@@ -23,7 +23,7 @@ The core ends as a small, stable package: tokens, stylesheet, palette and the do
 | Today here | Moves to | When |
 |------------|----------|------|
 | `showcase/` | The [playground](https://sanctuary-ds.github.io/playground/) of `sanctuary-ds.github.io` | Done: the playground replaced it and the showcase was deleted here |
-| `docs/design-language.md` | The site's `/docs/philosophy`; this repository keeps a link | Site phase 3 |
+| `docs/design-language.md` | The site's [philosophy](https://sanctuary-ds.github.io/docs/philosophy) and [foundations](https://sanctuary-ds.github.io/docs/foundations/color) | Done: this repository keeps a page of links |
 | `ports/` and `src/emit/ports.js` | One repository per application, as Catppuccin does, with the template generator in its own repository | The ports milestone, not yet planned |
 
 Until then, changes to these parts still land here.

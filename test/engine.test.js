@@ -65,8 +65,8 @@ test('text and accent roles meet WCAG AA against the surfaces of every flavor', 
     for (const surface of surfaces) {
       for (const text of ['text', 'text.muted', 'text.subtle']) pass(text, surface);
     }
-    // Every pairing the glass-role table in docs/design-language.md promises. Lume is light, not
-    // text, so it has no text guarantee; on sunken stone, accent text uses ink.
+    // Every pairing the site's glass roles promise (/docs/foundations/color, /docs/accessibility).
+    // Lume is light, not text, so it has no text guarantee; on sunken stone, accent text uses ink.
     for (const id of pigmentIds) {
       const glass = `glass.${id}`;
       for (const surface of surfaces) {
