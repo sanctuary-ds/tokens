@@ -87,6 +87,7 @@ A published version can never be replaced on npm. If one is wrong, release a fix
 - [Design language](https://sanctuary-ds.github.io/docs/philosophy): the idea, the materials and the rules, on the site.
 - [Architecture](docs/architecture.md): token tiers, the build pipeline and the decisions behind them.
 - [Token reference](docs/tokens.md): every group and its custom properties.
+- [Public API](docs/public-api.md): what stays stable and how each change is versioned.
 - [Ecosystem](docs/ecosystem.md): the planned GitHub organization, the Lit library and ports.
 
 ## Status

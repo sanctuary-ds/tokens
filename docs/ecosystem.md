@@ -80,6 +80,8 @@ Candidates: foot, WezTerm, tmux, Zellij, Neovim, Rofi, Dunst, Starship, btop, Fi
 
 ## Versioning
 
+[Public API](public-api.md) lists what is public and how each change is versioned. In short:
+
 - Token names are the public API. Renaming or removing one is a breaking change; adding one is not.
 - Changing a color value is a minor change if contrast guarantees still hold.
 - Publish from one version number across tokens, stylesheet and ports, so a port can state which palette it matches.
