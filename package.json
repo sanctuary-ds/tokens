@@ -37,6 +37,7 @@
   "scripts": {
     "build": "node scripts/build.js",
     "check": "node scripts/build.js --check",
+    "api": "node scripts/api.js",
     "test": "node --test"
   },
   "exports": {
