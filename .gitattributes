@@ -1,0 +1,3 @@
+# Every text file is checked out with LF endings, on every system. The build check and the
+# API report test compare files byte for byte, so CRLF endings would fail them without a change.
+* text=auto eol=lf

@@ -42,10 +42,11 @@ function shared(entries, placeholder, line) {
     ids.length === entries.length ? [line(`<${placeholder}>`, path)] : ids.map((id) => line(id, path)));
 }
 
-/** Dotted paths from a node down to its values; arrays count as values. */
+/** Dotted paths from a node down to its values; arrays and empty objects count as values. */
 function leaves(node, path = []) {
-  if (node === null || typeof node !== 'object' || Array.isArray(node)) return [path.join('.')];
-  return Object.entries(node).flatMap(([key, value]) => leaves(value, [...path, key]));
+  const entries = node !== null && typeof node === 'object' && !Array.isArray(node) ? Object.entries(node) : [];
+  if (entries.length === 0) return [path.join('.')];
+  return entries.flatMap(([key, value]) => leaves(value, [...path, key]));
 }
 
 // Maps in palette.json keyed by an id: the ids are listed, and the paths under them are shared.
@@ -54,7 +55,7 @@ const ID_MAPS = { flavors: 'flavor', pigments: 'pigment', windows: 'window', win
 /** Every key path in palette.json, down to the values. */
 export function paletteLines(palette) {
   return Object.entries(palette).flatMap(([key, value]) => {
-    if (!ID_MAPS[key]) return leaves(value, [key]).map((path) => `palette ${path}`);
+    if (!ID_MAPS[key] || Object.keys(value).length === 0) return leaves(value, [key]).map((path) => `palette ${path}`);
     const ids = Object.keys(value).map((id) => `palette ${key}: ${id}`);
     const entries = Object.entries(value).map(([id, node]) => [id, leaves(node)]);
     return [...ids, ...shared(entries, ID_MAPS[key], (id, path) => `palette ${[key, id, path].filter(Boolean).join('.')}`)];

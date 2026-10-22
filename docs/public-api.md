@@ -48,4 +48,4 @@ pnpm run build   # regenerate the package files
 pnpm run api     # regenerate the report from them
 ```
 
-In the report's diff, a removed line is a breaking change and needs a major release (a minor one before `1.0.0`); an added line is a minor change.
+In the report's diff, an added line is a minor change. A removed line is a breaking change, which needs a major release (a minor one before `1.0.0`), with one exception: when a new id lacks a path the others have, the placeholder line is replaced by one line per existing id. Nothing was taken away from those ids, so the change is minor. The test's message names both kinds of line, removed and added, so the two cases are easy to tell apart.
