@@ -93,4 +93,5 @@ The stylesheet relies on `oklch()`, `color-mix()` and `:is()`, all widely availa
 | Every `var(--san-*)` that is read is declared | Stylesheet integrity |
 | The default flavor block precedes the others | Flavor switching on the root element |
 | One theme per flavor per port, sixteen ANSI colors | Ports |
+| The package matches the committed API report | The [public API](public-api.md) |
 | Generated files match the sources | Drift |
