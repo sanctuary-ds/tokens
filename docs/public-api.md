@@ -39,7 +39,7 @@ A public name is not removed in the release that replaces it:
 
 ## The API report
 
-[`api/sanctuary.api.txt`](../api/sanctuary.api.txt) lists every public name, one per line, sorted. It holds names only, so a new color value leaves it unchanged. A test compares it with the package and fails on any difference, added or removed, so every change to the API appears in the report's diff and is reviewed with the change that caused it.
+[`api/sanctuary.api.txt`](../api/sanctuary.api.txt) lists every public name, one per line, sorted. It holds names only, so a new color value leaves it unchanged. A path that every flavor, accent, pigment, window, window mode, glazing or font has is written once with a placeholder, such as `flavors.<flavor>.accent`; a path that only some of them have is written for each one, such as `pigments.amber.drift`. A test compares it with the package and fails on any difference, added or removed, so every change to the API appears in the report's diff and is reviewed with the change that caused it.
 
 After changing `src/`:
 

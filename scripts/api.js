@@ -18,7 +18,8 @@ const read = (file) => readFileSync(join(root, file), 'utf8');
 /** The export map: the entry points consumers import. */
 function exportLines() {
   const { exports } = JSON.parse(read('package.json'));
-  return Object.entries(exports).map(([entry, target]) => `export ${entry} -> ${target}`);
+  // A conditional export maps to an object; writing it whole keeps its conditions in the report.
+  return Object.entries(exports).map(([entry, target]) => `export ${entry} -> ${typeof target === 'string' ? target : JSON.stringify(target)}`);
 }
 
 /** Every custom property the stylesheet declares, and every theme attribute value it styles. */
@@ -29,42 +30,67 @@ function cssLines() {
   return [...properties, ...attributes];
 }
 
-// Maps keyed by an id: the ids are listed once, and the paths under them use a placeholder,
-// so the report says "every flavor has colors.surface" in one line instead of four.
+/**
+ * Lines for several ids that share a shape, such as the four flavors. A path every id has is
+ * written once with a placeholder (`flavors.<flavor>.accent`); a path only some ids have is
+ * written for each of them, so removing it from a single id still changes the report.
+ */
+function shared(entries, placeholder, line) {
+  const owners = new Map();
+  for (const [id, paths] of entries) for (const path of paths) owners.set(path, [...(owners.get(path) ?? []), id]);
+  return [...owners].flatMap(([path, ids]) =>
+    ids.length === entries.length ? [line(`<${placeholder}>`, path)] : ids.map((id) => line(id, path)));
+}
+
+/** Dotted paths from a node down to its values; arrays count as values. */
+function leaves(node, path = []) {
+  if (node === null || typeof node !== 'object' || Array.isArray(node)) return [path.join('.')];
+  return Object.entries(node).flatMap(([key, value]) => leaves(value, [...path, key]));
+}
+
+// Maps in palette.json keyed by an id: the ids are listed, and the paths under them are shared.
 const ID_MAPS = { flavors: 'flavor', pigments: 'pigment', windows: 'window', windowModes: 'window-mode', glazings: 'glazing', fonts: 'font' };
 
 /** Every key path in palette.json, down to the values. */
-function paletteLines() {
-  const palette = JSON.parse(read('dist/palette.json'));
-  const lines = [];
-  const walk = (node, path) => {
-    if (node === null || typeof node !== 'object' || Array.isArray(node)) return lines.push(`palette ${path.join('.')}`);
-    const placeholder = path.length === 1 ? ID_MAPS[path[0]] : undefined;
-    for (const [key, value] of Object.entries(node)) {
-      if (placeholder) lines.push(`palette ${path[0]}: ${key}`);
-      walk(value, [...path, placeholder ? `<${placeholder}>` : key]);
-    }
-  };
-  walk(palette, []);
-  return lines;
+export function paletteLines(palette) {
+  return Object.entries(palette).flatMap(([key, value]) => {
+    if (!ID_MAPS[key]) return leaves(value, [key]).map((path) => `palette ${path}`);
+    const ids = Object.keys(value).map((id) => `palette ${key}: ${id}`);
+    const entries = Object.entries(value).map(([id, node]) => [id, leaves(node)]);
+    return [...ids, ...shared(entries, ID_MAPS[key], (id, path) => `palette ${[key, id, path].filter(Boolean).join('.')}`)];
+  });
 }
 
-/** Every DTCG file, and every token path in it. Files of one kind share a placeholder. */
-function tokenLines() {
-  const files = readdirSync(join(root, 'tokens'), { recursive: true })
-    .map((file) => file.split('\\').join('/'))
-    .filter((file) => file.endsWith('.json'));
-  const lines = files.map((file) => `file tokens/${file}`);
-  for (const file of files) {
-    const kind = file.replace(/^(flavor|accent)\/[^/]+(\.tokens\.json)$/, '$1/<$1>$2');
-    for (const { path } of flatten(JSON.parse(read(`tokens/${file}`)))) lines.push(`token ${kind} ${path.join('.')}`);
+/** Every DTCG file, and every token path in it, given as { 'flavor/lauds.tokens.json': tree }. */
+export function tokenLines(files) {
+  const lines = Object.keys(files).map((file) => `file tokens/${file}`);
+  const kinds = { flavor: [], accent: [] };
+  for (const [file, tree] of Object.entries(files)) {
+    const paths = flatten(tree).map(({ path }) => path.join('.'));
+    const [, kind, id] = file.match(/^(flavor|accent)\/([^/]+)\.tokens\.json$/) ?? [];
+    if (kind) kinds[kind].push([id, paths]);
+    else lines.push(...paths.map((path) => `token ${file} ${path}`));
+  }
+  for (const [kind, entries] of Object.entries(kinds)) {
+    lines.push(...shared(entries, kind, (id, path) => `token ${kind}/${id}.tokens.json ${path}`));
   }
   return lines;
 }
 
+/** The DTCG files of the package, by path inside tokens/. */
+function tokenFiles() {
+  return Object.fromEntries(
+    readdirSync(join(root, 'tokens'), { recursive: true })
+      .map((file) => file.split('\\').join('/'))
+      .filter((file) => file.endsWith('.json'))
+      .map((file) => [file, JSON.parse(read(`tokens/${file}`))]),
+  );
+}
+
 /** The public API, sorted and without duplicates. */
 export function publicApi() {
-  return [...new Set([...exportLines(), ...cssLines(), ...paletteLines(), ...tokenLines()])].sort();
+  const palette = JSON.parse(read('dist/palette.json'));
+  return [...new Set([...exportLines(), ...cssLines(), ...paletteLines(palette), ...tokenLines(tokenFiles())])].sort();
 }
 
 const HEADER = '# The public API of @sanctuary-ds/tokens. Generated by `pnpm run api`: see docs/public-api.md.\n';

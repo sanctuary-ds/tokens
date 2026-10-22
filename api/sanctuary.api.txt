@@ -725,7 +725,6 @@ palette glazings: flashed
 palette glazings: grisaille
 palette glazings: pot-metal
 palette pigments.<pigment>.chroma
-palette pigments.<pigment>.drift
 palette pigments.<pigment>.hue
 palette pigments.<pigment>.note
 palette pigments.<pigment>.tones.100
@@ -739,6 +738,8 @@ palette pigments.<pigment>.tones.700
 palette pigments.<pigment>.tones.800
 palette pigments.<pigment>.tones.900
 palette pigments.<pigment>.tones.950
+palette pigments.amber.drift
+palette pigments.gilt.drift
 palette pigments: amber
 palette pigments: amethyst
 palette pigments: azure
