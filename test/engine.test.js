@@ -8,7 +8,7 @@ import { fileURLToPath } from 'node:url';
 
 import { oklchToHex, hexToOklch, contrast } from '../src/color.js';
 import { FLAVORS, PIGMENTS, TONES, WINDOW_TONES, buildPalette, harmony } from '../src/palette.js';
-import { buildTokens, flatten, resolveHex } from '../src/tokens.js';
+import { buildTokens, cssName, flatten, resolveHex } from '../src/tokens.js';
 import { emitCss } from '../src/emit/css.js';
 import { emitPorts } from '../src/emit/ports.js';
 
@@ -195,7 +195,10 @@ test('under reduced motion every duration token collapses to zero', () => {
   const at = css.indexOf('@media (prefers-reduced-motion: reduce)');
   assert.ok(at >= 0, 'no reduced-motion rule in the stylesheet');
   const reduced = css.slice(at);
-  const durations = [...new Set([...css.matchAll(/(--san-duration-[a-z]+):/g)].map((match) => match[1]))];
+  // The names come from the motion tokens, not from the stylesheet, so no duration can be missed.
+  const durations = flatten(tokens.files['foundation/motion.tokens.json'])
+    .filter(({ type }) => type === 'duration')
+    .map(({ path }) => cssName(path));
   assert.ok(durations.length > 0);
   for (const name of durations) assert.match(reduced, new RegExp(`${name}: 0ms;`), name);
 });
@@ -226,7 +229,7 @@ test('the npm package ships only the stylesheet, the palette and the token files
   assert.deepEqual(roots, ['LICENSE', 'README.md', 'dist', 'package.json', 'tokens']);
 });
 
-test('the harmonic window leads each accent with its two neighbours on the hue wheel', () => {
+test('the harmonic window leads each accent with its two neighbors on the hue wheel', () => {
   assert.deepEqual(harmony('cobalt'), ['azure', 'cobalt', 'indigo']);
   // The wheel is circular: rose (3°) sits between murrey (342°) and ruby (24°).
   assert.deepEqual(harmony('ruby'), ['rose', 'ruby', 'ember']);
