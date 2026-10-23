@@ -10,7 +10,6 @@ import { oklchToHex, hexToOklch, contrast } from '../src/color.js';
 import { FLAVORS, PIGMENTS, TONES, WINDOW_TONES, buildPalette, harmony } from '../src/palette.js';
 import { buildTokens, cssName, flatten, resolveHex } from '../src/tokens.js';
 import { emitCss } from '../src/emit/css.js';
-import { emitPorts } from '../src/emit/ports.js';
 
 const palette = buildPalette();
 const tokens = buildTokens(palette);
@@ -260,20 +259,6 @@ test('the default flavor is declared first so that any flavor attribute on the r
   }
 });
 
-test('every port ships one theme per flavor with sixteen ANSI colors', () => {
-  const ports = emitPorts(palette, tokens);
-  for (const app of ['kitty', 'ghostty', 'alacritty', 'base16', 'gtk', 'hyprland']) {
-    const files = Object.keys(ports).filter((file) => file.startsWith(`${app}/`));
-    assert.equal(files.length, flavorIds.length, app);
-  }
-  for (const flavor of flavorIds) {
-    const kitty = ports[`kitty/sanctuary-${flavor}.conf`];
-    assert.equal([...kitty.matchAll(/^color\d+\s+#[0-9a-f]{6}$/gm)].length, 16);
-    // URLs are text, so they use the text-safe ink role rather than lume.
-    assert.match(kitty, new RegExp(`^url_color\\s+${resolveHex(tokens, flavor, 'accent.ink')}$`, 'm'));
-  }
-});
-
 test('committed build outputs are up to date with the sources', () => {
   const script = fileURLToPath(new URL('../scripts/build.js', import.meta.url));
   execFileSync(process.execPath, [script, '--check'], { stdio: 'pipe' });
@@ -283,13 +268,14 @@ test('the build check fails on a generated file that the sources no longer produ
   const repo = fileURLToPath(new URL('..', import.meta.url));
   const copy = mkdtempSync(join(tmpdir(), 'sanctuary-check-'));
   try {
-    for (const dir of ['scripts', 'src', 'tokens', 'ports', 'dist']) cpSync(join(repo, dir), join(copy, dir), { recursive: true });
+    for (const dir of ['scripts', 'src', 'tokens', 'dist']) cpSync(join(repo, dir), join(copy, dir), { recursive: true });
     cpSync(join(repo, 'package.json'), join(copy, 'package.json'));
-    writeFileSync(join(copy, 'ports/kitty/sanctuary-old.conf'), '# left behind by a renamed flavor\n');
-    writeFileSync(join(copy, 'ports/kitty/.DS_Store'), '');
+    // Stands in for the token file of a flavor that was renamed or removed.
+    writeFileSync(join(copy, 'tokens/flavor/vigils.tokens.json'), '{}\n');
+    writeFileSync(join(copy, 'tokens/flavor/.DS_Store'), '');
     const result = spawnSync(process.execPath, [join(copy, 'scripts/build.js'), '--check'], { encoding: 'utf8' });
     assert.equal(result.status, 1);
-    assert.match(result.stderr, /ports\/kitty\/sanctuary-old\.conf/);
+    assert.match(result.stderr, /tokens\/flavor\/vigils\.tokens\.json/);
     assert.doesNotMatch(result.stderr, /\.DS_Store/, 'hidden files are not build output');
   } finally {
     rmSync(copy, { recursive: true, force: true });

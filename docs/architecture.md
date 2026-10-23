@@ -1,6 +1,6 @@
 # Architecture
 
-Sanctuary is a token pipeline: a small dependency-free engine in `src/` generates DTCG token files, a stylesheet and application themes. Everything a consumer uses is generated; everything a maintainer edits is in `src/`.
+Sanctuary is a token pipeline: a small dependency-free engine in `src/` generates DTCG token files, a stylesheet and a palette as plain data. Themes for desktop applications are generated from that palette in the [`ports`](https://github.com/sanctuary-ds/ports) repository. Everything a consumer uses is generated; everything a maintainer edits is in `src/`.
 
 ## Pipeline
 
@@ -9,7 +9,6 @@ src/palette.js    ─┐
 src/foundation.js ├─► src/tokens.js ─► tokens/*.tokens.json   (DTCG 2025.10, interchange)
 src/color.js      ─┘        │         ─► tokens/sanctuary.resolver.json
                             ├─► src/emit/css.js   ─► dist/css/sanctuary.css
-                            ├─► src/emit/ports.js ─► ports/<app>/sanctuary-<flavor>.*
                             └─► scripts/build.js  ─► dist/palette.json
 ```
 
@@ -73,7 +72,7 @@ Known limit: when the *same* axis is nested twice with a different axis in betwe
 | Accent model | Tonal ramps plus per-flavor role mapping | Guarantees contrast for any accent in any flavor | Less hand-tuned per flavor than a curated palette |
 | Glazing | A separate axis, CSS only | Keeps the accent a pure color choice; needs `color-mix()` | Not portable through DTCG; ports receive solid colors |
 | Window | A setting derived from the accent (`mono`, `harmonic`), not an axis | A window independent of the accent made cast light compete with the controls; ports ignore it anyway | A whole theme cannot be recolored against its accent with one attribute; the five named windows remain as fixed gradients to place by hand |
-| Generated files | Committed | Ports are consumed straight from the repository, and consumers can pin a commit without a build step | Diffs include generated output; `npm run check` guards drift |
+| Generated files | Committed | Consumers can read them straight from the repository and pin a commit without a build step, and a review sees what each source change produces | Diffs include generated output; `pnpm run check` guards drift |
 | Prefix | `san` (`--san-*`, `data-san-*`, future `<san-button>`) | Short and unlikely to collide | None known |
 
 ## Browser support
@@ -92,6 +91,5 @@ The stylesheet relies on `oklch()`, `color-mix()` and `:is()`, all widely availa
 | Every token has a type, a legal name and a resolvable alias | DTCG validity |
 | Every `var(--san-*)` that is read is declared | Stylesheet integrity |
 | The default flavor block precedes the others | Flavor switching on the root element |
-| One theme per flavor per port, sixteen ANSI colors | Ports |
 | The package matches the committed API report | The [public API](public-api.md) |
 | Generated files match the sources | Drift |
