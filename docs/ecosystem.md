@@ -6,11 +6,11 @@ This repository is the seed of the [`sanctuary-ds`](https://github.com/sanctuary
 
 | Repository | Contents | Depends on | Status |
 |------------|----------|-----------|--------|
-| [`tokens`](https://github.com/sanctuary-ds/tokens) (this one, formerly `sanctuary`) | Token engine, DTCG tokens, stylesheet, palette and their technical docs; for now also the design language and the first ports | Nothing | Active, not yet on npm |
+| [`tokens`](https://github.com/sanctuary-ds/tokens) (this one, formerly `sanctuary`) | Token engine, DTCG tokens, stylesheet, palette and their technical docs | Nothing | Active, published as `@sanctuary-ds/tokens` |
 | [`sanctuary-ds.github.io`](https://github.com/sanctuary-ds/sanctuary-ds.github.io) | Public site: home, playground, documentation; see its [roadmap](https://github.com/sanctuary-ds/sanctuary-ds.github.io/blob/main/ROADMAP.md) | `tokens`, later `web-components` | In progress |
 | [`.github`](https://github.com/sanctuary-ds/.github) | Organization profile, contributing guide, security policy, brand mark | Nothing | Active |
 | `web-components` | Sanctuary Web Components: the Lit library (`<san-button>`, ...), published as `@sanctuary-ds/web-components` | `tokens` | Planned |
-| One repository per port | A theme for one application, with its templates | `palette.json` | Planned |
+| [`ports`](https://github.com/sanctuary-ds/ports) | Themes for desktop applications, generated from one template per application; see [Ports](#ports) | `palette.json` | Planned: no port is published yet |
 
 Repositories are named after what they ship, and a platform-specific library carries its platform in its name, so a future Flutter library would live in its own `flutter` repository and generate its theme from `palette.json`. This repository was renamed from `sanctuary` to `tokens`, to match `@sanctuary-ds/tokens`, once the showcase had moved to the site; GitHub redirects the old name. There is no separate umbrella repository: the organization profile and the site play that role, joined by organization discussions once they are enabled.
 
@@ -24,9 +24,7 @@ The core ends as a small, stable package: tokens, stylesheet, palette and the do
 |------------|----------|------|
 | `showcase/` | The [playground](https://sanctuary-ds.github.io/playground/) of `sanctuary-ds.github.io` | Done: the playground replaced it and the showcase was deleted here |
 | `docs/design-language.md` | The site's [philosophy](https://sanctuary-ds.github.io/docs/philosophy) and [foundations](https://sanctuary-ds.github.io/docs/foundations/color) | Done: this repository keeps a page of links |
-| `ports/` and `src/emit/ports.js` | One repository per application, as Catppuccin does, with the template generator in its own repository | The ports milestone, not yet planned |
-
-Until then, changes to these parts still land here.
+| `ports/` and `src/emit/ports.js` | [`ports`](https://github.com/sanctuary-ds/ports) | Done: deleted here before any replacement exists; the untested first drafts remain in the history at commit `467f5cc` |
 
 ## Web components with Lit
 
@@ -42,30 +40,18 @@ The stylesheet is already shaped for Shadow DOM: custom properties inherit throu
 
 Suggested first components, in dependency order: button, icon button, chip, text field, checkbox, radio, switch, tabs, menu, dialog, tooltip, card.
 
-## Ports for Linux ricing
+## Ports
 
-Generated today, one file per flavor:
+A port is the theme of one application, such as a terminal or a status bar, generated from `palette.json`.
 
-| App | Path | How to use |
-|-----|------|-----------|
-| kitty | `ports/kitty/sanctuary-<flavor>.conf` | `include` it from `kitty.conf` |
-| Ghostty | `ports/ghostty/sanctuary-<flavor>` | Copy to the themes directory and set `theme` |
-| Alacritty | `ports/alacritty/sanctuary-<flavor>.toml` | Add to `import` in `alacritty.toml` |
-| base16 | `ports/base16/sanctuary-<flavor>.yaml` | Feed to any base16 builder |
-| GTK CSS | `ports/gtk/sanctuary-<flavor>.css` | `@import` in a Waybar or GTK stylesheet, then use `@san-accent` |
-| Hyprland | `ports/hyprland/sanctuary-<flavor>.conf` | `source` it, then use `$san-accent` in borders |
+| Decision | Choice | Reason |
+|----------|--------|--------|
+| Where ports live | One `ports` repository for every application configured by a file; a repository of its own, named after the application (`nvim`), only for one installed from a git URL, such as a Neovim or tmux plugin | One maintainer: a palette change is one pull request, not one per application |
+| How they are built | One generator and one template per application, in TypeScript run directly by Node | The generator reads the palette and writes what each template returns, so a new application is a new template |
+| Template output | A list of files, not one file per flavor | Applications differ: some take one file per flavor, some every flavor in one file, some several files |
+| Palette input | `@sanctuary-ds/tokens` pinned to an exact version | Each port states which palette it matches |
 
-Each port uses the flavor's default accent. The GTK and Hyprland files also expose all twelve pigments, so an accent can be chosen in the user's own config.
-
-These files are generated from templates and have not been loaded in each application; treat them as a first draft to validate on a real desktop.
-
-### Adding a port
-
-1. Add a template function to `src/emit/ports.js` with the signature `(flavor, hex, pigments)`: the flavor, a `hex(path)` resolver for its tokens, and the list of pigment ids, for ports that expose every pigment.
-2. Register it in `PORTS` with its file extension.
-3. Run `pnpm run build` and `pnpm test`.
-
-Candidates: foot, WezTerm, tmux, Zellij, Neovim, Rofi, Dunst, Starship, btop, Firefox, VS Code.
+The first ports are the applications of a real desktop, so each one is tested where it runs. The `ports` repository's `ROADMAP.md` will list them.
 
 ### Rendering the idea outside the browser
 
@@ -84,7 +70,7 @@ Candidates: foot, WezTerm, tmux, Zellij, Neovim, Rofi, Dunst, Starship, btop, Fi
 
 - Token names are the public API. Renaming or removing one is a breaking change; adding one is not.
 - Changing a color value is a minor change if contrast guarantees still hold.
-- Publish from one version number across tokens, stylesheet and ports, so a port can state which palette it matches.
+- Tokens, stylesheet and palette share one version number; every other repository pins the exact version it uses.
 
 ## Fonts
 

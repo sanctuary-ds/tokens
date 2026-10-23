@@ -6,7 +6,6 @@ import { dirname, join, relative } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 import { emitCss } from '../src/emit/css.js';
-import { emitPorts } from '../src/emit/ports.js';
 import { DEFAULT_FLAVOR, DEFAULT_GLAZING, DEFAULT_WINDOW, PIGMENTS, TONES, buildPalette } from '../src/palette.js';
 import { buildTokens, flatten, resolveToken } from '../src/tokens.js';
 
@@ -16,7 +15,7 @@ const json = (value) => `${JSON.stringify(value, null, 2)}\n`;
 // Directories whose every file is generated, so anything else in them is left over. Only
 // `--check` reports leftovers: the build itself never deletes files it did not write.
 // Hidden files such as .DS_Store belong to the operating system or an editor, not the build.
-const GENERATED_DIRS = ['tokens', 'ports', 'dist'];
+const GENERATED_DIRS = ['tokens', 'dist'];
 
 const filesIn = (dir) =>
   existsSync(join(root, dir))
@@ -84,7 +83,6 @@ function outputs() {
   const data = paletteData(palette, tokens);
   const files = { 'tokens/sanctuary.resolver.json': json(tokens.resolver) };
   for (const [file, tree] of Object.entries(tokens.files)) files[`tokens/${file}`] = json(tree);
-  for (const [file, content] of Object.entries(emitPorts(palette, tokens))) files[`ports/${file}`] = content;
   files['dist/css/sanctuary.css'] = emitCss(palette, tokens);
   files['dist/palette.json'] = json(data);
   return files;

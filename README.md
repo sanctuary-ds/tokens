@@ -55,7 +55,6 @@ Any element can carry these attributes, so a card can sit in another flavor or a
 | `src/` | The source of truth: color maths, palette, foundations, emitters | Yes |
 | `tokens/` | DTCG 2025.10 token files and a resolver document | No, generated |
 | `dist/` | `css/sanctuary.css` (custom properties) and `palette.json` | No, generated |
-| `ports/` | Themes for kitty, Ghostty, Alacritty, base16, GTK CSS (Waybar) and Hyprland | No, generated |
 | `docs/` | Design language, architecture, token reference, ecosystem plan | Yes |
 
 The npm package, `@sanctuary-ds/tokens`, contains only `dist/` and `tokens/`, with this README and the license; a test keeps it that way.
@@ -64,9 +63,9 @@ The npm package, `@sanctuary-ds/tokens`, contains only `dist/` and `tokens/`, wi
 
 | Command | Result |
 |---------|--------|
-| `pnpm run build` | Regenerates `tokens/`, `dist/` and `ports/` |
+| `pnpm run build` | Regenerates `tokens/` and `dist/` |
 | `pnpm run check` | Fails if any generated file is stale |
-| `pnpm test` | Color maths, WCAG AA contrast for every flavor, DTCG validity, cascade order, ports |
+| `pnpm test` | Color maths, WCAG AA contrast for every flavor, DTCG validity, cascade order, public API |
 
 There are no dependencies. The tools run on Node 22 or later; development uses Node 24, which pnpm downloads for the project when it is missing (`devEngines.runtime` in `package.json`).
 
@@ -88,7 +87,7 @@ A published version can never be replaced on npm. If one is wrong, release a fix
 - [Architecture](docs/architecture.md): token tiers, the build pipeline and the decisions behind them.
 - [Token reference](docs/tokens.md): every group and its custom properties.
 - [Public API](docs/public-api.md): what stays stable and how each change is versioned.
-- [Ecosystem](docs/ecosystem.md): the planned GitHub organization, the Lit library and ports.
+- [Ecosystem](docs/ecosystem.md): the planned GitHub organization, the Lit library and the [ports](https://github.com/sanctuary-ds/ports) for desktop applications.
 
 ## Status
 
