@@ -3,6 +3,10 @@
   "version": "0.1.1",
   "description": "Sanctuary: a design system of stone, glass and light.",
   "license": "MIT",
+  "author": {
+    "name": "Anthony Portugal",
+    "url": "https://anthonyportugal.github.io"
+  },
   "keywords": [
     "design-system",
     "design-tokens",
