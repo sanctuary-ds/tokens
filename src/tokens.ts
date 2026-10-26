@@ -1,39 +1,86 @@
 // Builds the DTCG 2025.10 token trees and the resolver document from the palette.
 
-import { FOUNDATION_FILES } from './foundation.js';
-import { DEFAULT_FLAVOR, PIGMENTS, STATUS, SYNTAX, WINDOW_TONES } from './palette.js';
+import { FOUNDATION_FILES } from './foundation.ts';
+import { DEFAULT_FLAVOR, PIGMENTS, STATUS, SYNTAX, WINDOW_TONES } from './palette.ts';
+import type { ColorRecord, Oklch } from './color.ts';
+import type { Palette, PigmentId, Role } from './palette.ts';
 
-const GLASS_ROLES = ['$root', 'lume', 'ink', 'pane', 'on', 'on-pane'];
+/** A node of a DTCG tree: a group of other nodes, or a token when it has a `$value`. */
+export interface TokenNode {
+  $type?: string;
+  $value?: unknown;
+  $description?: string;
+  [key: string]: unknown;
+}
+
+/** DTCG files by path inside tokens/, such as `flavor/lauds.tokens.json`. */
+export type TokenFiles = Record<string, TokenNode>;
+
+export interface Tokens {
+  files: TokenFiles;
+  resolver: ReturnType<typeof resolverDocument>;
+}
+
+/** A dimension or duration `$value`. */
+export interface Dimension {
+  value: number;
+  unit: string;
+}
+
+/** A typography `$value`; `fontFamily` is an alias to a font family token. */
+export interface Typography {
+  fontFamily: string;
+  fontSize: Dimension;
+  fontWeight: number;
+  letterSpacing: Dimension;
+  lineHeight: number;
+}
+
+/** The token tree of `foundation/typography.tokens.json`, as far as the build reads it. */
+export interface TypographyTree {
+  font: { family: Record<string, TokenNode> };
+  type: Record<string, TokenNode>;
+}
+
+/** A color `$value` as the DTCG color module writes it. */
+export interface DtcgColor {
+  colorSpace: 'oklch';
+  components: Oklch;
+  alpha?: number;
+  hex: string;
+}
+
+const GLASS_ROLES: readonly Role[] = ['$root', 'lume', 'ink', 'pane', 'on', 'on-pane'];
 
 /** Alias to a token; a bare group name points at that group's `$root` token. */
-const ref = (path, role = '$root') => `{${path}.${role}}`;
+const ref = (path: string, role = '$root') => `{${path}.${role}}`;
 
-function dtcgColor({ oklch, hex, alpha }) {
+function dtcgColor({ oklch, hex, alpha }: ColorRecord): DtcgColor {
   return { colorSpace: 'oklch', components: oklch, ...(alpha === undefined ? {} : { alpha }), hex };
 }
 
-const colorGroup = (records) =>
+const colorGroup = (records: Record<string, ColorRecord>) =>
   Object.fromEntries(Object.entries(records).map(([key, record]) => [key, { $value: dtcgColor(record) }]));
 
-const roleGroup = (target, roles = GLASS_ROLES) =>
+const roleGroup = (target: string, roles: readonly string[] = GLASS_ROLES) =>
   Object.fromEntries(roles.map((role) => [role, { $value: ref(target, role) }]));
 
-function pigmentFile(palette) {
-  const pigment = { $type: 'color' };
+function pigmentFile(palette: Palette) {
+  const pigment: TokenNode = { $type: 'color' };
   for (const [id, ramp] of Object.entries(palette.pigments)) {
-    pigment[id] = { $description: PIGMENTS[id].note, ...colorGroup(ramp) };
+    pigment[id] = { $description: PIGMENTS[id as PigmentId].note, ...colorGroup(ramp) };
   }
   return { pigment };
 }
 
 // Terminal colors follow the convention that 0/8 recede and 7/15 carry text, in both schemes.
-function ansi(scheme) {
+function ansi(scheme: string) {
   const neutrals =
     scheme === 'dark'
       ? { black: '{surface.raised-3}', white: '{text.muted}', 'bright-black': '{lead.strong}', 'bright-white': '{text.$root}' }
       : { black: '{text.muted}', white: '{lead.$root}', 'bright-black': '{text.subtle}', 'bright-white': '{lead.soft}' };
   const hues = { red: 'ruby', green: 'verdure', yellow: 'gilt', blue: 'cobalt', magenta: 'amethyst', cyan: 'viridian' };
-  const tokens = {};
+  const tokens: Record<string, TokenNode> = {};
   for (const [name, pigment] of Object.entries(hues)) {
     tokens[name] = { $value: ref(`glass.${pigment}`) };
     tokens[`bright-${name}`] = { $value: ref(`glass.${pigment}`, 'lume') };
@@ -42,9 +89,9 @@ function ansi(scheme) {
   return tokens;
 }
 
-function flavorFile(flavor) {
+function flavorFile(flavor: Palette['flavors'][string]): TokenNode {
   const { colors, roles } = flavor;
-  const glass = {};
+  const glass: Record<string, TokenNode> = {};
   for (const id of Object.keys(PIGMENTS)) {
     glass[id] = Object.fromEntries(
       GLASS_ROLES.map((role) => [role, { $value: `{pigment.${id}.${roles[role]}}` }]),
@@ -64,13 +111,13 @@ function flavorFile(flavor) {
   };
 }
 
-function semanticFile(palette) {
+function semanticFile(palette: Palette): TokenNode {
   const status = Object.fromEntries(
     Object.entries(STATUS).map(([name, pigment]) => [name, { $type: 'color', ...roleGroup(`glass.${pigment}`) }]),
   );
-  const syntax = { $type: 'color' };
+  const syntax: TokenNode = { $type: 'color' };
   for (const [name, target] of Object.entries(SYNTAX)) syntax[name] = { $value: `{${target}}` };
-  const window = { $type: 'gradient' };
+  const window: TokenNode = { $type: 'gradient' };
   for (const [id, { stops, note }] of Object.entries(palette.windows)) {
     window[id] = {
       $description: note,
@@ -80,10 +127,10 @@ function semanticFile(palette) {
   return { ...status, syntax, window };
 }
 
-function resolverDocument(files) {
-  const sources = (prefix) =>
+function resolverDocument(files: TokenFiles) {
+  const sources = (prefix: string) =>
     Object.keys(files).filter((file) => file.startsWith(prefix)).map((file) => ({ $ref: file }));
-  const contexts = (prefix) =>
+  const contexts = (prefix: string): Record<string, { $ref: string }[]> =>
     Object.fromEntries(sources(prefix).map((source) => [source.$ref.slice(prefix.length).split('.')[0], [source]]));
   return {
     name: 'Sanctuary',
@@ -112,8 +159,8 @@ function resolverDocument(files) {
   };
 }
 
-export function buildTokens(palette) {
-  const files = { ...FOUNDATION_FILES, 'pigment.tokens.json': pigmentFile(palette) };
+export function buildTokens(palette: Palette): Tokens {
+  const files: TokenFiles = { ...FOUNDATION_FILES, 'pigment.tokens.json': pigmentFile(palette) };
   for (const [id, flavor] of Object.entries(palette.flavors)) files[`flavor/${id}.tokens.json`] = flavorFile(flavor);
   for (const id of Object.keys(PIGMENTS)) {
     files[`accent/${id}.tokens.json`] = { accent: { $type: 'color', ...roleGroup(`glass.${id}`) } };
@@ -122,30 +169,36 @@ export function buildTokens(palette) {
   return { files, resolver: resolverDocument(files) };
 }
 
+export interface FlatToken {
+  path: string[];
+  token: TokenNode;
+  type: string | undefined;
+}
+
 /** Every token in a tree, with its path and its own or inherited `$type`. */
-export function flatten(tree, path = [], inherited) {
+export function flatten(tree: TokenNode, path: string[] = [], inherited?: string): FlatToken[] {
   const type = tree.$type ?? inherited;
   if ('$value' in tree) return [{ path, token: tree, type }];
   return Object.entries(tree)
     .filter(([key, value]) => (key === '$root' || !key.startsWith('$')) && typeof value === 'object')
-    .flatMap(([key, value]) => flatten(value, [...path, key], type));
+    .flatMap(([key, value]) => flatten(value as TokenNode, [...path, key], type));
 }
 
 /** Custom property name for a token path. `$root` names the group itself. */
-export const cssName = (path) => `--san-${path.filter((segment) => segment !== '$root').join('-')}`;
+export const cssName = (path: string[]): string => `--san-${path.filter((segment) => segment !== '$root').join('-')}`;
 
-export const aliasPath = (value) =>
+export const aliasPath = (value: unknown): string[] | null =>
   typeof value === 'string' && value.startsWith('{') ? value.slice(1, -1).split('.') : null;
 
-function find(tree, path) {
+function find(tree: TokenNode | undefined, path: string[]): TokenNode | undefined {
   let node = tree;
-  for (const segment of path) node = node?.[segment];
-  if (node && !('$value' in node) && node.$root) node = node.$root;
+  for (const segment of path) node = node?.[segment] as TokenNode | undefined;
+  if (node && !('$value' in node) && node.$root) node = node.$root as TokenNode;
   return node && '$value' in node ? node : undefined;
 }
 
 /** Resolves a token (given as a dotted path) to its token object within one flavor. */
-export function resolveToken(tokens, flavor, path) {
+export function resolveToken(tokens: Pick<Tokens, 'files'>, flavor: string, path: string | string[]): TokenNode {
   const segments = Array.isArray(path) ? path : path.split('.');
   const trees = ['pigment.tokens.json', `flavor/${flavor}.tokens.json`, 'semantic.tokens.json'];
   const token = trees.map((file) => find(tokens.files[file], segments)).find(Boolean);
@@ -154,4 +207,5 @@ export function resolveToken(tokens, flavor, path) {
   return alias ? resolveToken(tokens, flavor, alias) : token;
 }
 
-export const resolveHex = (tokens, flavor, path) => resolveToken(tokens, flavor, path).$value.hex;
+export const resolveHex = (tokens: Pick<Tokens, 'files'>, flavor: string, path: string | string[]): string =>
+  (resolveToken(tokens, flavor, path).$value as DtcgColor).hex;

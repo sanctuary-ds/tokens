@@ -6,15 +6,26 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-import { oklchToHex, hexToOklch, contrast } from '../src/color.js';
-import { FLAVORS, PIGMENTS, TONES, WINDOW_TONES, buildPalette, harmony } from '../src/palette.js';
-import { buildTokens, cssName, flatten, resolveHex } from '../src/tokens.js';
-import { emitCss } from '../src/emit/css.js';
+import { oklchToHex, hexToOklch, contrast } from '../src/color.ts';
+import { FLAVORS, PIGMENTS, TONES, WINDOW_TONES, buildPalette, harmony } from '../src/palette.ts';
+import { buildTokens, cssName, flatten, resolveHex } from '../src/tokens.ts';
+import { emitCss } from '../src/emit/css.ts';
+import type { FlavorId, PigmentId } from '../src/palette.ts';
+import type { DtcgColor, Typography, TypographyTree } from '../src/tokens.ts';
+
+/** A font as dist/palette.json lists it. */
+interface FontData {
+  family: string;
+  fallbacks: string[];
+  generic: string;
+  weights: number[];
+  styles: string[];
+}
 
 const palette = buildPalette();
 const tokens = buildTokens(palette);
-const flavorIds = Object.keys(FLAVORS);
-const pigmentIds = Object.keys(PIGMENTS);
+const flavorIds = Object.keys(FLAVORS) as FlavorId[];
+const pigmentIds = Object.keys(PIGMENTS) as PigmentId[];
 const data = JSON.parse(readFileSync(new URL('../dist/palette.json', import.meta.url), 'utf8'));
 
 test('oklch converts to the sRGB hex given in the DTCG color module example', () => {
@@ -55,9 +66,9 @@ test('every pigment has a full ramp of in-gamut, strictly darkening tones', () =
 
 test('text and accent roles meet WCAG AA against the surfaces of every flavor', () => {
   for (const flavor of flavorIds) {
-    const hex = (path) => resolveHex(tokens, flavor, path);
+    const hex = (path: string) => resolveHex(tokens, flavor, path);
     const surfaces = ['surface', 'surface.sunken', 'surface.raised-1', 'surface.raised-2', 'surface.raised-3', 'surface.raised-4'];
-    const pass = (fg, bg) => {
+    const pass = (fg: string, bg: string) => {
       const ratio = contrast(hex(fg), hex(bg));
       assert.ok(ratio >= 4.5, `${flavor}: ${fg} on ${bg} is ${ratio.toFixed(2)}`);
     };
@@ -83,7 +94,7 @@ test('the focus halo is drawn in the accent, which clears 3:1 against its stone 
   const css = emitCss(palette, tokens);
   assert.match(css, /--san-halo: 0 0 0 2px var\(--san-surface\), 0 0 0 4px var\(--san-accent\);/);
   for (const flavor of flavorIds) {
-    const hex = (path) => resolveHex(tokens, flavor, path);
+    const hex = (path: string) => resolveHex(tokens, flavor, path);
     for (const id of pigmentIds) {
       const ratio = contrast(hex(`glass.${id}`), hex('surface'));
       assert.ok(ratio >= 3, `${flavor}: halo in ${id} is ${ratio.toFixed(2)}`);
@@ -99,9 +110,10 @@ test('DTCG token files are structurally valid and every alias resolves', () => {
         assert.ok(segment === '$root' || !/^\$|[{}.]/.test(segment), `${file}: bad name ${segment}`);
       }
       if (type === 'color' && typeof token.$value === 'object') {
-        assert.equal(token.$value.colorSpace, 'oklch');
-        assert.equal(token.$value.components.length, 3);
-        assert.match(token.$value.hex, /^#[0-9a-f]{6}$/);
+        const value = token.$value as DtcgColor;
+        assert.equal(value.colorSpace, 'oklch');
+        assert.equal(value.components.length, 3);
+        assert.match(value.hex, /^#[0-9a-f]{6}$/);
       }
     }
   }
@@ -143,7 +155,7 @@ test('a glazing declared in the palette without CSS fails the build instead of s
 test('a field name keeps one type across the published palette tables', () => {
   for (const window of Object.values(palette.windows)) assert.ok(Array.isArray(window.stops));
   for (const [id, mode] of Object.entries(palette.windowModes)) {
-    assert.equal(mode.stops, undefined, `${id} describes its light in source, not stops`);
+    assert.equal((mode as { stops?: unknown }).stops, undefined, `${id} describes its light in source, not stops`);
     assert.equal(typeof mode.source, 'string', id);
   }
 });
@@ -163,17 +175,19 @@ test('the palette data names the default of every theme axis', () => {
 });
 
 test('the palette data lists each font family with exactly the weights the type scale uses', () => {
-  const families = tokens.files['foundation/typography.tokens.json'].font.family;
-  const scale = tokens.files['foundation/typography.tokens.json'].type;
+  const typography = tokens.files['foundation/typography.tokens.json'] as unknown as TypographyTree;
+  const families = typography.font.family;
+  const scale = typography.type;
   assert.deepEqual(Object.keys(data.fonts), Object.keys(families).filter((key) => !key.startsWith('$')));
-  for (const [id, font] of Object.entries(data.fonts)) {
-    const stack = families[id].$value;
+  for (const [id, font] of Object.entries(data.fonts as Record<string, FontData>)) {
+    const stack = families[id].$value as string[];
     assert.equal(font.family, stack[0], id);
     assert.deepEqual(font.fallbacks, stack.slice(1, -1), id);
     assert.equal(font.generic, stack.at(-1), id);
     const used = Object.values(scale)
-      .filter((role) => role.$value?.fontFamily === `{font.family.${id}}`)
-      .map((role) => role.$value.fontWeight);
+      .map((role) => role.$value as Typography | undefined)
+      .filter((value) => value?.fontFamily === `{font.family.${id}}`)
+      .map((value) => value!.fontWeight);
     assert.deepEqual(font.weights, [...new Set(used)].sort((a, b) => a - b), id);
     assert.deepEqual(font.styles, ['normal'], id);
   }
@@ -182,7 +196,7 @@ test('the palette data lists each font family with exactly the weights the type 
 test('every font in the palette data has the stylesheet variable of the same name', () => {
   // Consumers that host their own fonts map fonts.<role> onto --san-font-family-<role>.
   const css = emitCss(palette, tokens);
-  for (const [role, font] of Object.entries(data.fonts)) {
+  for (const [role, font] of Object.entries(data.fonts as Record<string, FontData>)) {
     const declared = css.match(new RegExp(`--san-font-family-${role}: ([^;]+);`));
     assert.ok(declared, `--san-font-family-${role} is not declared`);
     assert.ok(declared[1].startsWith(`"${font.family}"`) || declared[1].startsWith(font.family), role);
@@ -205,7 +219,7 @@ test('under reduced motion every duration token collapses to zero', () => {
 test('white light is a token, and the glass sheen is drawn with it', () => {
   const css = emitCss(palette, tokens);
   assert.match(css, /--san-light: oklch\(1 0 0\);/);
-  const sheen = css.match(/--san-glaze-sheen: ([^;]+);/)[1];
+  const sheen = css.match(/--san-glaze-sheen: ([^;]+);/)![1];
   assert.ok(sheen.includes('var(--san-light)'), sheen);
   assert.ok(!/oklch\(1 0 0 \//.test(css), 'white light written as a literal');
 });
@@ -224,7 +238,7 @@ test('the npm package ships only the stylesheet, the palette and the token files
   const start = result.stdout.indexOf('{');
   assert.ok(start >= 0, `pnpm pack printed no JSON:\n${result.stdout}`);
   const { files } = JSON.parse(result.stdout.slice(start));
-  const roots = [...new Set(files.map(({ path }) => path.split('/')[0]))].sort();
+  const roots = [...new Set(files.map(({ path }: { path: string }) => path.split('/')[0]))].sort();
   assert.deepEqual(roots, ['LICENSE', 'README.md', 'dist', 'package.json', 'tokens']);
 });
 
@@ -235,8 +249,8 @@ test('the harmonic window leads each accent with its two neighbors on the hue wh
   assert.deepEqual(harmony('rose'), ['murrey', 'rose', 'ruby']);
 
   const css = emitCss(palette, tokens);
-  const blockOf = (selector) => css.slice(css.indexOf(selector), css.indexOf('}', css.indexOf(selector)));
-  const stops = (id) => harmony(id).map((pigment, i) => `--san-harmony-${'abc'[i]}: var(--san-pigment-${pigment}-${WINDOW_TONES[i]});`);
+  const blockOf = (selector: string) => css.slice(css.indexOf(selector), css.indexOf('}', css.indexOf(selector)));
+  const stops = (id: PigmentId) => harmony(id).map((pigment, i) => `--san-harmony-${'abc'[i]}: var(--san-pigment-${pigment}-${WINDOW_TONES[i]});`);
   for (const id of pigmentIds) {
     for (const stop of stops(id)) assert.ok(blockOf(`[data-san-accent="${id}"]`).includes(stop), `${id}: ${stop}`);
   }
@@ -260,7 +274,7 @@ test('the default flavor is declared first so that any flavor attribute on the r
 });
 
 test('committed build outputs are up to date with the sources', () => {
-  const script = fileURLToPath(new URL('../scripts/build.js', import.meta.url));
+  const script = fileURLToPath(new URL('../scripts/build.ts', import.meta.url));
   execFileSync(process.execPath, [script, '--check'], { stdio: 'pipe' });
 });
 
@@ -273,7 +287,7 @@ test('the build check fails on a generated file that the sources no longer produ
     // Stands in for the token file of a flavor that was renamed or removed.
     writeFileSync(join(copy, 'tokens/flavor/vigils.tokens.json'), '{}\n');
     writeFileSync(join(copy, 'tokens/flavor/.DS_Store'), '');
-    const result = spawnSync(process.execPath, [join(copy, 'scripts/build.js'), '--check'], { encoding: 'utf8' });
+    const result = spawnSync(process.execPath, [join(copy, 'scripts/build.ts'), '--check'], { encoding: 'utf8' });
     assert.equal(result.status, 1);
     assert.match(result.stderr, /tokens\/flavor\/vigils\.tokens\.json/);
     assert.doesNotMatch(result.stderr, /\.DS_Store/, 'hidden files are not build output');
