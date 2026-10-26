@@ -87,11 +87,12 @@ A published version can never be replaced on npm. If one is wrong, release a fix
 - [Architecture](docs/architecture.md): token tiers, the build pipeline and the decisions behind them.
 - [Token reference](docs/tokens.md): every group and its custom properties.
 - [Public API](docs/public-api.md): what stays stable and how each change is versioned.
+- [Roadmap](ROADMAP.md): the phases of the core, up to `1.0.0`.
 - [Ecosystem](docs/ecosystem.md): the planned GitHub organization, the Lit library and the [ports](https://github.com/sanctuary-ds/ports) for desktop applications.
 
 ## Status
 
-`0.1.0`, the foundation.
+`0.1.1`. The [roadmap](ROADMAP.md) lists what comes next, up to `1.0.0`.
 
 ## License
 
