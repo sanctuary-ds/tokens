@@ -25,6 +25,7 @@ jobs:
       - uses: pnpm/setup@a0881977cd8ea73b1ed212236c99ca10dcc80cf4 # v3.1.1
         with:
           require-lockfile: true
+      - run: pnpm run typecheck
       - run: pnpm test
       - name: Check that generated files match the sources
         run: pnpm run check
@@ -35,8 +36,8 @@ jobs:
     timeout-minutes: 10
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-      # Proves the engines.node ">=22" promise in package.json.
+      # The oldest Node.js that devEngines.runtime in package.json accepts: 24, the active LTS line.
       - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
-          node-version: 22
+          node-version: 24.0.0
       - run: node --test

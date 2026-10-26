@@ -28,9 +28,6 @@
   },
   "type": "module",
   "packageManager": "pnpm@12.8.1",
-  "engines": {
-    "node": ">=22"
-  },
   "devEngines": {
     "runtime": {
       "name": "node",
