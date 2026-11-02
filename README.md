@@ -23,7 +23,7 @@ import '@sanctuary-ds/tokens/css';
 Without a build step, link it from a CDN that serves npm packages:
 
 ```html
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@sanctuary-ds/tokens@0.1/dist/css/sanctuary.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@sanctuary-ds/tokens@0.2/dist/css/sanctuary.css">
 ```
 
 The resolved colors are also available as data, and the DTCG files under `tokens/` for design tools and token pipelines:
@@ -78,7 +78,7 @@ The package has no dependencies: it is CSS and data, with no logic to run. The t
 Releases are published to npm by `.github/workflows/release.yml` with npm trusted publishing, so no npm token is stored anywhere. To release:
 
 1. Raise `version` in `package.json` in a pull request and merge it.
-2. Tag the merge commit with the same version, for example `git tag -s v0.1.1 && git push origin v0.1.1`.
+2. Tag the merge commit with the same version, for example `git tag -s v0.2.0 && git push origin v0.2.0`.
 3. Approve the `npm` deployment in the workflow run.
 
 The workflow runs the tests, checks that the tagged commit is on `main` and that the tag matches the version, waits for the approval, and publishes with provenance.
@@ -96,7 +96,7 @@ A published version can never be replaced on npm. If one is wrong, release a fix
 
 ## Status
 
-`0.1.1`. The [roadmap](ROADMAP.md) lists what comes next, up to `1.0.0`.
+`0.2.0`. The [roadmap](ROADMAP.md) lists what comes next, up to `1.0.0`.
 
 ## License
 
