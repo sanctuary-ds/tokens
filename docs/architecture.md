@@ -9,8 +9,11 @@ src/palette.ts    ─┐
 src/foundation.ts ├─► src/tokens.ts ─► tokens/*.tokens.json   (DTCG 2025.10, interchange)
 src/color.ts      ─┘        │         ─► tokens/sanctuary.resolver.json
                             ├─► src/emit/css.ts   ─► dist/css/sanctuary.css
-                            └─► scripts/build.ts  ─► dist/palette.json
+                            ├─► scripts/build.ts  ─► dist/palette.json
+                            └─► src/emit/palette.ts ─► dist/palette.js, dist/palette.d.ts
 ```
+
+The palette module and `palette.json` are two forms of one generated object, never edited by hand, and `pnpm run check` fails if either goes stale. The module exists so that bundlers keep only the keys a consumer imports; the JSON exists because the DTCG files use aliases, so a tool in another language would otherwise have to resolve them.
 
 `pnpm run build` writes all of it. `pnpm run check` (also run by the test suite) fails when a generated file is stale.
 

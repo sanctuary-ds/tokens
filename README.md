@@ -28,9 +28,12 @@ Without a build step, link it from a CDN that serves npm packages:
 
 The resolved colors are also available as data, and the DTCG files under `tokens/` for design tools and token pipelines:
 
-```js
-import palette from '@sanctuary-ds/tokens/palette' with { type: 'json' };
+```ts
+import { flavors, pigments } from '@sanctuary-ds/tokens/palette';
+import type { FlavorId, PigmentId } from '@sanctuary-ds/tokens/palette';
 ```
+
+Bundlers keep only what you import. Tools outside JavaScript can read the same data from `@sanctuary-ds/tokens/palette.json`.
 
 ## The three axes
 
@@ -54,7 +57,7 @@ Any element can carry these attributes, so a card can sit in another flavor or a
 |------|----------|----------------|
 | `src/` | The source of truth: color maths, palette, foundations, emitters | Yes |
 | `tokens/` | DTCG 2025.10 token files and a resolver document | No, generated |
-| `dist/` | `css/sanctuary.css` (custom properties) and `palette.json` | No, generated |
+| `dist/` | `css/sanctuary.css` (custom properties), and the palette as `palette.js`, `palette.d.ts` and `palette.json` | No, generated |
 | `docs/` | Design language, architecture, token reference, ecosystem plan | Yes |
 
 The npm package, `@sanctuary-ds/tokens`, contains only `dist/` and `tokens/`, with this README and the license; a test keeps it that way.
@@ -68,7 +71,7 @@ The npm package, `@sanctuary-ds/tokens`, contains only `dist/` and `tokens/`, wi
 | `pnpm run typecheck` | Checks the types of `src/`, `scripts/` and `test/` |
 | `pnpm test` | Color maths, WCAG AA contrast for every flavor, DTCG validity, cascade order, public API |
 
-The package has no dependencies: it is CSS and JSON. The tools are written in TypeScript, which Node runs directly by stripping the types, so there is no compile step; TypeScript itself is a development dependency that only checks them. They run on Node 24 or later, which pnpm downloads for the project when it is missing (`devEngines.runtime` in `package.json`).
+The package has no dependencies: it is CSS and data, with no logic to run. The tools are written in TypeScript, which Node runs directly by stripping the types, so there is no compile step; TypeScript itself is a development dependency that only checks them. They run on Node 24 or later, which pnpm downloads for the project when it is missing (`devEngines.runtime` in `package.json`).
 
 ## Releasing
 

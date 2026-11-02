@@ -198,6 +198,11 @@ test('a group keeps its $root token and leaves out the other $ properties', () =
   assert.deepEqual(groupTokens({ $type: 'color', $description: 'A group', $root: root, named }), [['$root', root], ['named', named]]);
 });
 
+test('the palette module holds the same data as palette.json', async () => {
+  const module = await import(new URL('../dist/palette.js', import.meta.url).href);
+  assert.deepEqual({ ...module }, data);
+});
+
 test('every font in the palette data has the stylesheet variable of the same name', () => {
   // Consumers that host their own fonts map fonts.<role> onto --san-font-family-<role>.
   const css = emitCss(palette, tokens);

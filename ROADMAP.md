@@ -9,7 +9,7 @@ This document is the brief for whoever changes the core. Read it before changing
 | In this repository | Elsewhere |
 |--------------------|-----------|
 | Color maths, palette, foundations and the emitters in `src/` | The site, the playground and the design language: [`sanctuary-ds.github.io`](https://github.com/sanctuary-ds/sanctuary-ds.github.io) |
-| DTCG token files, `sanctuary.css` and `palette.json` | Components: `web-components`, planned |
+| DTCG token files, `sanctuary.css`, and the palette as a typed module and as `palette.json` | Components: `web-components`, planned |
 | Their technical docs: architecture, token reference, public API | Application themes: [`ports`](https://github.com/sanctuary-ds/ports) |
 
 ## Principles
@@ -17,7 +17,7 @@ This document is the brief for whoever changes the core. Read it before changing
 - **A small, stable package.** The core ships tokens, a stylesheet and a palette. Anything that consumes them lives in the repository that consumes them.
 - **Every release changes the package.** A version is published only when `dist/` or `tokens/` change. Cleanups of the repository, its docs or its tests are not released.
 - **The contract is written down.** [`docs/public-api.md`](docs/public-api.md) defines what is public, and a test keeps the [API report](api/sanctuary.api.txt) in step with the package.
-- **No runtime dependencies.** The package is CSS and JSON; the engine runs on Node alone.
+- **No runtime dependencies.** The package is CSS and data, with no logic to run; the engine runs on Node alone.
 
 ## Contract with the other repositories
 
@@ -42,13 +42,14 @@ Each phase ends in a release to npm or in an internal change, and says which.
 - [x] Convert `src/`, `scripts/` and `test/` to TypeScript run directly by Node (type stripping, erasable syntax only), with Node 24 as the minimum.
 - [x] Check the types with `pnpm run typecheck` in CI and before each release.
 
-No release: the package publishes CSS and JSON, not JavaScript.
+No release: the source is not published, so the package did not change.
 
-### Phase 3: A typed palette (release `0.1.2`)
+### Phase 3: A typed palette (release `0.2.0`)
 
-- [ ] Publish types for `palette.json`, generated from the source, so `ports` and `web-components` can rely on ids such as `FlavorId` and `PigmentId`.
-- [ ] Verify how a JSON entry point carries its types (the `types` condition in `exports`, or a separate entry point) before choosing the shape.
-- [ ] Add the types to the public API report.
+- [x] Publish the palette as a typed module, generated from the source, so `ports` and `web-components` can rely on ids such as `FlavorId` and `PigmentId`. A breaking change: `./palette` becomes the module and the JSON moves to `./palette.json`.
+- [x] Verify how a JSON entry point carries its types before choosing the shape. Types over a JSON file left the import attribute unchecked and could not be tree-shaken, so the entry point became a module.
+- [x] Add the types to the public API report.
+- [ ] Update the site to the new entry point and its guide for writing a port, after the release.
 - [x] Type the token trees from their source, so the build and the tests no longer cast the typography tree.
 - [x] Derive the `Role` type from the list of glass roles, so a new role cannot be left out of the tokens.
 - [x] Pass the test file pattern to `node --test` explicitly, so a run without type stripping fails instead of finding no tests.
@@ -71,7 +72,6 @@ No release: the package publishes CSS and JSON, not JavaScript.
 | Decision | Options | When |
 |----------|---------|------|
 | Wide gamut | Display P3 pigments, or sRGB only | Phase 4 |
-| Shape of the palette types | `types` condition on `./palette`, or a separate entry point | Phase 3 |
 
 ## Working agreement
 

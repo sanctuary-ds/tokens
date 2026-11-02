@@ -10,7 +10,7 @@ This repository is the seed of the [`sanctuary-ds`](https://github.com/sanctuary
 | [`sanctuary-ds.github.io`](https://github.com/sanctuary-ds/sanctuary-ds.github.io) | Public site: home, playground, documentation; see its [roadmap](https://github.com/sanctuary-ds/sanctuary-ds.github.io/blob/main/ROADMAP.md) | `tokens`, later `web-components` | In progress |
 | [`.github`](https://github.com/sanctuary-ds/.github) | Organization profile, contributing guide, security policy, brand mark | Nothing | Active |
 | `web-components` | Sanctuary Web Components: the Lit library (`<san-button>`, ...), published as `@sanctuary-ds/web-components` | `tokens` | Planned |
-| [`ports`](https://github.com/sanctuary-ds/ports) | Themes for desktop applications, generated from one template per application; see [Ports](#ports) | `palette.json` | Planned: no port is published yet |
+| [`ports`](https://github.com/sanctuary-ds/ports) | Themes for desktop applications, generated from one template per application; see [Ports](#ports) | `tokens` | Planned: no port is published yet |
 
 Repositories are named after what they ship, and a platform-specific library carries its platform in its name, so a future Flutter library would live in its own `flutter` repository and generate its theme from `palette.json`. This repository was renamed from `sanctuary` to `tokens`, to match `@sanctuary-ds/tokens`, once the showcase had moved to the site; GitHub redirects the old name. There is no separate umbrella repository: the organization profile and the site play that role, joined by organization discussions once they are enabled.
 
@@ -42,14 +42,14 @@ Suggested first components, in dependency order: button, icon button, chip, text
 
 ## Ports
 
-A port is the theme of one application, such as a terminal or a status bar, generated from `palette.json`.
+A port is the theme of one application, such as a terminal or a status bar, generated from the palette.
 
 | Decision | Choice | Reason |
 |----------|--------|--------|
 | Where ports live | One `ports` repository for every application configured by a file; a repository of its own, named after the application (`nvim`), only for one installed from a git URL, such as a Neovim or tmux plugin | One maintainer: a palette change is one pull request, not one per application |
 | How they are built | One generator and one template per application, in TypeScript run directly by Node | The generator reads the palette and writes what each template returns, so a new application is a new template |
 | Template output | A list of files, not one file per flavor | Applications differ: some take one file per flavor, some every flavor in one file, some several files |
-| Palette input | `@sanctuary-ds/tokens` pinned to an exact version | Each port states which palette it matches |
+| Palette input | The typed module of `@sanctuary-ds/tokens`, pinned to an exact version | Each port states which palette it matches, and a template that names a missing color fails its type check |
 
 The first ports are the applications of a real desktop, so each one is tested where it runs. The `ports` repository's `ROADMAP.md` will list them.
 
