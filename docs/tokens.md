@@ -116,7 +116,14 @@ Glazing, cast, halo, state layers and the arch shapes are not in the token files
 
 ## Using the plain palette
 
-`dist/palette.json` holds resolved values for tools that do not want a token pipeline:
+The palette holds resolved values for tools that do not want a token pipeline. It comes in two forms, with the same data:
+
+| Entry point | For | How to read it |
+|-------------|-----|----------------|
+| `@sanctuary-ds/tokens/palette` | JavaScript and TypeScript, with types such as `FlavorId` and `PigmentId` | `import { flavors } from '@sanctuary-ds/tokens/palette';` |
+| `@sanctuary-ds/tokens/palette.json` | Tools in any other language | Read `dist/palette.json` from the package |
+
+Each top-level key below is a named export of the module:
 
 ```json
 { "flavors": { "compline": { "scheme": "dark", "accent": "cobalt",

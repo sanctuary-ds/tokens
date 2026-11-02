@@ -1,5 +1,7 @@
 // Flavor-independent foundations, authored directly as DTCG 2025.10 token trees.
 
+import type { Typography } from './tokens.ts';
+
 const rem = (value: number) => ({ value, unit: 'rem' });
 const px = (value: number) => ({ value, unit: 'px' });
 const ms = (value: number) => ({ value, unit: 'ms' });
@@ -70,24 +72,24 @@ const TYPE_SCALE: Record<string, [family: string, size: number, lineHeight: numb
   'code-sm': ['mono', 0.78125, 1.6, 400, 0],
 };
 
-const type = {
-  $type: 'typography',
-  ...Object.fromEntries(
-    Object.entries(TYPE_SCALE).map(([name, [family, fontSize, lineHeight, weight, tracking]]) => [
-      name,
-      {
-        $value: {
-          fontFamily: `{font.family.${family}}`,
-          fontSize: rem(fontSize),
-          fontWeight: weight,
-          // DTCG dimensions only allow px and rem, so em tracking is resolved against the size.
-          letterSpacing: rem(Number((fontSize * tracking).toFixed(5))),
-          lineHeight,
-        },
+const typeRoles: Record<string, { $value: Typography }> = Object.fromEntries(
+  Object.entries(TYPE_SCALE).map(([name, [family, fontSize, lineHeight, weight, tracking]]) => [
+    name,
+    {
+      $value: {
+        fontFamily: `{font.family.${family}}`,
+        fontSize: rem(fontSize),
+        fontWeight: weight,
+        // DTCG dimensions only allow px and rem, so em tracking is resolved against the size.
+        letterSpacing: rem(Number((fontSize * tracking).toFixed(5))),
+        lineHeight,
       },
-    ]),
-  ),
-};
+    },
+  ]),
+);
+
+// Declared by hand because a spread drops the index signature, and the roles with it.
+const type: { $type: string; [role: string]: string | { $value: Typography } } = { $type: 'typography', ...typeRoles };
 
 const duration = {
   ...group('duration', { instant: 80, fast: 140, base: 220, slow: 360, slower: 560 }, ms),

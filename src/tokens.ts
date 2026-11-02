@@ -1,9 +1,9 @@
 // Builds the DTCG 2025.10 token trees and the resolver document from the palette.
 
 import { FOUNDATION_FILES } from './foundation.ts';
-import { DEFAULT_FLAVOR, PIGMENTS, STATUS, SYNTAX, WINDOW_TONES } from './palette.ts';
+import { DEFAULT_FLAVOR, GLASS_ROLES, PIGMENTS, STATUS, SYNTAX, WINDOW_TONES } from './palette.ts';
 import type { ColorRecord, Oklch } from './color.ts';
-import type { Palette, PigmentId, Role } from './palette.ts';
+import type { Palette, PigmentId } from './palette.ts';
 
 /** A node of a DTCG tree: a group of other nodes, or a token when it has a `$value`. */
 export interface TokenNode {
@@ -17,7 +17,8 @@ export interface TokenNode {
 export type TokenFiles = Record<string, TokenNode>;
 
 export interface Tokens {
-  files: TokenFiles;
+  /** Foundation files keep the types of their source; the generated ones are plain token trees. */
+  files: TokenFiles & typeof FOUNDATION_FILES;
   resolver: ReturnType<typeof resolverDocument>;
 }
 
@@ -36,12 +37,6 @@ export interface Typography {
   lineHeight: number;
 }
 
-/** The token tree of `foundation/typography.tokens.json`, as far as the build reads it. */
-export interface TypographyTree {
-  font: { family: Record<string, TokenNode> };
-  type: Record<string, TokenNode>;
-}
-
 /** A color `$value` as the DTCG color module writes it. */
 export interface DtcgColor {
   colorSpace: 'oklch';
@@ -49,8 +44,6 @@ export interface DtcgColor {
   alpha?: number;
   hex: string;
 }
-
-const GLASS_ROLES: readonly Role[] = ['$root', 'lume', 'ink', 'pane', 'on', 'on-pane'];
 
 /** Alias to a token; a bare group name points at that group's `$root` token. */
 const ref = (path: string, role = '$root') => `{${path}.${role}}`;
@@ -160,7 +153,7 @@ function resolverDocument(files: TokenFiles) {
 }
 
 export function buildTokens(palette: Palette): Tokens {
-  const files: TokenFiles = { ...FOUNDATION_FILES, 'pigment.tokens.json': pigmentFile(palette) };
+  const files: Tokens['files'] = { ...FOUNDATION_FILES, 'pigment.tokens.json': pigmentFile(palette) };
   for (const [id, flavor] of Object.entries(palette.flavors)) files[`flavor/${id}.tokens.json`] = flavorFile(flavor);
   for (const id of Object.keys(PIGMENTS)) {
     files[`accent/${id}.tokens.json`] = { accent: { $type: 'color', ...roleGroup(`glass.${id}`) } };
@@ -182,6 +175,11 @@ export function flatten(tree: TokenNode, path: string[] = [], inherited?: string
   return Object.entries(tree)
     .filter(([key, value]) => (key === '$root' || !key.startsWith('$')) && typeof value === 'object')
     .flatMap(([key, value]) => flatten(value as TokenNode, [...path, key], type));
+}
+
+/** The tokens of a DTCG group: its `$root` token and named ones, without properties such as `$type`. */
+export function groupTokens<T>(group: { [key: string]: string | T }): [name: string, token: T][] {
+  return Object.entries(group).filter((entry): entry is [string, T] => entry[0] === '$root' || !entry[0].startsWith('$'));
 }
 
 /** Custom property name for a token path. `$root` names the group itself. */

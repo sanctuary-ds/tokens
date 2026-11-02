@@ -4,14 +4,15 @@ What `@sanctuary-ds/tokens` promises to keep stable, and how each kind of change
 
 ## What is public
 
-Five parts of the published package are public. Each one appears in the [API report](../api/sanctuary.api.txt) with its own prefix.
+Six parts of the published package are public. Each one appears in the [API report](../api/sanctuary.api.txt) with its own prefix.
 
 | Part | Example | Report prefix |
 |------|---------|---------------|
 | Entry points in `exports` | `@sanctuary-ds/tokens/css` | `export` |
 | Custom properties the stylesheet declares | `--san-accent-ink` | `css` |
 | Theme attributes and their values | `data-san-flavor="vespers"` | `attribute` |
-| Keys of `palette.json`, and the ids of its flavors, pigments, windows, window modes, glazings and fonts | `flavors.<flavor>.colors.surface.hex` | `palette` |
+| Keys of the palette, in its module and in `palette.json`, and the ids of its flavors, pigments, windows, window modes, glazings and fonts | `flavors.<flavor>.colors.surface.hex` | `palette` |
+| Types the palette module exports | `FlavorId` | `type` |
 | DTCG files and the token paths in them | `semantic.tokens.json` `danger.ink` | `file`, `token` |
 
 Not public: the values (hex codes, OKLCH components, durations, font stacks), descriptions and notes, the order of rules in the stylesheet, and everything outside the package, such as `src/`, `scripts/` and `test/`.
@@ -36,6 +37,12 @@ A public name is not removed in the release that replaces it:
 
 1. **Deprecate** in a minor release. The DTCG token gets `$deprecated` with a short note naming its replacement, and the old custom property stays, set to the new one (`--san-old: var(--san-new)`), so nothing breaks.
 2. **Remove** in the next major release.
+
+One change skipped this path: `0.2.0` turned `./palette` from a JSON file into a module, and the JSON moved to `./palette.json`. An entry point cannot be both, so there was nothing to deprecate first.
+
+| Before `0.2.0` | From `0.2.0` |
+|----------------|--------------|
+| `import palette from '@sanctuary-ds/tokens/palette' with { type: 'json' };` | `import * as palette from '@sanctuary-ds/tokens/palette';`, or named imports |
 
 ## The API report
 

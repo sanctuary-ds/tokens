@@ -2,7 +2,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 
-import { REPORT, paletteLines, publicApi, report, tokenLines } from '../scripts/api.ts';
+import { REPORT, paletteLines, publicApi, report, tokenLines, typeLines } from '../scripts/api.ts';
 
 const read = (file: string) => JSON.parse(readFileSync(new URL(`../${file}`, import.meta.url), 'utf8'));
 const lines = (text: string) => text.split('\n').filter((line) => line && !line.startsWith('#'));
@@ -51,6 +51,12 @@ test('a token removed from a single flavor file changes the report', () => {
     removed: ['token flavor/<flavor>.tokens.json surface.sunken'],
     added: ['token flavor/lauds.tokens.json surface.sunken'],
   });
+});
+
+test('a type removed from the palette module changes the report', () => {
+  const declarations = 'export type FlavorId = "lauds";\nexport interface Flavor {\n  name: string;\n}\nexport declare const flavors: unknown;\n';
+  assert.deepEqual(typeLines(declarations), ['type FlavorId', 'type Flavor']);
+  assert.deepEqual(typeLines(declarations.replace('export type FlavorId = "lauds";\n', '')), ['type Flavor']);
 });
 
 test('a palette key whose value is empty stays in the report', () => {

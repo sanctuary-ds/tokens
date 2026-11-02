@@ -443,7 +443,8 @@ css --san-window-rosace
 css --san-window-vesperal
 export ./css -> ./dist/css/sanctuary.css
 export ./package.json -> ./package.json
-export ./palette -> ./dist/palette.json
+export ./palette -> {"types":"./dist/palette.d.ts","default":"./dist/palette.js"}
+export ./palette.json -> ./dist/palette.json
 export ./tokens/* -> ./tokens/*
 file tokens/accent/amber.tokens.json
 file tokens/accent/amethyst.tokens.json
@@ -1153,3 +1154,19 @@ token semantic.tokens.json window.jesse
 token semantic.tokens.json window.lancet
 token semantic.tokens.json window.rosace
 token semantic.tokens.json window.vesperal
+type Color
+type ColorName
+type Flavor
+type FlavorId
+type Font
+type FontRole
+type Glazing
+type GlazingId
+type PaletteWindow
+type Pigment
+type PigmentId
+type Scheme
+type Tone
+type WindowId
+type WindowMode
+type WindowModeId
