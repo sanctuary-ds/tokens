@@ -1,9 +1,10 @@
 // Flavor-independent foundations, authored directly as DTCG 2025.10 token trees.
 
-const rem = (value) => ({ value, unit: 'rem' });
-const px = (value) => ({ value, unit: 'px' });
-const ms = (value) => ({ value, unit: 'ms' });
-const group = (type, entries, wrap = (v) => v) => ({
+const rem = (value: number) => ({ value, unit: 'rem' });
+const px = (value: number) => ({ value, unit: 'px' });
+const ms = (value: number) => ({ value, unit: 'ms' });
+/** A DTCG group of one type, whose values may be wrapped, for example as a dimension. */
+const group = <V>(type: string, entries: Record<string, V>, wrap: (value: V) => unknown = (value) => value) => ({
   $type: type,
   ...Object.fromEntries(Object.entries(entries).map(([key, value]) => [key, { $value: wrap(value) }])),
 });
@@ -48,7 +49,7 @@ const font = {
 };
 
 // [family, size rem, line-height, weight, tracking em]
-const TYPE_SCALE = {
+const TYPE_SCALE: Record<string, [family: string, size: number, lineHeight: number, weight: number, tracking: number]> = {
   'display-lg': ['display', 4.5, 1.04, 500, -0.02],
   'display-md': ['display', 3.5, 1.08, 500, -0.018],
   'display-sm': ['display', 2.75, 1.1, 500, -0.015],
@@ -101,7 +102,8 @@ const ease = group('cubicBezier', {
 });
 
 // Lumen levels. Each level pairs a key shadow with an ambient one; colors come from the flavor.
-const LUMEN = [
+type Shadow = [offsetY: number, blur: number, spread: number];
+const LUMEN: [key: Shadow, ambient: Shadow][] = [
   [[0, 0, 0], [0, 0, 0]],
   [[1, 2, 0], [1, 3, 1]],
   [[2, 4, -1], [4, 10, 0]],
@@ -110,7 +112,7 @@ const LUMEN = [
   [[12, 24, -6], [32, 64, 0]],
 ];
 
-const layer = (umbra, [offsetY, blur, spread]) => ({
+const layer = (umbra: string, [offsetY, blur, spread]: Shadow) => ({
   color: `{umbra.${umbra}}`,
   offsetX: px(0),
   offsetY: px(offsetY),
@@ -146,14 +148,14 @@ export const FOUNDATION_FILES = {
 };
 
 /** Percentage polygon for a pointed (equilateral) arch whose springing sits `spring`% down the box. */
-export function archPolygon(spring, steps = 14) {
-  const points = [];
+export function archPolygon(spring: number, steps = 14): string {
+  const points: [x: number, y: number][] = [];
   const apex = Math.PI / 3;
   for (let i = 0; i <= steps; i += 1) {
     const t = (apex * i) / steps;
     points.push([(1 - Math.cos(t)) * 100, spring * (1 - Math.sin(t) / Math.sin(apex))]);
   }
-  const right = points.slice(0, -1).reverse().map(([x, y]) => [100 - x, y]);
-  const format = ([x, y]) => `${Number(x.toFixed(2))}% ${Number(y.toFixed(2))}%`;
+  const right = points.slice(0, -1).reverse().map(([x, y]): [number, number] => [100 - x, y]);
+  const format = ([x, y]: [number, number]) => `${Number(x.toFixed(2))}% ${Number(y.toFixed(2))}%`;
   return `polygon(0% 100%, ${[...points, ...right].map(format).join(', ')}, 100% 100%)`;
 }

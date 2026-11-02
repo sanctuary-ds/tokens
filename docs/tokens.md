@@ -112,7 +112,7 @@ When the visitor asks for reduced motion (`prefers-reduced-motion: reduce`), the
 | `flavor` | `lauds`, `vespers`, `compline`, `matins` | `compline` |
 | `accent` | `flavor` (keep the flavor's default) or any pigment | `flavor` |
 
-Glazing, cast, halo, state layers and the arch shapes are not in the token files: the format has no color functions or string type. They are defined in `src/emit/css.js`.
+Glazing, cast, halo, state layers and the arch shapes are not in the token files: the format has no color functions or string type. They are defined in `src/emit/css.ts`.
 
 ## Using the plain palette
 

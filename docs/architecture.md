@@ -1,15 +1,15 @@
 # Architecture
 
-Sanctuary is a token pipeline: a small dependency-free engine in `src/` generates DTCG token files, a stylesheet and a palette as plain data. Themes for desktop applications are generated from that palette in the [`ports`](https://github.com/sanctuary-ds/ports) repository. Everything a consumer uses is generated; everything a maintainer edits is in `src/`.
+Sanctuary is a token pipeline: a small engine in `src/`, written in TypeScript and with no runtime dependencies, generates DTCG token files, a stylesheet and a palette as plain data. Themes for desktop applications are generated from that palette in the [`ports`](https://github.com/sanctuary-ds/ports) repository. Everything a consumer uses is generated; everything a maintainer edits is in `src/`.
 
 ## Pipeline
 
 ```text
-src/palette.js    ─┐
-src/foundation.js ├─► src/tokens.js ─► tokens/*.tokens.json   (DTCG 2025.10, interchange)
-src/color.js      ─┘        │         ─► tokens/sanctuary.resolver.json
-                            ├─► src/emit/css.js   ─► dist/css/sanctuary.css
-                            └─► scripts/build.js  ─► dist/palette.json
+src/palette.ts    ─┐
+src/foundation.ts ├─► src/tokens.ts ─► tokens/*.tokens.json   (DTCG 2025.10, interchange)
+src/color.ts      ─┘        │         ─► tokens/sanctuary.resolver.json
+                            ├─► src/emit/css.ts   ─► dist/css/sanctuary.css
+                            └─► scripts/build.ts  ─► dist/palette.json
 ```
 
 `pnpm run build` writes all of it. `pnpm run check` (also run by the test suite) fails when a generated file is stale.
@@ -67,12 +67,13 @@ Known limit: when the *same* axis is nested twice with a different axis in betwe
 |----------|--------|--------|-----------|
 | Token format | DTCG 2025.10 (Format, Color, Resolver) | First stable revision; a vendor-neutral contract for Figma, Style Dictionary, Terrazzo and others | The spec has no string type and no color functions, so tier 4 cannot be expressed in it |
 | Source of truth | Code in `src/`, DTCG is generated | The palette is parametric: 132 pigment tones and 4 flavors derive from a few numbers | Designers cannot edit token JSON directly; they change parameters |
-| Build tooling | Own zero-dependency emitters | Nothing to install; support for the 2025.10 revision in third-party tools could not be confirmed at the time | The emitters must be maintained; adopting Style Dictionary or Terrazzo later is possible because the DTCG files already exist |
+| Language | TypeScript, run by Node's type stripping | Typed palette and token trees with no compile step; `tsc` only checks | Only erasable syntax (no enums or namespaces); TypeScript and `@types/node` are development dependencies |
+| Build tooling | Own emitters, no runtime dependencies | Nothing to install for consumers; support for the 2025.10 revision in third-party tools could not be confirmed at the time | The emitters must be maintained; adopting Style Dictionary or Terrazzo later is possible because the DTCG files already exist |
 | Color space | OKLCH, sRGB gamut | Perceptually even ramps and predictable contrast; sRGB keeps ports exact | Wide-gamut (P3) pigments are not used yet |
 | Accent model | Tonal ramps plus per-flavor role mapping | Guarantees contrast for any accent in any flavor | Less hand-tuned per flavor than a curated palette |
 | Glazing | A separate axis, CSS only | Keeps the accent a pure color choice; needs `color-mix()` | Not portable through DTCG; ports receive solid colors |
 | Window | A setting derived from the accent (`mono`, `harmonic`), not an axis | A window independent of the accent made cast light compete with the controls; ports ignore it anyway | A whole theme cannot be recolored against its accent with one attribute; the five named windows remain as fixed gradients to place by hand |
-| Generated files | Committed | Consumers can read them straight from the repository and pin a commit without a build step, and a review sees what each source change produces | Diffs include generated output; `pnpm run check` guards drift |
+| Generated files | Committed | A review sees exactly which values each source change produces, which the API report cannot show because it lists names only | Diffs include generated output; `pnpm run check` guards drift |
 | Prefix | `san` (`--san-*`, `data-san-*`, future `<san-button>`) | Short and unlikely to collide | None known |
 
 ## Browser support

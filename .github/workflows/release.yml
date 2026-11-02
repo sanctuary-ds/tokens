@@ -30,6 +30,7 @@ jobs:
             exit 1
           fi
       # Includes the package contents test, which needs pnpm.
+      - run: pnpm run typecheck
       - run: pnpm test
       - name: Check that generated files match the sources
         run: pnpm run check

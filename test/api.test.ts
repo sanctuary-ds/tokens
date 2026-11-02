@@ -2,14 +2,14 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 
-import { REPORT, paletteLines, publicApi, report, tokenLines } from '../scripts/api.js';
+import { REPORT, paletteLines, publicApi, report, tokenLines } from '../scripts/api.ts';
 
-const read = (file) => JSON.parse(readFileSync(new URL(`../${file}`, import.meta.url), 'utf8'));
-const lines = (text) => text.split('\n').filter((line) => line && !line.startsWith('#'));
+const read = (file: string) => JSON.parse(readFileSync(new URL(`../${file}`, import.meta.url), 'utf8'));
+const lines = (text: string) => text.split('\n').filter((line) => line && !line.startsWith('#'));
 // The report lists each line once, so compare what a change leaves in it, not how often.
-const unique = (names) => [...new Set(names)].sort();
+const unique = (names: string[]) => [...new Set(names)].sort();
 /** The lines a change takes out of the report and the lines it puts in. */
-const change = (before, after) => ({
+const change = (before: string[], after: string[]) => ({
   removed: unique(before).filter((line) => !after.includes(line)),
   added: unique(after).filter((line) => !before.includes(line)),
 });
@@ -19,7 +19,7 @@ test('the public API matches the committed report', () => {
   const current = publicApi();
   const removed = lines(committed).filter((line) => !current.includes(line));
   const added = current.filter((line) => !lines(committed).includes(line));
-  const list = (names) => names.map((name) => `  ${name}`).join('\n');
+  const list = (names: string[]) => names.map((name) => `  ${name}`).join('\n');
   // Compared as text, so a report that was edited by hand, reordered or duplicated also fails.
   assert.ok(
     committed === report(),
@@ -36,7 +36,7 @@ test('a palette key removed from a single flavor changes the report', () => {
   const before = paletteLines(palette);
   delete palette.flavors.matins.colors.surface;
   // The shared line goes, and the flavors that still have the color are named one by one.
-  const names = (flavor) => [`palette flavors.${flavor}.colors.surface.hex`, `palette flavors.${flavor}.colors.surface.oklch`];
+  const names = (flavor: string) => [`palette flavors.${flavor}.colors.surface.hex`, `palette flavors.${flavor}.colors.surface.oklch`];
   assert.deepEqual(change(before, paletteLines(palette)), {
     removed: names('<flavor>'),
     added: ['compline', 'lauds', 'vespers'].flatMap(names).sort(),

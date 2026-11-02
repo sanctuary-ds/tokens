@@ -28,9 +28,6 @@
   },
   "type": "module",
   "packageManager": "pnpm@12.8.1",
-  "engines": {
-    "node": ">=22"
-  },
   "devEngines": {
     "runtime": {
       "name": "node",
@@ -39,10 +36,11 @@
     }
   },
   "scripts": {
-    "build": "node scripts/build.js",
-    "check": "node scripts/build.js --check",
-    "api": "node scripts/api.js",
-    "test": "node --test"
+    "build": "node scripts/build.ts",
+    "check": "node scripts/build.ts --check",
+    "api": "node scripts/api.ts",
+    "test": "node --test",
+    "typecheck": "tsc"
   },
   "exports": {
     "./css": "./dist/css/sanctuary.css",
@@ -56,5 +54,9 @@
   ],
   "publishConfig": {
     "access": "public"
+  },
+  "devDependencies": {
+    "@types/node": "24.19.2",
+    "typescript": "7.0.2"
   }
 }

@@ -65,9 +65,10 @@ The npm package, `@sanctuary-ds/tokens`, contains only `dist/` and `tokens/`, wi
 |---------|--------|
 | `pnpm run build` | Regenerates `tokens/` and `dist/` |
 | `pnpm run check` | Fails if any generated file is stale |
+| `pnpm run typecheck` | Checks the types of `src/`, `scripts/` and `test/` |
 | `pnpm test` | Color maths, WCAG AA contrast for every flavor, DTCG validity, cascade order, public API |
 
-There are no dependencies. The tools run on Node 22 or later; development uses Node 24, which pnpm downloads for the project when it is missing (`devEngines.runtime` in `package.json`).
+The package has no dependencies: it is CSS and JSON. The tools are written in TypeScript, which Node runs directly by stripping the types, so there is no compile step; TypeScript itself is a development dependency that only checks them. They run on Node 24 or later, which pnpm downloads for the project when it is missing (`devEngines.runtime` in `package.json`).
 
 ## Releasing
 

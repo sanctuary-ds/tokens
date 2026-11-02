@@ -8,12 +8,16 @@ import { readFileSync, readdirSync, writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 
-import { flatten } from '../src/tokens.js';
+import { flatten } from '../src/tokens.ts';
+import type { TokenFiles } from '../src/tokens.ts';
+
+/** Ids that share a shape, each with its dotted paths. */
+type Entries = [id: string, paths: string[]][];
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 export const REPORT = 'api/sanctuary.api.txt';
 
-const read = (file) => readFileSync(join(root, file), 'utf8');
+const read = (file: string) => readFileSync(join(root, file), 'utf8');
 
 /** The export map: the entry points consumers import. */
 function exportLines() {
@@ -35,37 +39,37 @@ function cssLines() {
  * written once with a placeholder (`flavors.<flavor>.accent`); a path only some ids have is
  * written for each of them, so removing it from a single id still changes the report.
  */
-function shared(entries, placeholder, line) {
-  const owners = new Map();
+function shared(entries: Entries, placeholder: string, line: (id: string, path: string) => string): string[] {
+  const owners = new Map<string, string[]>();
   for (const [id, paths] of entries) for (const path of paths) owners.set(path, [...(owners.get(path) ?? []), id]);
   return [...owners].flatMap(([path, ids]) =>
     ids.length === entries.length ? [line(`<${placeholder}>`, path)] : ids.map((id) => line(id, path)));
 }
 
 /** Dotted paths from a node down to its values; arrays and empty objects count as values. */
-function leaves(node, path = []) {
+function leaves(node: unknown, path: string[] = []): string[] {
   const entries = node !== null && typeof node === 'object' && !Array.isArray(node) ? Object.entries(node) : [];
   if (entries.length === 0) return [path.join('.')];
   return entries.flatMap(([key, value]) => leaves(value, [...path, key]));
 }
 
 // Maps in palette.json keyed by an id: the ids are listed, and the paths under them are shared.
-const ID_MAPS = { flavors: 'flavor', pigments: 'pigment', windows: 'window', windowModes: 'window-mode', glazings: 'glazing', fonts: 'font' };
+const ID_MAPS: Record<string, string> = { flavors: 'flavor', pigments: 'pigment', windows: 'window', windowModes: 'window-mode', glazings: 'glazing', fonts: 'font' };
 
 /** Every key path in palette.json, down to the values. */
-export function paletteLines(palette) {
+export function paletteLines(palette: Record<string, unknown>): string[] {
   return Object.entries(palette).flatMap(([key, value]) => {
-    if (!ID_MAPS[key] || Object.keys(value).length === 0) return leaves(value, [key]).map((path) => `palette ${path}`);
-    const ids = Object.keys(value).map((id) => `palette ${key}: ${id}`);
-    const entries = Object.entries(value).map(([id, node]) => [id, leaves(node)]);
+    if (!ID_MAPS[key] || Object.keys(value as object).length === 0) return leaves(value, [key]).map((path) => `palette ${path}`);
+    const ids = Object.keys(value as object).map((id) => `palette ${key}: ${id}`);
+    const entries: Entries = Object.entries(value as object).map(([id, node]) => [id, leaves(node)]);
     return [...ids, ...shared(entries, ID_MAPS[key], (id, path) => `palette ${[key, id, path].filter(Boolean).join('.')}`)];
   });
 }
 
 /** Every DTCG file, and every token path in it, given as { 'flavor/lauds.tokens.json': tree }. */
-export function tokenLines(files) {
+export function tokenLines(files: TokenFiles): string[] {
   const lines = Object.keys(files).map((file) => `file tokens/${file}`);
-  const kinds = { flavor: [], accent: [] };
+  const kinds: Record<string, Entries> = { flavor: [], accent: [] };
   for (const [file, tree] of Object.entries(files)) {
     const paths = flatten(tree).map(({ path }) => path.join('.'));
     const [, kind, id] = file.match(/^(flavor|accent)\/([^/]+)\.tokens\.json$/) ?? [];
@@ -81,7 +85,7 @@ export function tokenLines(files) {
 /** The DTCG files of the package, by path inside tokens/. */
 function tokenFiles() {
   return Object.fromEntries(
-    readdirSync(join(root, 'tokens'), { recursive: true })
+    readdirSync(join(root, 'tokens'), { recursive: true, encoding: 'utf8' })
       .map((file) => file.split('\\').join('/'))
       .filter((file) => file.endsWith('.json'))
       .map((file) => [file, JSON.parse(read(`tokens/${file}`))]),

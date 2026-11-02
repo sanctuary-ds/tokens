@@ -1,18 +1,55 @@
 // The Sanctuary palette: pigments (flavor-independent tonal ramps), flavors
 // (the stone each hour of the day reveals) and windows (multi-pigment light).
 
-import { color, maxChroma, withAlpha } from './color.js';
+import { color, maxChroma, withAlpha } from './color.ts';
+import type { ColorRecord } from './color.ts';
 
-export const TONES = [50, 100, 200, 300, 400, 500, 600, 700, 800, 900, 950];
+export const TONES = [50, 100, 200, 300, 400, 500, 600, 700, 800, 900, 950] as const;
+export type Tone = (typeof TONES)[number];
+
+/** A hue and the most chroma it may take. */
+interface Tint {
+  hue: number;
+  chroma: number;
+}
+
+interface PigmentDef extends Tint {
+  drift?: number;
+  note: string;
+}
+
+export type Role = '$root' | 'lume' | 'ink' | 'pane' | 'on' | 'on-pane';
+
+interface FlavorDef {
+  name: string;
+  hour: string;
+  scheme: 'light' | 'dark';
+  blurb: string;
+  accent: PigmentId;
+  roles: Record<Role, Tone>;
+  stone: Tint;
+  surface: Record<string, number>;
+  lead: Record<string, number>;
+  ink: Tint;
+  text: Record<string, number>;
+  umbra: { lightness: number; key: number; ambient: number };
+  scrim: number;
+}
+
+interface WindowDef {
+  name: string;
+  stops: PigmentId[];
+  note: string;
+}
 
 // Lightness is fixed per tone so that a tone number means the same contrast in every pigment.
-const TONE_LIGHTNESS = {
+const TONE_LIGHTNESS: Record<Tone, number> = {
   50: 0.972, 100: 0.94, 200: 0.885, 300: 0.805, 400: 0.715, 500: 0.625,
   600: 0.52, 700: 0.43, 800: 0.34, 900: 0.265, 950: 0.195,
 };
 
 // Share of the pigment's peak chroma used at each tone: pale at the edges, saturated in the body.
-const TONE_CHROMA = {
+const TONE_CHROMA: Record<Tone, number> = {
   50: 0.16, 100: 0.3, 200: 0.52, 300: 0.78, 400: 0.95, 500: 1,
   600: 0.98, 700: 0.86, 800: 0.7, 900: 0.55, 950: 0.42,
 };
@@ -34,10 +71,11 @@ export const PIGMENTS = {
   amethyst: { hue: 306, chroma: 0.2, note: 'Manganese purple.' },
   murrey: { hue: 342, chroma: 0.19, note: 'Murrey, the mulberry red-purple of glaziers.' },
   rose: { hue: 3, chroma: 0.16, note: 'Soft rose, flesh tones and dawn.' },
-};
+} satisfies Record<string, PigmentDef>;
+export type PigmentId = keyof typeof PIGMENTS;
 
 // Which tone of a pigment plays each glass role, by flavor mode.
-const ROLE_TONES = {
+const ROLE_TONES: Record<'dark' | 'abyss' | 'light', Record<Role, Tone>> = {
   dark: { $root: 300, lume: 200, ink: 200, pane: 800, on: 950, 'on-pane': 100 },
   abyss: { $root: 400, lume: 300, ink: 300, pane: 900, on: 950, 'on-pane': 200 },
   light: { $root: 600, lume: 400, ink: 700, pane: 100, on: 50, 'on-pane': 800 },
@@ -105,36 +143,39 @@ export const FLAVORS = {
     umbra: { lightness: 0, key: 0.7, ambient: 0.5 },
     scrim: 0.7,
   },
-};
+} satisfies Record<string, FlavorDef>;
+export type FlavorId = keyof typeof FLAVORS;
 
-export const DEFAULT_FLAVOR = 'compline';
+export const DEFAULT_FLAVOR: FlavorId = 'compline';
 // What a page shows before anyone chooses: solid glass, lit by the accent alone.
-export const DEFAULT_GLAZING = 'pot-metal';
-export const DEFAULT_WINDOW = 'mono';
+export const DEFAULT_GLAZING: GlazingId = 'pot-metal';
+export const DEFAULT_WINDOW: WindowModeId = 'mono';
 
 // Windows: three pigments leaded together, used wherever light is cast rather than applied.
 // Stops use the saturated body of each pigment and brighten along the gradient, in every flavor.
-export const WINDOW_TONES = [600, 500, 400];
+export const WINDOW_TONES: Tone[] = [600, 500, 400];
 export const WINDOWS = {
   rosace: { name: 'Rosace', stops: ['ruby', 'murrey', 'cobalt'], note: 'Ruby against cobalt, the rose window.' },
   jesse: { name: 'Jesse', stops: ['verdure', 'gilt', 'ruby'], note: 'Vine, gold and blood: the Jesse tree.' },
   lancet: { name: 'Lancet', stops: ['viridian', 'azure', 'indigo'], note: 'A tall cool window, all blues.' },
   aureole: { name: 'Aureole', stops: ['gilt', 'amber', 'ember'], note: 'Halo light, gold falling to coal.' },
   vesperal: { name: 'Vesperal', stops: ['indigo', 'amethyst', 'rose'], note: 'The west window at sunset.' },
-};
+} satisfies Record<string, WindowDef>;
+export type WindowId = keyof typeof WINDOWS;
 
 // Window modes: how the cast light follows the accent, set with data-san-window. Mono is the default.
 export const WINDOW_MODES = {
   mono: { name: 'Mono', source: 'one pigment', note: 'Pane, glass and lume of the current accent. The default.' },
   harmonic: { name: 'Harmonic', source: 'accent and neighbours', note: 'The accent leaded with the pigments on either side of it.' },
 };
+export type WindowModeId = keyof typeof WINDOW_MODES;
 
 // The harmonic window is not a fixed set of stops: it leads an accent with its two
 // neighbours on the hue wheel, so the cast light always agrees with the controls.
-export function harmony(accent) {
-  const wheel = Object.keys(PIGMENTS).sort((a, b) => PIGMENTS[a].hue - PIGMENTS[b].hue);
+export function harmony(accent: PigmentId): PigmentId[] {
+  const wheel = (Object.keys(PIGMENTS) as PigmentId[]).sort((a, b) => PIGMENTS[a].hue - PIGMENTS[b].hue);
   const at = wheel.indexOf(accent);
-  return [wheel.at(at - 1), accent, wheel[(at + 1) % wheel.length]];
+  return [wheel[(at - 1 + wheel.length) % wheel.length], accent, wheel[(at + 1) % wheel.length]];
 }
 
 export const GLAZINGS = {
@@ -142,11 +183,12 @@ export const GLAZINGS = {
   flashed: { name: 'Flashed', note: 'A thin skin of color over clear glass. Translucent, glowing accent.' },
   grisaille: { name: 'Grisaille', note: 'Monochrome glass with a colored border. Accent as a line only.' },
 };
+export type GlazingId = keyof typeof GLAZINGS;
 
-export const STATUS = { danger: 'ruby', warning: 'amber', success: 'verdure', info: 'azure' };
+export const STATUS: Record<string, PigmentId> = { danger: 'ruby', warning: 'amber', success: 'verdure', info: 'azure' };
 
 // Values are full token paths.
-export const SYNTAX = {
+export const SYNTAX: Record<string, string> = {
   keyword: 'glass.amethyst.$root',
   string: 'glass.verdure.$root',
   number: 'glass.ember.$root',
@@ -162,8 +204,8 @@ export const SYNTAX = {
   comment: 'text.subtle',
 };
 
-function ramp({ hue, chroma, drift = 0 }) {
-  const tones = {};
+function ramp({ hue, chroma, drift = 0 }: PigmentDef): Record<Tone, ColorRecord> {
+  const tones = {} as Record<Tone, ColorRecord>;
   for (const tone of TONES) {
     const l = TONE_LIGHTNESS[tone];
     const darkness = Math.max(0, (TONE_LIGHTNESS[500] - l) / (TONE_LIGHTNESS[500] - TONE_LIGHTNESS[950]));
@@ -174,12 +216,12 @@ function ramp({ hue, chroma, drift = 0 }) {
   return tones;
 }
 
-function tinted(lightness, { hue, chroma }) {
+function tinted(lightness: number, { hue, chroma }: Tint): ColorRecord {
   return color(lightness, Math.min(chroma, GAMUT_HEADROOM * maxChroma(lightness, hue)), hue);
 }
 
-function stone(flavor) {
-  const map = (levels, tint) => Object.fromEntries(Object.entries(levels).map(([k, l]) => [k, tinted(l, tint)]));
+function stone(flavor: FlavorDef) {
+  const map = (levels: Record<string, number>, tint: Tint): Record<string, ColorRecord> => Object.fromEntries(Object.entries(levels).map(([k, l]) => [k, tinted(l, tint)]));
   const leadTint = { hue: flavor.stone.hue, chroma: flavor.stone.chroma * 1.3 };
   const surface = map(flavor.surface, flavor.stone);
   const text = map(flavor.text, flavor.ink);
@@ -202,3 +244,5 @@ export function buildPalette() {
     glazings: GLAZINGS,
   };
 }
+
+export type Palette = ReturnType<typeof buildPalette>;
