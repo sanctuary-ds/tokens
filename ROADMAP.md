@@ -51,7 +51,7 @@ No release: the package publishes CSS and JSON, not JavaScript.
 - [ ] Add the types to the public API report.
 - [ ] Type the token trees from their source, so the build and the tests no longer cast the typography tree.
 - [ ] Derive the `Role` type from the list of glass roles, so a new role cannot be left out of the tokens.
-- [ ] Pass the test file pattern to `node --test` explicitly, so a suite that matches no file fails.
+- [x] Pass the test file pattern to `node --test` explicitly, so a run without type stripping fails instead of finding no tests.
 
 ### Phase 4: Wide gamut
 

@@ -94,3 +94,5 @@ The stylesheet relies on `oklch()`, `color-mix()` and `:is()`, all widely availa
 | The default flavor block precedes the others | Flavor switching on the root element |
 | The package matches the committed API report | The [public API](public-api.md) |
 | Generated files match the sources | Drift |
+
+The `test` script passes the `test/*.test.ts` pattern to `node --test`. Without it, the default discovery only finds `.ts` files while type stripping is on, so a run without stripping would find nothing and pass; with it, that run fails. The pattern does not cover an empty run: `node --test` still exits successfully when a pattern matches no file.

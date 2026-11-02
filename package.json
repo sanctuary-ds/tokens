@@ -39,7 +39,7 @@
     "build": "node scripts/build.ts",
     "check": "node scripts/build.ts --check",
     "api": "node scripts/api.ts",
-    "test": "node --test",
+    "test": "node --test \"test/*.test.ts\"",
     "typecheck": "tsc"
   },
   "exports": {
