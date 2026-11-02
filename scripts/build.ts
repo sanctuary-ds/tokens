@@ -7,9 +7,9 @@ import { fileURLToPath } from 'node:url';
 
 import { emitCss } from '../src/emit/css.ts';
 import { DEFAULT_FLAVOR, DEFAULT_GLAZING, DEFAULT_WINDOW, PIGMENTS, TONES, buildPalette } from '../src/palette.ts';
-import { buildTokens, flatten, resolveToken } from '../src/tokens.ts';
+import { buildTokens, flatten, groupTokens, resolveToken } from '../src/tokens.ts';
 import type { Palette, PigmentId } from '../src/palette.ts';
-import type { DtcgColor, TokenNode, Tokens, Typography, TypographyTree } from '../src/tokens.ts';
+import type { DtcgColor, Tokens } from '../src/tokens.ts';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 const json = (value: unknown) => `${JSON.stringify(value, null, 2)}\n`;
@@ -29,23 +29,20 @@ const filesIn = (dir: string): string[] =>
 
 /** Each font family with the weights the type scale uses, so a consumer loads exactly those. */
 function fontData(tokens: Tokens) {
-  const { font, type } = tokens.files['foundation/typography.tokens.json'] as unknown as TypographyTree;
-  const roles = Object.values(type).flatMap((role) => ((role as TokenNode)?.$value ? [(role as TokenNode).$value as Typography] : []));
+  const { font, type } = tokens.files['foundation/typography.tokens.json'];
+  const roles = groupTokens(type).map(([, role]) => role.$value);
   return Object.fromEntries(
-    Object.entries(font.family)
-      .filter(([id]) => !id.startsWith('$'))
-      .map(([id, node]) => {
-        const stack = (node as TokenNode).$value as string[];
-        const weights = roles.filter((role) => role.fontFamily === `{font.family.${id}}`).map((role) => role.fontWeight);
-        return [id, {
-          family: stack[0],
-          fallbacks: stack.slice(1, -1),
-          generic: stack.at(-1),
-          weights: [...new Set(weights)].sort((a, b) => a - b),
-          // The type scale sets no italics; add a style here when a role starts using one.
-          styles: ['normal'],
-        }];
-      }),
+    groupTokens(font.family).map(([id, { $value: stack }]) => {
+      const weights = roles.filter((role) => role.fontFamily === `{font.family.${id}}`).map((role) => role.fontWeight);
+      return [id, {
+        family: stack[0],
+        fallbacks: stack.slice(1, -1),
+        generic: stack.at(-1),
+        weights: [...new Set(weights)].sort((a, b) => a - b),
+        // The type scale sets no italics; add a style here when a role starts using one.
+        styles: ['normal'],
+      }];
+    }),
   );
 }
 

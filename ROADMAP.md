@@ -49,8 +49,8 @@ No release: the package publishes CSS and JSON, not JavaScript.
 - [ ] Publish types for `palette.json`, generated from the source, so `ports` and `web-components` can rely on ids such as `FlavorId` and `PigmentId`.
 - [ ] Verify how a JSON entry point carries its types (the `types` condition in `exports`, or a separate entry point) before choosing the shape.
 - [ ] Add the types to the public API report.
-- [ ] Type the token trees from their source, so the build and the tests no longer cast the typography tree.
-- [ ] Derive the `Role` type from the list of glass roles, so a new role cannot be left out of the tokens.
+- [x] Type the token trees from their source, so the build and the tests no longer cast the typography tree.
+- [x] Derive the `Role` type from the list of glass roles, so a new role cannot be left out of the tokens.
 - [x] Pass the test file pattern to `node --test` explicitly, so a run without type stripping fails instead of finding no tests.
 
 ### Phase 4: Wide gamut

@@ -8,10 +8,10 @@ import { fileURLToPath } from 'node:url';
 
 import { oklchToHex, hexToOklch, contrast } from '../src/color.ts';
 import { FLAVORS, PIGMENTS, TONES, WINDOW_TONES, buildPalette, harmony } from '../src/palette.ts';
-import { buildTokens, cssName, flatten, resolveHex } from '../src/tokens.ts';
+import { buildTokens, cssName, flatten, groupTokens, resolveHex } from '../src/tokens.ts';
 import { emitCss } from '../src/emit/css.ts';
 import type { FlavorId, PigmentId } from '../src/palette.ts';
-import type { DtcgColor, Typography, TypographyTree } from '../src/tokens.ts';
+import type { DtcgColor } from '../src/tokens.ts';
 
 /** A font as dist/palette.json lists it. */
 interface FontData {
@@ -175,22 +175,27 @@ test('the palette data names the default of every theme axis', () => {
 });
 
 test('the palette data lists each font family with exactly the weights the type scale uses', () => {
-  const typography = tokens.files['foundation/typography.tokens.json'] as unknown as TypographyTree;
-  const families = typography.font.family;
-  const scale = typography.type;
-  assert.deepEqual(Object.keys(data.fonts), Object.keys(families).filter((key) => !key.startsWith('$')));
+  const typography = tokens.files['foundation/typography.tokens.json'];
+  const families = Object.fromEntries(groupTokens(typography.font.family));
+  const scale = groupTokens(typography.type).map(([, role]) => role.$value);
+  assert.deepEqual(Object.keys(data.fonts), Object.keys(families));
   for (const [id, font] of Object.entries(data.fonts as Record<string, FontData>)) {
-    const stack = families[id].$value as string[];
+    const stack = families[id].$value;
     assert.equal(font.family, stack[0], id);
     assert.deepEqual(font.fallbacks, stack.slice(1, -1), id);
     assert.equal(font.generic, stack.at(-1), id);
-    const used = Object.values(scale)
-      .map((role) => role.$value as Typography | undefined)
-      .filter((value) => value?.fontFamily === `{font.family.${id}}`)
-      .map((value) => value!.fontWeight);
+    const used = scale
+      .filter((role) => role.fontFamily === `{font.family.${id}}`)
+      .map((role) => role.fontWeight);
     assert.deepEqual(font.weights, [...new Set(used)].sort((a, b) => a - b), id);
     assert.deepEqual(font.styles, ['normal'], id);
   }
+});
+
+test('a group keeps its $root token and leaves out the other $ properties', () => {
+  const root = { $value: 'root' };
+  const named = { $value: 'named' };
+  assert.deepEqual(groupTokens({ $type: 'color', $description: 'A group', $root: root, named }), [['$root', root], ['named', named]]);
 });
 
 test('every font in the palette data has the stylesheet variable of the same name', () => {

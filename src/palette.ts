@@ -18,7 +18,10 @@ interface PigmentDef extends Tint {
   note: string;
 }
 
-export type Role = '$root' | 'lume' | 'ink' | 'pane' | 'on' | 'on-pane';
+/** The roles every pigment plays in a flavor's glass; the `Role` type comes from this list. */
+export const GLASS_ROLES = ['$root', 'lume', 'ink', 'pane', 'on', 'on-pane'] as const;
+
+export type Role = (typeof GLASS_ROLES)[number];
 
 interface FlavorDef {
   name: string;
