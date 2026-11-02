@@ -1,4 +1,4 @@
-import { after, before, describe, it } from 'node:test';
+import { after, before, describe, it, test } from 'node:test';
 import assert from 'node:assert/strict';
 import { execFileSync, spawnSync } from 'node:child_process';
 import { existsSync, mkdirSync, mkdtempSync, readFileSync, readdirSync, rmSync, writeFileSync } from 'node:fs';
@@ -8,10 +8,17 @@ import { fileURLToPath } from 'node:url';
 
 const repo = fileURLToPath(new URL('..', import.meta.url));
 const name = '@sanctuary-ds/tokens';
-// pnpm sets npm_execpath for the scripts it runs; a bare `node --test` cannot pack, so it skips.
-// CI and the release workflow run `pnpm test`, where these checks always run.
+// pnpm sets npm_execpath for the scripts it runs. Without it this suite cannot pack, so it skips: on a
+// bare `node --test`, and in the CI job `minimum-node`, which has no pnpm and declares so with
+// SANCTUARY_NO_PNPM. The jobs that run `pnpm test`, in CI and in the release workflow, run the suite.
 const pnpm = process.env.npm_execpath;
-const skip = pnpm && /pnpm/.test(pnpm) ? false : 'run through pnpm to check the packed package';
+const canPack = Boolean(pnpm && /pnpm/.test(pnpm));
+const skip = canPack ? false : 'run through pnpm to check the packed package';
+
+test('CI runs the packed package suite, unless a job declares that it has no pnpm', () => {
+  const required = Boolean(process.env.CI) && !process.env.SANCTUARY_NO_PNPM;
+  assert.ok(canPack || !required, 'This CI job would skip the packed package suite: run `pnpm test`, or set SANCTUARY_NO_PNPM if the job has no pnpm.');
+});
 
 const SETUPS = {
   nodenext: { module: 'nodenext', moduleResolution: 'nodenext' },

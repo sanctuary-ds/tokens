@@ -236,7 +236,7 @@ test('white light is a token, and the glass sheen is drawn with it', () => {
 
 test('the npm package ships only the stylesheet, the palette and the token files', (t) => {
   // pnpm sets npm_execpath for the scripts it runs; a bare `node --test` cannot pack, so it skips.
-  // CI and the release workflow run `pnpm test`, where this check always runs.
+  // The jobs that run `pnpm test`, in CI and in the release workflow, run this check.
   const pnpm = process.env.npm_execpath;
   if (!pnpm || !/pnpm/.test(pnpm)) return t.skip('run through pnpm to check the package contents');
   const [command, args] = /\.c?js$/.test(pnpm)
