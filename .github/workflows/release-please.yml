@@ -1,0 +1,36 @@
+name: Release Please
+
+# Opens and updates the release pull request from the conventional commits on main.
+# Merging that pull request creates the tag; the Release workflow then publishes it.
+on:
+  push:
+    branches: [main]
+
+# The workflow itself only reads. Every write uses the GitHub App token below, so
+# the tags and pull requests it creates trigger the other workflows.
+permissions:
+  contents: read
+
+# Runs in order: a second push waits for the first, so two release pull requests never race.
+concurrency:
+  group: release-please
+  cancel-in-progress: false
+
+jobs:
+  release-please:
+    name: Open or update the release pull request
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Create a token for the release app
+        id: app-token
+        uses: actions/create-github-app-token@64ab729a6294000f5aa4a4bc0b73d1f32bc45510 # v3.3.0
+        with:
+          app-id: ${{ secrets.RELEASE_APP_ID }}
+          private-key: ${{ secrets.RELEASE_APP_PRIVATE_KEY }}
+      - name: Run release-please
+        uses: googleapis/release-please-action@45996ed1f6d02564a971a2fa1b5860e934307cf7 # v5.0.0
+        with:
+          token: ${{ steps.app-token.outputs.token }}
+          config-file: release-please-config.json
+          manifest-file: .release-please-manifest.json
