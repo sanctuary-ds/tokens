@@ -13,7 +13,7 @@ on:
 permissions:
   contents: read
 
-# Only one run per branch at a time, so two release pull requests never race. GitHub keeps a
+# Only one run at a time in the repository, so two release pull requests never race. GitHub keeps a
 # single pending run: a newer push can replace an older waiting one. Release-please recomputes
 # from every commit on main, so a replaced run loses nothing.
 concurrency:
