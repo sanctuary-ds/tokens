@@ -75,13 +75,15 @@ The package has no dependencies: it is CSS and data, with no logic to run. The t
 
 ## Releasing
 
-Releases are published to npm by `.github/workflows/release.yml` with npm trusted publishing, so no npm token is stored anywhere. To release:
+Releases are prepared by [release-please](https://github.com/googleapis/release-please) and published to npm by `.github/workflows/release.yml` with npm trusted publishing, so no npm token is stored anywhere. The version and the changelog come from the conventional commits on `main`. To release:
 
-1. Raise `version` in `package.json` in a pull request and merge it.
-2. Tag the merge commit with the same version, for example `git tag -s v0.2.0 && git push origin v0.2.0`.
-3. Approve the `npm` deployment in the workflow run.
+1. Merge the pull request titled `chore(main): release X.Y.Z`, which release-please keeps up to date. Read its version and its `CHANGELOG.md` entries before merging: a published version cannot be replaced.
+2. Merging it creates the tag `vX.Y.Z` and the GitHub release.
+3. Approve the `npm` deployment in the `Release` workflow run.
 
-The workflow runs the tests, checks that the tagged commit is on `main` and that the tag matches the version, waits for the approval, and publishes with provenance.
+Before 1.0.0, a breaking change raises the minor version and any other change raises the patch version, as [the public API](docs/public-api.md#how-changes-are-versioned) describes.
+
+The release workflow runs the tests, checks that the tagged commit is on `main` and that the tag matches the version, waits for the approval, and publishes with provenance. Release-please runs as a GitHub App (`RELEASE_APP_ID` and `RELEASE_APP_PRIVATE_KEY` in the repository secrets), so the tags and pull requests it creates start the other workflows.
 
 A published version can never be replaced on npm. If one is wrong, release a fixed patch version and mark the bad one with `npm deprecate @sanctuary-ds/tokens@<version> "<reason>"`.
 
