@@ -5,13 +5,17 @@ name: Release Please
 on:
   push:
     branches: [main]
+  # Lets a maintainer re-run release-please from the Actions tab if a run fails.
+  workflow_dispatch:
 
 # The workflow itself only reads. Every write uses the GitHub App token below, so
 # the tags and pull requests it creates trigger the other workflows.
 permissions:
   contents: read
 
-# Runs in order: a second push waits for the first, so two release pull requests never race.
+# Only one run per branch at a time, so two release pull requests never race. GitHub keeps a
+# single pending run: a newer push can replace an older waiting one. Release-please recomputes
+# from every commit on main, so a replaced run loses nothing.
 concurrency:
   group: release-please
   cancel-in-progress: false
