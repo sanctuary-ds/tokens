@@ -2,6 +2,13 @@
 
 Entries for 0.1.0 and 0.1.1 were generated from the commit history after those releases, with the rules release-please applies from 0.2.0 on.
 
+## [0.2.1](https://github.com/sanctuary-ds/tokens/compare/v0.2.0...v0.2.1) (2026-11-04)
+
+
+### Documentation
+
+* **release:** describe the release-please flow ([977d115](https://github.com/sanctuary-ds/tokens/commit/977d115a77a1b908105d7118f3427218d45da1a3))
+
 ## 0.2.0 (2026-11-02)
 
 ### ⚠ BREAKING CHANGES
