@@ -1,6 +1,7 @@
 {
+  "$schema": "https://www.designtokens.org/schemas/2025.10/resolver.json",
   "name": "Sanctuary",
-  "version": "2025-10-01",
+  "version": "2025.10",
   "description": "Resolves Sanctuary tokens for one flavor and one accent.",
   "sets": {
     "foundation": {

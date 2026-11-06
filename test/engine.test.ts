@@ -124,6 +124,13 @@ test('DTCG token files are structurally valid and every alias resolves', () => {
   }
 });
 
+test('the resolver document declares the DTCG 2025.10 version and schema', () => {
+  // Resolver module 2025.10, section 4.1.2: the version MUST be `2025.10`.
+  assert.equal(tokens.resolver.version, '2025.10');
+  assert.equal(tokens.resolver.$schema, 'https://www.designtokens.org/schemas/2025.10/resolver.json');
+  assert.equal(Object.keys(tokens.resolver)[0], '$schema', 'the schema comes first, as in the spec examples');
+});
+
 test('the stylesheet exposes every flavor, accent, glazing and window switch', () => {
   const css = emitCss(palette, tokens);
   for (const flavor of flavorIds) assert.ok(css.includes(`[data-san-flavor="${flavor}"]`), flavor);
