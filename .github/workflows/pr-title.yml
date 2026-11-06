@@ -1,0 +1,36 @@
+name: Pull request title
+
+# Pull requests are merged with a merge commit, and GitHub copies the pull request title into
+# its message. Release-please reads every paragraph of a commit message that starts with a
+# conventional type as a separate change, so a conventional title would list each change
+# twice in the changelog. The commits carry the conventional messages; the title stays a
+# plain sentence.
+on:
+  pull_request:
+    types: [opened, edited, reopened, synchronize]
+
+# The check only reads the event payload.
+permissions: {}
+
+jobs:
+  title:
+    name: Title is a plain sentence
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    # Release-please titles its own pull requests `chore(main): release X.Y.Z`; chore is hidden
+    # from the changelog, so that title adds no entry.
+    if: ${{ !startsWith(github.head_ref, 'release-please--') }}
+    steps:
+      - name: Reject a conventional commit title
+        env:
+          # Passed through the environment, never interpolated into the script.
+          TITLE: ${{ github.event.pull_request.title }}
+        # The types are the ones release-please's splitMessages (src/commit.ts) separates into
+        # their own change, plus deps, which it can release. Like that pattern, a type only
+        # counts when ": " with a space follows it.
+        run: |
+          if printf '%s\n' "$TITLE" | grep -qiE '^(feat|fix|docs|style|refactor|perf|test|build|ci|chore|revert|deps)(\([^)]*\))?!?: '; then
+            echo "::error title=Pull request title::Write the title as a plain sentence, for example 'Declare the DTCG 2025.10 version in the resolver'. The commits keep the conventional messages: the merge commit copies the title, and release-please would list the change twice."
+            exit 1
+          fi
+          echo "The title is a plain sentence."
