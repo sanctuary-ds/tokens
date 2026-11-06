@@ -95,7 +95,7 @@ These are computed from the active flavor, accent, glazing and window setting.
 | Easing | `--san-ease-standard/enter/exit/linear` | |
 | Blur | `--san-blur-sm/md/lg` | For glass surfaces |
 | Opacity | `--san-opacity-hover/focus/pressed/disabled-content/disabled-container` | 0.08, 0.12, 0.16, 0.38, 0.12; numbers from 0 to 1 |
-| Layer | `--san-layer-base/raised/sticky/overlay/modal/toast/tooltip` | `z-index` |
+| Z | `--san-z-base/raised/sticky/overlay/modal/toast/tooltip` | `z-index`: 0, 10, 100 to 500 |
 
 Type roles: `display-lg/md/sm`, `headline-lg/md/sm`, `title-lg/md/sm`, `body-lg/md/sm`, `label-lg/md/sm`, `inscription`, `code-md/sm`.
 

@@ -294,7 +294,7 @@
       "$value": 0.12
     }
   },
-  "layer": {
+  "z": {
     "$type": "number",
     "base": {
       "$value": 0

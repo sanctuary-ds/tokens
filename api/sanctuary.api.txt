@@ -172,13 +172,6 @@ css --san-info-lume
 css --san-info-on
 css --san-info-on-pane
 css --san-info-pane
-css --san-layer-base
-css --san-layer-modal
-css --san-layer-overlay
-css --san-layer-raised
-css --san-layer-sticky
-css --san-layer-toast
-css --san-layer-tooltip
 css --san-lead
 css --san-lead-came
 css --san-lead-soft
@@ -309,6 +302,13 @@ css --san-window-jesse
 css --san-window-lancet
 css --san-window-rosace
 css --san-window-vesperal
+css --san-z-base
+css --san-z-modal
+css --san-z-overlay
+css --san-z-raised
+css --san-z-sticky
+css --san-z-toast
+css --san-z-tooltip
 export ./css -> ./dist/css/sanctuary.css
 export ./package.json -> ./package.json
 export ./palette -> {"types":"./dist/palette.d.ts","default":"./dist/palette.js"}
@@ -762,18 +762,18 @@ token foundation/elevation.tokens.json elevation.2
 token foundation/elevation.tokens.json elevation.3
 token foundation/elevation.tokens.json elevation.4
 token foundation/elevation.tokens.json elevation.5
-token foundation/elevation.tokens.json layer.base
-token foundation/elevation.tokens.json layer.modal
-token foundation/elevation.tokens.json layer.overlay
-token foundation/elevation.tokens.json layer.raised
-token foundation/elevation.tokens.json layer.sticky
-token foundation/elevation.tokens.json layer.toast
-token foundation/elevation.tokens.json layer.tooltip
 token foundation/elevation.tokens.json opacity.disabled-container
 token foundation/elevation.tokens.json opacity.disabled-content
 token foundation/elevation.tokens.json opacity.focus
 token foundation/elevation.tokens.json opacity.hover
 token foundation/elevation.tokens.json opacity.pressed
+token foundation/elevation.tokens.json z.base
+token foundation/elevation.tokens.json z.modal
+token foundation/elevation.tokens.json z.overlay
+token foundation/elevation.tokens.json z.raised
+token foundation/elevation.tokens.json z.sticky
+token foundation/elevation.tokens.json z.toast
+token foundation/elevation.tokens.json z.tooltip
 token foundation/motion.tokens.json duration.base
 token foundation/motion.tokens.json duration.fast
 token foundation/motion.tokens.json duration.instant

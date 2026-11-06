@@ -267,6 +267,14 @@ test('pigment ramps are private custom properties that the stylesheet still reso
   for (const [, name] of css.matchAll(/var\((--_san-pigment-[a-z0-9-]+)\)/g)) assert.ok(declared.has(name), `${name} is read but not declared`);
 });
 
+test('stacking order is the z group, so no custom property is named layer', () => {
+  const css = emitCss(palette, tokens);
+  assert.doesNotMatch(css, /--san-layer-/);
+  for (const level of ['base', 'raised', 'sticky', 'overlay', 'modal', 'toast', 'tooltip']) {
+    assert.match(css, new RegExp(`--san-z-${level}: \\d+;`), `--san-z-${level} is not declared as a number`);
+  }
+});
+
 test('the harmony stops behind the harmonic window are private custom properties', () => {
   const css = emitCss(palette, tokens);
   assert.doesNotMatch(css, /--san-harmony-/, 'a harmony stop is declared or read under the public prefix');

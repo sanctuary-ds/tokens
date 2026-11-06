@@ -141,14 +141,16 @@ const opacity = {
   'disabled-container': { $value: 0.12 },
 };
 
-const zLayer = group('number', { base: 0, raised: 10, sticky: 100, overlay: 200, modal: 300, toast: 400, tooltip: 500 });
+// Stacking order, read as `z-index: var(--san-z-modal)`. Named z, not layer, so it does not read as a
+// state layer (a color) or a CSS cascade layer.
+const z = group('number', { base: 0, raised: 10, sticky: 100, overlay: 200, modal: 300, toast: 400, tooltip: 500 });
 
 export const FOUNDATION_FILES = {
   'foundation/space.tokens.json': { space, size, breakpoint },
   'foundation/shape.tokens.json': { radius, border },
   'foundation/typography.tokens.json': { font, type },
   'foundation/motion.tokens.json': { duration, ease },
-  'foundation/elevation.tokens.json': { elevation, blur, opacity, layer: zLayer },
+  'foundation/elevation.tokens.json': { elevation, blur, opacity, z },
 };
 
 /** Percentage polygon for a pointed (equilateral) arch whose springing sits `spring`% down the box. */
