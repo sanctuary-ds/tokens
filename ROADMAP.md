@@ -65,7 +65,7 @@ No release: the source is not published, so the package did not change.
 
 - [ ] `web-components` and `ports` consume the package in their own releases.
 - [ ] Several releases have passed without a breaking change.
-- [ ] Releases are automated (release-please with a GitHub App, so its pull requests and tags run the workflows).
+- [x] Releases are automated (release-please with a GitHub App, so its pull requests and tags run the workflows).
 
 ## Open decisions
 
