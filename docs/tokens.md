@@ -85,7 +85,6 @@ These are computed from the active flavor, accent, glazing and window setting.
 |-------|-----------|-------|
 | Space | `--san-space-0`, `-px`, `-half`, `-1`, `-2`, `-3`, `-4`, `-5`, `-6`, `-8`, `-10`, `-12`, `-16`, `-20`, `-24`, `-32` | 4px grid: `space-4` is 16px |
 | Size | `--san-size-control-sm/md/lg` (32/40/48px), `--san-size-icon-sm/md/lg`, `--san-size-measure` | |
-| Breakpoint | `--san-breakpoint-sm/md/lg/xl/2xl` | Reference values; custom properties cannot be used in media queries |
 | Radius | `--san-radius-none/xs/sm/md/lg/xl/full` | 0, 2, 4, 8, 12, 20px, pill |
 | Border | `--san-border-width-hairline/came/heavy` | 1, 2, 3px |
 | Shape | `--san-shape-lancet`, `--san-shape-ogive` | `clip-path` values, CSS only |
@@ -98,6 +97,8 @@ These are computed from the active flavor, accent, glazing and window setting.
 | Z | `--san-z-base/raised/sticky/overlay/modal/toast/tooltip` | `z-index`: 0, 10, 100 to 500 |
 
 Type roles: `display-lg/md/sm`, `headline-lg/md/sm`, `title-lg/md/sm`, `body-lg/md/sm`, `label-lg/md/sm`, `inscription`, `code-md/sm`.
+
+Breakpoints (`sm` 40rem, `md` 48rem, `lg` 64rem, `xl` 80rem, `2xl` 96rem) are not custom properties: a media query cannot read one. Read them from `breakpoint` in `tokens/foundation/layout.tokens.json` and write the values into your queries, or let a preprocessor do it.
 
 ### Reduced motion
 

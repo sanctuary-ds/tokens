@@ -284,6 +284,11 @@ test('each foundation file holds the groups of one concern', () => {
   });
 });
 
+test('breakpoints are DTCG tokens only, since custom properties cannot be read in a media query', () => {
+  assert.deepEqual(Object.keys(tokens.files['foundation/layout.tokens.json'].breakpoint).filter((key) => !key.startsWith('$')), ['sm', 'md', 'lg', 'xl', '2xl']);
+  assert.doesNotMatch(emitCss(palette, tokens), /--san-breakpoint-/);
+});
+
 test('stacking order is the z group, so no custom property is named layer', () => {
   const css = emitCss(palette, tokens);
   assert.doesNotMatch(css, /--san-layer-/);

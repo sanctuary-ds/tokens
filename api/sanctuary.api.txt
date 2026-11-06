@@ -48,11 +48,6 @@ css --san-blur-sm
 css --san-border-width-came
 css --san-border-width-hairline
 css --san-border-width-heavy
-css --san-breakpoint-2xl
-css --san-breakpoint-lg
-css --san-breakpoint-md
-css --san-breakpoint-sm
-css --san-breakpoint-xl
 css --san-cast-lg
 css --san-cast-md
 css --san-cast-sm
