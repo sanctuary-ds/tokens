@@ -126,8 +126,10 @@ function resolverDocument(files: TokenFiles) {
   const contexts = (prefix: string): Record<string, { $ref: string }[]> =>
     Object.fromEntries(sources(prefix).map((source) => [source.$ref.slice(prefix.length).split('.')[0], [source]]));
   return {
+    $schema: 'https://www.designtokens.org/schemas/2025.10/resolver.json',
     name: 'Sanctuary',
-    version: '2025-10-01',
+    // The DTCG revision this document follows, not a release of Sanctuary (Resolver module, 4.1.2).
+    version: '2025.10',
     description: 'Resolves Sanctuary tokens for one flavor and one accent.',
     sets: {
       foundation: { sources: sources('foundation/') },
