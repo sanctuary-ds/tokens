@@ -16,14 +16,6 @@ Entries for 0.1.0 and 0.1.1 were generated from the commit history after those r
 
 * pin line endings and state when a removed report line breaks ([9f02c43](https://github.com/sanctuary-ds/tokens/commit/9f02c43df876c6bf40949235614f330701e91d85))
 
-### Documentation
-
-* describe the TypeScript toolchain ([a9c1920](https://github.com/sanctuary-ds/tokens/commit/a9c19203f1c1eb2615c3a26525d9a9532b7f89a9))
-* add the roadmap of the core ([ab44844](https://github.com/sanctuary-ds/tokens/commit/ab44844b9dd4e43819224b7065dbc7ce8ad9440c))
-* **ecosystem:** record where the ports live ([e45e5d2](https://github.com/sanctuary-ds/tokens/commit/e45e5d27f51313b6e580ec8fc38a9d7561f55b4a))
-* define the public API and how it changes ([6f2dfc8](https://github.com/sanctuary-ds/tokens/commit/6f2dfc8e97abd028b5143dccdfd9703e622c7808))
-* point the design language to the site ([056e477](https://github.com/sanctuary-ds/tokens/commit/056e4774d90786e2fe97b190e48004d36483cbbe))
-
 ## 0.1.1 (2026-10-16)
 
 ### Bug Fixes
@@ -51,13 +43,3 @@ Entries for 0.1.0 and 0.1.1 were generated from the commit history after those r
 * **showcase:** keep the saved theme when opening a shared link ([6cf5424](https://github.com/sanctuary-ds/tokens/commit/6cf54240dd670bdb12e6c196ba49539ac8c13300))
 * **showcase:** honour reduced motion during theme changes ([58937fa](https://github.com/sanctuary-ds/tokens/commit/58937faabdab577d9a0ebf54a8e88000524e7088))
 * **tokens:** emit glazing rules from the palette's glazing list ([9310a2f](https://github.com/sanctuary-ds/tokens/commit/9310a2f44665a102fb09a4c5537daa7fd879b07e))
-
-### Documentation
-
-* **ecosystem:** record the rename to tokens ([55d1d55](https://github.com/sanctuary-ds/tokens/commit/55d1d5596e2dbe9859bfbc458eb1b4e65e54d570))
-* **ecosystem:** name the component and core repositories ([eb2bea9](https://github.com/sanctuary-ds/tokens/commit/eb2bea9ffd0a8d871ef944da57eaf322244ff828))
-* **ecosystem:** map the repositories and what leaves the core ([dd7c4fb](https://github.com/sanctuary-ds/tokens/commit/dd7c4fb871c1ce0b753e7688b8b6227bba8d5054))
-* write the README and the guides in American English ([012766b](https://github.com/sanctuary-ds/tokens/commit/012766b5d5a0214f929c3198c80ca955795a49fc))
-* **ecosystem:** document the port template signature and the unpublished scope ([fd6150e](https://github.com/sanctuary-ds/tokens/commit/fd6150e9e0ec906bce6731f44648d74aa78c1604))
-* **ecosystem:** add the site repository and the cross-repository workflow ([0ee099d](https://github.com/sanctuary-ds/tokens/commit/0ee099db3070198e224b062e82b3f5fc51f75219))
-* license Sanctuary under MIT ([4ee4c98](https://github.com/sanctuary-ds/tokens/commit/4ee4c98ddc058a2c9a6524f3c8d508d1ea140b30))
