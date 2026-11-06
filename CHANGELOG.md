@@ -2,6 +2,14 @@
 
 Entries for 0.1.0 and 0.1.1 were generated from the commit history after those releases, with the rules release-please applies from 0.2.0 on.
 
+## [0.2.1](https://github.com/sanctuary-ds/tokens/compare/v0.2.0...v0.2.1) (2026-11-06)
+
+
+### Bug Fixes
+
+* **tokens:** declare the DTCG 2025.10 version in the resolver ([60f2a33](https://github.com/sanctuary-ds/tokens/commit/60f2a3358dc24061451f33d4218321cea2569765))
+* **tokens:** declare the DTCG 2025.10 version in the resolver ([deff31a](https://github.com/sanctuary-ds/tokens/commit/deff31a282fd365990364e86d6665f914412f37f))
+
 ## 0.2.0 (2026-11-02)
 
 ### ⚠ BREAKING CHANGES
