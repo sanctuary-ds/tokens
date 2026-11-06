@@ -187,6 +187,11 @@ css --san-lead-came
 css --san-lead-soft
 css --san-lead-strong
 css --san-light
+css --san-opacity-disabled-container
+css --san-opacity-disabled-content
+css --san-opacity-focus
+css --san-opacity-hover
+css --san-opacity-pressed
 css --san-pigment-amber-100
 css --san-pigment-amber-200
 css --san-pigment-amber-300
@@ -352,11 +357,9 @@ css --san-space-6
 css --san-space-8
 css --san-space-half
 css --san-space-px
-css --san-state-disabled-container
-css --san-state-disabled-content
-css --san-state-focus
-css --san-state-hover
-css --san-state-pressed
+css --san-state-layer-focus
+css --san-state-layer-hover
+css --san-state-layer-pressed
 css --san-success
 css --san-success-ink
 css --san-success-lume
@@ -901,11 +904,11 @@ token foundation/elevation.tokens.json layer.raised
 token foundation/elevation.tokens.json layer.sticky
 token foundation/elevation.tokens.json layer.toast
 token foundation/elevation.tokens.json layer.tooltip
-token foundation/elevation.tokens.json state.disabled-container
-token foundation/elevation.tokens.json state.disabled-content
-token foundation/elevation.tokens.json state.focus
-token foundation/elevation.tokens.json state.hover
-token foundation/elevation.tokens.json state.pressed
+token foundation/elevation.tokens.json opacity.disabled-container
+token foundation/elevation.tokens.json opacity.disabled-content
+token foundation/elevation.tokens.json opacity.focus
+token foundation/elevation.tokens.json opacity.hover
+token foundation/elevation.tokens.json opacity.pressed
 token foundation/motion.tokens.json duration.base
 token foundation/motion.tokens.json duration.fast
 token foundation/motion.tokens.json duration.instant

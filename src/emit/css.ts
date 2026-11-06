@@ -19,6 +19,8 @@ interface ShadowLayer {
 
 const THEMING = ['data-san-flavor', 'data-san-accent', 'data-san-glazing', 'data-san-window'];
 const ANY_SCOPE = `:root, ${THEMING.map((attr) => `[${attr}]`).join(', ')}`;
+/** The interaction states that get a state layer; each needs an opacity token of the same name. */
+const STATE_LAYERS = ['hover', 'focus', 'pressed'];
 
 // Custom properties are substituted where they are declared, so a value that reads another
 // theming axis must be declared again on every nested theming element to pick up its context.
@@ -118,16 +120,22 @@ const glaze: Record<string, Declaration[]> = {
   ],
 };
 
-function derived(states: TokenNode): Declaration[] {
-  const percent = (key: string) => Math.round(((states[key] as TokenNode).$value as number) * 100);
+/** A state layer: the content color at the opacity token of its state, so retuning the opacity retunes the layer. */
+const stateLayer = (state: string): Declaration => [
+  `--san-state-layer-${state}`,
+  `color-mix(in oklch, currentColor calc(var(--san-opacity-${state}) * 100%), transparent)`,
+];
+
+function derived(opacity: TokenNode): Declaration[] {
+  for (const state of STATE_LAYERS) {
+    if (!(state in opacity)) throw new Error(`No opacity token "${state}" for its state layer; add it to opacity in src/foundation.ts.`);
+  }
   return [
     ['--san-cast-sm', `0 0 12px -2px ${mix('accent', 45)}`],
     ['--san-cast-md', `0 0 28px -4px ${mix('accent', 50)}`],
     ['--san-cast-lg', `0 0 18px -2px ${mix('accent-lume', 40)}, 0 0 72px -8px ${mix('accent', 55)}`],
     ['--san-halo', '0 0 0 2px var(--san-surface), 0 0 0 4px var(--san-accent)'],
-    ['--san-state-hover', `color-mix(in oklch, currentColor ${percent('hover')}%, transparent)`],
-    ['--san-state-focus', `color-mix(in oklch, currentColor ${percent('focus')}%, transparent)`],
-    ['--san-state-pressed', `color-mix(in oklch, currentColor ${percent('pressed')}%, transparent)`],
+    ...STATE_LAYERS.map(stateLayer),
     ...windowModeStops[DEFAULT_WINDOW],
     ['--san-window', windowGradient(['a', 'b', 'c'].map((stop) => `var(--san-window-${stop})`))],
     ...glaze[DEFAULT_GLAZING],
@@ -175,7 +183,7 @@ export function emitCss(palette: Palette, tokens: Tokens): string {
   }
 
   out.push(`/* Light derived from the active flavor and accent. ${palette.glazings[DEFAULT_GLAZING].name} is the default glazing. */`);
-  out.push(block(ANY_SCOPE, derived(files['foundation/elevation.tokens.json'].state as TokenNode)));
+  out.push(block(ANY_SCOPE, derived(files['foundation/elevation.tokens.json'].opacity as TokenNode)));
   for (const id of Object.keys(palette.glazings)) {
     if (!glaze[id]) throw new Error(`No CSS is defined for glazing "${id}"; add it to the glaze table in src/emit/css.ts.`);
     out.push(block(scoped('data-san-glazing', id), glaze[id]));

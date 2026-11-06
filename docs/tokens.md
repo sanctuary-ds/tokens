@@ -72,7 +72,7 @@ These are computed from the active flavor, accent, glazing and window setting.
 | `--san-glaze-blur` | filter | `backdrop-filter` value |
 | `--san-cast-sm`, `-md`, `-lg` | shadow | Colored light around glass |
 | `--san-halo` | shadow | Focus ring |
-| `--san-state-hover`, `-focus`, `-pressed` | color | State layer; uses `currentColor`, so it follows the content color |
+| `--san-state-layer-hover`, `-focus`, `-pressed` | color | State layer: `currentColor` at `--san-opacity-<state>`, so it follows the content color and the opacity token |
 | `--san-window` | gradient | The cast-light gradient |
 | `--san-window-a`, `-b`, `-c` | color | Its three stops |
 | `--san-harmony-a`, `-b`, `-c` | color | The accent and its two hue-wheel neighbors; read by `data-san-window="harmonic"` |
@@ -94,7 +94,7 @@ These are computed from the active flavor, accent, glazing and window setting.
 | Duration | `--san-duration-instant/fast/base/slow/slower/procession` | 80 to 900ms; all `0ms` under `prefers-reduced-motion: reduce` |
 | Easing | `--san-ease-standard/enter/exit/linear` | |
 | Blur | `--san-blur-sm/md/lg` | For glass surfaces |
-| State | `--san-state-disabled-content`, `-disabled-container` | Opacities |
+| Opacity | `--san-opacity-hover/focus/pressed/disabled-content/disabled-container` | 0.08, 0.12, 0.16, 0.38, 0.12; numbers from 0 to 1 |
 | Layer | `--san-layer-base/raised/sticky/overlay/modal/toast/tooltip` | `z-index` |
 
 Type roles: `display-lg/md/sm`, `headline-lg/md/sm`, `title-lg/md/sm`, `body-lg/md/sm`, `label-lg/md/sm`, `inscription`, `code-md/sm`.

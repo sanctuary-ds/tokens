@@ -233,6 +233,32 @@ test('under reduced motion every duration token collapses to zero', () => {
   for (const name of durations) assert.match(reduced, new RegExp(`${name}: 0ms;`), name);
 });
 
+test('a number token keeps a number value in every declaration of its custom property', () => {
+  const css = emitCss(palette, tokens);
+  const numbers = Object.entries(tokens.files)
+    .filter(([file]) => file.startsWith('foundation/'))
+    .flatMap(([, tree]) => flatten(tree))
+    .filter(({ type }) => type === 'number')
+    .map(({ path }) => cssName(path));
+  assert.ok(numbers.length > 0);
+  for (const name of numbers) {
+    const values = [...css.matchAll(new RegExp(`${name}: ([^;]+);`, 'g'))].map((match) => match[1]);
+    assert.ok(values.length > 0, `${name} is not declared`);
+    for (const value of values) assert.match(value, /^-?\d+(\.\d+)?$/, `${name} is redeclared as ${value}`);
+  }
+});
+
+test('each state layer mixes the content color at the opacity token of its state', () => {
+  const css = emitCss(palette, tokens);
+  for (const state of ['hover', 'focus', 'pressed']) {
+    assert.ok(css.includes(`--san-opacity-${state}: `), `--san-opacity-${state} is not declared`);
+    assert.ok(
+      css.includes(`--san-state-layer-${state}: color-mix(in oklch, currentColor calc(var(--san-opacity-${state}) * 100%), transparent);`),
+      `--san-state-layer-${state} does not read --san-opacity-${state}`,
+    );
+  }
+});
+
 test('white light is a token, and the glass sheen is drawn with it', () => {
   const css = emitCss(palette, tokens);
   assert.match(css, /--san-light: oklch\(1 0 0\);/);

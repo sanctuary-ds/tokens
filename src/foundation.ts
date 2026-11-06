@@ -129,9 +129,11 @@ const elevation = {
 
 const blur = group('dimension', { sm: 8, md: 16, lg: 32 }, px);
 
-const state = {
+// Opacities only. The state layers that mix the content color at these opacities are CSS-only
+// (`--san-state-layer-*` in src/emit/css.ts): DTCG has no color functions.
+const opacity = {
   $type: 'number',
-  $description: 'Opacity of the content color laid over a control in each interaction state.',
+  $description: 'Opacity of the content color in each interaction state, from 0 to 1.',
   hover: { $value: 0.08 },
   focus: { $value: 0.12 },
   pressed: { $value: 0.16 },
@@ -146,7 +148,7 @@ export const FOUNDATION_FILES = {
   'foundation/shape.tokens.json': { radius, border },
   'foundation/typography.tokens.json': { font, type },
   'foundation/motion.tokens.json': { duration, ease },
-  'foundation/elevation.tokens.json': { elevation, blur, state, layer: zLayer },
+  'foundation/elevation.tokens.json': { elevation, blur, opacity, layer: zLayer },
 };
 
 /** Percentage polygon for a pointed (equilateral) arch whose springing sits `spring`% down the box. */
