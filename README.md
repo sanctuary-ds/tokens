@@ -81,6 +81,8 @@ Releases are prepared by [release-please](https://github.com/googleapis/release-
 2. Merging it creates the tag `vX.Y.Z` and the GitHub release.
 3. Approve the `npm` deployment in the `Release` workflow run.
 
+Only `feat`, `fix`, `perf` and `revert` commits, and breaking changes, open a release pull request. `docs`, `test`, `refactor`, `build`, `ci`, `chore` and `style` commits do not: they change nothing consumers use, so they never publish a version on their own. A README change reaches the npm page with the next release.
+
 Before 1.0.0, a breaking change raises the minor version and any other change raises the patch version, as [the public API](docs/public-api.md#how-changes-are-versioned) describes.
 
 The release workflow runs the tests, checks that the tagged commit is on `main` and that the tag matches the version, waits for the approval, and publishes with provenance. Release-please runs as a GitHub App (`RELEASE_APP_ID` and `RELEASE_APP_PRIVATE_KEY` in the repository secrets), so the tags and pull requests it creates start the other workflows.
