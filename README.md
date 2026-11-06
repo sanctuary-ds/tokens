@@ -87,7 +87,7 @@ Pull requests are merged with a merge commit, so every commit reaches `main` wit
 
 Before 1.0.0, a breaking change raises the minor version and any other change raises the patch version, as [the public API](docs/public-api.md#how-changes-are-versioned) describes.
 
-The release workflow runs the tests, checks that the tagged commit is on `main` and that the tag matches the version, waits for the approval, and publishes with provenance. Release-please runs as a GitHub App (`RELEASE_APP_ID` and `RELEASE_APP_PRIVATE_KEY` in the repository secrets), so the tags and pull requests it creates start the other workflows.
+The release workflow runs the tests, checks that the tagged commit is on `main` and that the tag matches the version, waits for the approval, and publishes with provenance. Release-please runs as a GitHub App (its client ID in the repository variable `RELEASE_APP_CLIENT_ID`, its private key in the repository secret `RELEASE_APP_PRIVATE_KEY`), so the tags and pull requests it creates start the other workflows.
 
 A published version can never be replaced on npm. If one is wrong, release a fixed patch version and mark the bad one with `npm deprecate @sanctuary-ds/tokens@<version> "<reason>"`.
 
