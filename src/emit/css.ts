@@ -183,7 +183,7 @@ export function emitCss(palette: Palette, tokens: Tokens): string {
   }
 
   out.push(`/* Light derived from the active flavor and accent. ${palette.glazings[DEFAULT_GLAZING].name} is the default glazing. */`);
-  out.push(block(ANY_SCOPE, derived(files['foundation/elevation.tokens.json'].opacity as TokenNode)));
+  out.push(block(ANY_SCOPE, derived(files['foundation/effect.tokens.json'].opacity as TokenNode)));
   for (const id of Object.keys(palette.glazings)) {
     if (!glaze[id]) throw new Error(`No CSS is defined for glazing "${id}"; add it to the glaze table in src/emit/css.ts.`);
     out.push(block(scoped('data-san-glazing', id), glaze[id]));

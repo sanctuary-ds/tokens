@@ -10,6 +10,9 @@
           "$ref": "foundation/space.tokens.json"
         },
         {
+          "$ref": "foundation/layout.tokens.json"
+        },
+        {
           "$ref": "foundation/shape.tokens.json"
         },
         {
@@ -20,6 +23,9 @@
         },
         {
           "$ref": "foundation/elevation.tokens.json"
+        },
+        {
+          "$ref": "foundation/effect.tokens.json"
         }
       ]
     },

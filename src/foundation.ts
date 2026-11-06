@@ -146,11 +146,14 @@ const opacity = {
 const z = group('number', { base: 0, raised: 10, sticky: 100, overlay: 200, modal: 300, toast: 400, tooltip: 500 });
 
 export const FOUNDATION_FILES = {
-  'foundation/space.tokens.json': { space, size, breakpoint },
+  'foundation/space.tokens.json': { space, size },
+  'foundation/layout.tokens.json': { breakpoint, z },
   'foundation/shape.tokens.json': { radius, border },
   'foundation/typography.tokens.json': { font, type },
   'foundation/motion.tokens.json': { duration, ease },
-  'foundation/elevation.tokens.json': { elevation, blur, opacity, z },
+  'foundation/elevation.tokens.json': { elevation },
+  // Effects change how something that is already there looks: the glass blur and the state opacities.
+  'foundation/effect.tokens.json': { blur, opacity },
 };
 
 /** Percentage polygon for a pointed (equilateral) arch whose springing sits `spring`% down the box. */

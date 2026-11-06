@@ -267,6 +267,23 @@ test('pigment ramps are private custom properties that the stylesheet still reso
   for (const [, name] of css.matchAll(/var\((--_san-pigment-[a-z0-9-]+)\)/g)) assert.ok(declared.has(name), `${name} is read but not declared`);
 });
 
+test('each foundation file holds the groups of one concern', () => {
+  const groups = Object.fromEntries(
+    Object.entries(tokens.files)
+      .filter(([file]) => file.startsWith('foundation/'))
+      .map(([file, tree]) => [file, Object.keys(tree).filter((key) => !key.startsWith('$'))]),
+  );
+  assert.deepEqual(groups, {
+    'foundation/space.tokens.json': ['space', 'size'],
+    'foundation/layout.tokens.json': ['breakpoint', 'z'],
+    'foundation/shape.tokens.json': ['radius', 'border'],
+    'foundation/typography.tokens.json': ['font', 'type'],
+    'foundation/motion.tokens.json': ['duration', 'ease'],
+    'foundation/elevation.tokens.json': ['elevation'],
+    'foundation/effect.tokens.json': ['blur', 'opacity'],
+  });
+});
+
 test('stacking order is the z group, so no custom property is named layer', () => {
   const css = emitCss(palette, tokens);
   assert.doesNotMatch(css, /--san-layer-/);

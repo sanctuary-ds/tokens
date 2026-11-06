@@ -330,7 +330,9 @@ file tokens/flavor/compline.tokens.json
 file tokens/flavor/lauds.tokens.json
 file tokens/flavor/matins.tokens.json
 file tokens/flavor/vespers.tokens.json
+file tokens/foundation/effect.tokens.json
 file tokens/foundation/elevation.tokens.json
+file tokens/foundation/layout.tokens.json
 file tokens/foundation/motion.tokens.json
 file tokens/foundation/shape.tokens.json
 file tokens/foundation/space.tokens.json
@@ -753,27 +755,32 @@ token flavor/<flavor>.tokens.json text.muted
 token flavor/<flavor>.tokens.json text.subtle
 token flavor/<flavor>.tokens.json umbra.ambient
 token flavor/<flavor>.tokens.json umbra.key
-token foundation/elevation.tokens.json blur.lg
-token foundation/elevation.tokens.json blur.md
-token foundation/elevation.tokens.json blur.sm
+token foundation/effect.tokens.json blur.lg
+token foundation/effect.tokens.json blur.md
+token foundation/effect.tokens.json blur.sm
+token foundation/effect.tokens.json opacity.disabled-container
+token foundation/effect.tokens.json opacity.disabled-content
+token foundation/effect.tokens.json opacity.focus
+token foundation/effect.tokens.json opacity.hover
+token foundation/effect.tokens.json opacity.pressed
 token foundation/elevation.tokens.json elevation.0
 token foundation/elevation.tokens.json elevation.1
 token foundation/elevation.tokens.json elevation.2
 token foundation/elevation.tokens.json elevation.3
 token foundation/elevation.tokens.json elevation.4
 token foundation/elevation.tokens.json elevation.5
-token foundation/elevation.tokens.json opacity.disabled-container
-token foundation/elevation.tokens.json opacity.disabled-content
-token foundation/elevation.tokens.json opacity.focus
-token foundation/elevation.tokens.json opacity.hover
-token foundation/elevation.tokens.json opacity.pressed
-token foundation/elevation.tokens.json z.base
-token foundation/elevation.tokens.json z.modal
-token foundation/elevation.tokens.json z.overlay
-token foundation/elevation.tokens.json z.raised
-token foundation/elevation.tokens.json z.sticky
-token foundation/elevation.tokens.json z.toast
-token foundation/elevation.tokens.json z.tooltip
+token foundation/layout.tokens.json breakpoint.2xl
+token foundation/layout.tokens.json breakpoint.lg
+token foundation/layout.tokens.json breakpoint.md
+token foundation/layout.tokens.json breakpoint.sm
+token foundation/layout.tokens.json breakpoint.xl
+token foundation/layout.tokens.json z.base
+token foundation/layout.tokens.json z.modal
+token foundation/layout.tokens.json z.overlay
+token foundation/layout.tokens.json z.raised
+token foundation/layout.tokens.json z.sticky
+token foundation/layout.tokens.json z.toast
+token foundation/layout.tokens.json z.tooltip
 token foundation/motion.tokens.json duration.base
 token foundation/motion.tokens.json duration.fast
 token foundation/motion.tokens.json duration.instant
@@ -794,11 +801,6 @@ token foundation/shape.tokens.json radius.none
 token foundation/shape.tokens.json radius.sm
 token foundation/shape.tokens.json radius.xl
 token foundation/shape.tokens.json radius.xs
-token foundation/space.tokens.json breakpoint.2xl
-token foundation/space.tokens.json breakpoint.lg
-token foundation/space.tokens.json breakpoint.md
-token foundation/space.tokens.json breakpoint.sm
-token foundation/space.tokens.json breakpoint.xl
 token foundation/space.tokens.json size.control.lg
 token foundation/space.tokens.json size.control.md
 token foundation/space.tokens.json size.control.sm

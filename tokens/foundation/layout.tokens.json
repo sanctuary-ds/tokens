@@ -1,0 +1,59 @@
+{
+  "breakpoint": {
+    "$type": "dimension",
+    "sm": {
+      "$value": {
+        "value": 40,
+        "unit": "rem"
+      }
+    },
+    "md": {
+      "$value": {
+        "value": 48,
+        "unit": "rem"
+      }
+    },
+    "lg": {
+      "$value": {
+        "value": 64,
+        "unit": "rem"
+      }
+    },
+    "xl": {
+      "$value": {
+        "value": 80,
+        "unit": "rem"
+      }
+    },
+    "2xl": {
+      "$value": {
+        "value": 96,
+        "unit": "rem"
+      }
+    }
+  },
+  "z": {
+    "$type": "number",
+    "base": {
+      "$value": 0
+    },
+    "raised": {
+      "$value": 10
+    },
+    "sticky": {
+      "$value": 100
+    },
+    "overlay": {
+      "$value": 200
+    },
+    "modal": {
+      "$value": 300
+    },
+    "toast": {
+      "$value": 400
+    },
+    "tooltip": {
+      "$value": 500
+    }
+  }
+}
