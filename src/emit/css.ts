@@ -86,7 +86,7 @@ const monoStops: Declaration[] = [
 // Window modes: where the three window stops come from.
 const windowModeStops: Record<string, Declaration[]> = {
   mono: monoStops,
-  harmonic: [...'abc'].map((stop): Declaration => [`--san-window-${stop}`, `var(--san-harmony-${stop})`]),
+  harmonic: [...'abc'].map((stop): Declaration => [`--san-window-${stop}`, `var(${cssName(['harmony', stop])})`]),
 };
 
 // Glazing: how the accent is rendered on a filled element.
@@ -142,10 +142,10 @@ function derived(opacity: TokenNode): Declaration[] {
   ];
 }
 
-const windowTones = (pigments: PigmentId[]): string[] => pigments.map((pigment, i) => `var(--san-pigment-${pigment}-${WINDOW_TONES[i]})`);
+const windowTones = (pigments: PigmentId[]): string[] => pigments.map((pigment, i) => `var(${cssName(['pigment', pigment, String(WINDOW_TONES[i])])})`);
 
 // Declared wherever the accent is, so the harmonic window can follow it.
-const harmonyStops = (accent: PigmentId): Declaration[] => windowTones(harmony(accent)).map((value, i): Declaration => [`--san-harmony-${'abc'[i]}`, value]);
+const harmonyStops = (accent: PigmentId): Declaration[] => windowTones(harmony(accent)).map((value, i): Declaration => [cssName(['harmony', 'abc'[i]]), value]);
 
 export function emitCss(palette: Palette, tokens: Tokens): string {
   const { files } = tokens;

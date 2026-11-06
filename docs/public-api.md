@@ -15,7 +15,7 @@ Six parts of the published package are public. Each one appears in the [API repo
 | Types the palette module exports | `FlavorId` | `type` |
 | DTCG files and the token paths in them | `semantic.tokens.json` `danger.ink` | `file`, `token` |
 
-Not public: the values (hex codes, OKLCH components, durations, font stacks), descriptions and notes, the order of rules in the stylesheet, and everything outside the package, such as `src/`, `scripts/` and `test/`.
+Not public: custom properties with the private `--_san-` prefix, such as the pigment ramps `--_san-pigment-<p>-<tone>` and the harmony stops `--_san-harmony-a` to `-c` behind the harmonic window; the values (hex codes, OKLCH components, durations, font stacks), descriptions and notes, the order of rules in the stylesheet, and everything outside the package, such as `src/`, `scripts/` and `test/`.
 
 ## How changes are versioned
 

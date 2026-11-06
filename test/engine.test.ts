@@ -259,6 +259,20 @@ test('each state layer mixes the content color at the opacity token of its state
   }
 });
 
+test('pigment ramps are private custom properties that the stylesheet still resolves', () => {
+  const css = emitCss(palette, tokens);
+  assert.doesNotMatch(css, /--san-pigment-/, 'a pigment is declared or read under the public prefix');
+  const declared = new Set([...css.matchAll(/(--_san-pigment-[a-z0-9-]+):/g)].map((match) => match[1]));
+  assert.equal(declared.size, pigmentIds.length * TONES.length);
+  for (const [, name] of css.matchAll(/var\((--_san-pigment-[a-z0-9-]+)\)/g)) assert.ok(declared.has(name), `${name} is read but not declared`);
+});
+
+test('the harmony stops behind the harmonic window are private custom properties', () => {
+  const css = emitCss(palette, tokens);
+  assert.doesNotMatch(css, /--san-harmony-/, 'a harmony stop is declared or read under the public prefix');
+  for (const stop of 'abc') assert.ok(css.includes(`--_san-harmony-${stop}: `), `--_san-harmony-${stop} is not declared`);
+});
+
 test('white light is a token, and the glass sheen is drawn with it', () => {
   const css = emitCss(palette, tokens);
   assert.match(css, /--san-light: oklch\(1 0 0\);/);
@@ -293,7 +307,7 @@ test('the harmonic window leads each accent with its two neighbors on the hue wh
 
   const css = emitCss(palette, tokens);
   const blockOf = (selector: string) => css.slice(css.indexOf(selector), css.indexOf('}', css.indexOf(selector)));
-  const stops = (id: PigmentId) => harmony(id).map((pigment, i) => `--san-harmony-${'abc'[i]}: var(--san-pigment-${pigment}-${WINDOW_TONES[i]});`);
+  const stops = (id: PigmentId) => harmony(id).map((pigment, i) => `--_san-harmony-${'abc'[i]}: var(--_san-pigment-${pigment}-${WINDOW_TONES[i]});`);
   for (const id of pigmentIds) {
     for (const stop of stops(id)) assert.ok(blockOf(`[data-san-accent="${id}"]`).includes(stop), `${id}: ${stop}`);
   }
@@ -302,7 +316,7 @@ test('the harmonic window leads each accent with its two neighbors on the hue wh
     for (const stop of stops(FLAVORS[flavor].accent)) assert.ok(blockOf(`[data-san-flavor="${flavor}"] {`).includes(stop), `${flavor}: ${stop}`);
   }
   const harmonic = blockOf('[data-san-window="harmonic"]');
-  for (const stop of 'abc') assert.ok(harmonic.includes(`--san-window-${stop}: var(--san-harmony-${stop});`), stop);
+  for (const stop of 'abc') assert.ok(harmonic.includes(`--san-window-${stop}: var(--_san-harmony-${stop});`), stop);
   // Mono is the default and can also be set explicitly, to opt out inside a harmonic scope.
   assert.ok(blockOf('[data-san-window="mono"]').includes('--san-window-b: var(--san-accent);'));
 });

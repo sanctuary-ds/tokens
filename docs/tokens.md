@@ -48,7 +48,8 @@ Every token is a custom property prefixed `--san-`. The name is the DTCG token p
 | `--san-glass-<p>-pane` | Tinted container |
 | `--san-glass-<p>-on` | Content on the pigment |
 | `--san-glass-<p>-on-pane` | Content on the pane |
-| `--san-pigment-<p>-50` … `-950` | Raw ramp. For illustration and data only |
+
+The raw ramps are not custom properties you can rely on: the stylesheet declares them as private `--_san-pigment-<p>-<tone>` to build the glass, and they can change in any release. For illustration and data, read the ramps from `@sanctuary-ds/tokens/palette` (`pigments.<p>.tones`) or `tokens/pigment.tokens.json`.
 
 ### Accent, status, syntax, terminal
 
@@ -75,7 +76,6 @@ These are computed from the active flavor, accent, glazing and window setting.
 | `--san-state-layer-hover`, `-focus`, `-pressed` | color | State layer: `currentColor` at `--san-opacity-<state>`, so it follows the content color and the opacity token |
 | `--san-window` | gradient | The cast-light gradient |
 | `--san-window-a`, `-b`, `-c` | color | Its three stops |
-| `--san-harmony-a`, `-b`, `-c` | color | The accent and its two hue-wheel neighbors; read by `data-san-window="harmonic"` |
 | `--san-window-rosace`, `-jesse`, `-lancet`, `-aureole`, `-vesperal` | gradient | Named windows: fixed, independent of the accent, for one specific place |
 | `--san-elevation-0` … `-5` | shadow | Lumen shadows (pair with `surface-raised-n`) |
 
