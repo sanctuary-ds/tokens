@@ -3,7 +3,7 @@
   "$extensions": {
     "dev.sanctuary": {
       "scheme": "dark",
-      "defaultAccent": "amber"
+      "defaultAccent": "ember"
     }
   },
   "surface": {
@@ -477,22 +477,22 @@
   "accent": {
     "$type": "color",
     "$root": {
-      "$value": "{glass.amber.$root}"
+      "$value": "{glass.ember.$root}"
     },
     "lume": {
-      "$value": "{glass.amber.lume}"
+      "$value": "{glass.ember.lume}"
     },
     "ink": {
-      "$value": "{glass.amber.ink}"
+      "$value": "{glass.ember.ink}"
     },
     "pane": {
-      "$value": "{glass.amber.pane}"
+      "$value": "{glass.ember.pane}"
     },
     "on": {
-      "$value": "{glass.amber.on}"
+      "$value": "{glass.ember.on}"
     },
     "on-pane": {
-      "$value": "{glass.amber.on-pane}"
+      "$value": "{glass.ember.on-pane}"
     }
   },
   "ansi": {

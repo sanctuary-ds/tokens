@@ -60,6 +60,8 @@ The raw ramps are not custom properties you can rely on: the stylesheet declares
 | Syntax | `--san-syntax-keyword`, `-string`, `-number`, `-constant`, `-function`, `-type`, `-property`, `-tag`, `-operator`, `-regex`, `-variable`, `-punctuation`, `-comment` |
 | ANSI | `--san-ansi-black` … `-white` and `--san-ansi-bright-black` … `-bright-white` |
 
+Each flavor's default accent is kept off the four status pigments, so a primary action never matches a status out of the box. An accent you set yourself can be a status pigment: `data-san-accent="ruby"` makes `--san-accent` the same color as `--san-danger`. Color alone never carries the meaning of a status; pair it with a label or an icon, as [Accessibility](https://sanctuary-ds.github.io/docs/accessibility) describes.
+
 ## Light (CSS only)
 
 These are computed from the active flavor, accent, glazing and window setting.

@@ -7,7 +7,7 @@ import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 import { oklchToHex, hexToOklch, contrast } from '../src/color.ts';
-import { FLAVORS, PIGMENTS, TONES, WINDOW_TONES, buildPalette, harmony } from '../src/palette.ts';
+import { FLAVORS, PIGMENTS, STATUS, TONES, WINDOW_TONES, buildPalette, harmony } from '../src/palette.ts';
 import { buildTokens, cssName, flatten, groupTokens, resolveHex } from '../src/tokens.ts';
 import { emitCss } from '../src/emit/css.ts';
 import type { FlavorId, PigmentId } from '../src/palette.ts';
@@ -282,6 +282,14 @@ test('each foundation file holds the groups of one concern', () => {
     'foundation/elevation.tokens.json': ['elevation'],
     'foundation/effect.tokens.json': ['blur', 'opacity'],
   });
+});
+
+test("no flavor's default accent shares a pigment with a status", () => {
+  // An accent on a status pigment renders the same color as that status: a primary action would read as an error.
+  const statusPigments = new Map(Object.entries(STATUS).map(([status, pigment]) => [pigment, status]));
+  for (const [id, flavor] of Object.entries(FLAVORS)) {
+    assert.ok(!statusPigments.has(flavor.accent), `${id}: its accent ${flavor.accent} is the ${statusPigments.get(flavor.accent)} pigment`);
+  }
 });
 
 test('breakpoints are DTCG tokens only, since custom properties cannot be read in a media query', () => {

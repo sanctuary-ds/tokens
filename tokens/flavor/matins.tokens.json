@@ -3,7 +3,7 @@
   "$extensions": {
     "dev.sanctuary": {
       "scheme": "dark",
-      "defaultAccent": "ruby"
+      "defaultAccent": "viridian"
     }
   },
   "surface": {
@@ -477,22 +477,22 @@
   "accent": {
     "$type": "color",
     "$root": {
-      "$value": "{glass.ruby.$root}"
+      "$value": "{glass.viridian.$root}"
     },
     "lume": {
-      "$value": "{glass.ruby.lume}"
+      "$value": "{glass.viridian.lume}"
     },
     "ink": {
-      "$value": "{glass.ruby.ink}"
+      "$value": "{glass.viridian.ink}"
     },
     "pane": {
-      "$value": "{glass.ruby.pane}"
+      "$value": "{glass.viridian.pane}"
     },
     "on": {
-      "$value": "{glass.ruby.on}"
+      "$value": "{glass.viridian.on}"
     },
     "on-pane": {
-      "$value": "{glass.ruby.on-pane}"
+      "$value": "{glass.viridian.on-pane}"
     }
   },
   "ansi": {

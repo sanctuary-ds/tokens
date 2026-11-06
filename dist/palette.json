@@ -924,7 +924,7 @@
       "hour": "Dusk",
       "scheme": "dark",
       "blurb": "Candles lit against plum shadow. The warmest of the dark hours.",
-      "accent": "amber",
+      "accent": "ember",
       "colors": {
         "surface-sunken": {
           "hex": "#180c13",
@@ -1658,51 +1658,51 @@
           ]
         },
         "accent": {
-          "hex": "#f6af57",
+          "hex": "#fca87f",
           "oklch": [
             0.805,
-            0.1326,
-            70
+            0.1131,
+            47
           ]
         },
         "accent-lume": {
-          "hex": "#fdd09e",
+          "hex": "#fdcdb7",
           "oklch": [
             0.885,
-            0.0826,
-            70
+            0.0622,
+            47
           ]
         },
         "accent-ink": {
-          "hex": "#fdd09e",
+          "hex": "#fdcdb7",
           "oklch": [
             0.885,
-            0.0826,
-            70
+            0.0622,
+            47
           ]
         },
         "accent-pane": {
-          "hex": "#512f04",
+          "hex": "#5c2604",
           "oklch": [
             0.34,
-            0.0729,
-            64.7
+            0.0897,
+            47
           ]
         },
         "accent-on": {
-          "hex": "#230f00",
+          "hex": "#280b00",
           "oklch": [
             0.195,
-            0.0456,
-            62
+            0.0549,
+            47
           ]
         },
         "accent-on-pane": {
-          "hex": "#fee7ce",
+          "hex": "#fee5da",
           "oklch": [
             0.94,
-            0.0416,
-            70
+            0.0311,
+            47
           ]
         },
         "ansi-red": {
@@ -2756,7 +2756,7 @@
       "hour": "Deep night",
       "scheme": "dark",
       "blurb": "The crypt before any light. Near-black stone, jewel-deep glass.",
-      "accent": "ruby",
+      "accent": "viridian",
       "colors": {
         "surface-sunken": {
           "hex": "#010103",
@@ -3490,51 +3490,51 @@
           ]
         },
         "accent": {
-          "hex": "#fa726e",
+          "hex": "#37bc9a",
           "oklch": [
             0.715,
-            0.1677,
-            24
+            0.1235,
+            172
           ]
         },
         "accent-lume": {
-          "hex": "#fca59f",
+          "hex": "#74d5b8",
           "oklch": [
             0.805,
-            0.1043,
-            24
+            0.1014,
+            172
           ]
         },
         "accent-ink": {
-          "hex": "#fca59f",
+          "hex": "#74d5b8",
           "oklch": [
             0.805,
-            0.1043,
-            24
+            0.1014,
+            172
           ]
         },
         "accent-pane": {
-          "hex": "#4c0309",
+          "hex": "#022d22",
           "oklch": [
             0.265,
-            0.1026,
-            24
+            0.0494,
+            172
           ]
         },
         "accent-on": {
-          "hex": "#300003",
+          "hex": "#001a13",
           "oklch": [
             0.195,
-            0.0775,
-            24
+            0.0376,
+            172
           ]
         },
         "accent-on-pane": {
-          "hex": "#fdcbc7",
+          "hex": "#ace8d4",
           "oklch": [
             0.885,
-            0.057,
-            24
+            0.0676,
+            172
           ]
         },
         "ansi-red": {
