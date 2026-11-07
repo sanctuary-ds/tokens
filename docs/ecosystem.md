@@ -79,6 +79,4 @@ The core names its fonts and publishes them in `palette.json` (`fonts`), but doe
 
 ## Open decisions
 
-| Decision | Options | Note |
-|----------|---------|------|
-| Wide gamut | Add Display P3 pigments | The engine clamps to sRGB today |
+None. Wide gamut was decided: `1.0.0` stays sRGB only, and Display P3 is evaluated after it as an addition (see the [roadmap](../ROADMAP.md#phase-4-wide-gamut)).

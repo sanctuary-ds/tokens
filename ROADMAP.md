@@ -56,8 +56,8 @@ No release: the source is not published, so the package did not change.
 
 ### Phase 4: Wide gamut
 
-- [ ] Decide whether pigments gain Display P3 values next to the sRGB ones; see [Open decisions](#open-decisions).
-- [ ] If they do, add them as an addition that keeps every existing name and value.
+- [x] Decide whether pigments gain Display P3 values next to the sRGB ones. `1.0.0` stays sRGB only: P3 makes colors more saturated on screens that support it, but nothing fails without it, and adding it later breaks nothing.
+- [ ] After `1.0.0`, evaluate Display P3 values as an addition that keeps every existing name and value, with the contrast guarantees checked in P3 too (a minor release).
 
 ### Phase 5: Road to `1.0.0`
 
@@ -70,9 +70,7 @@ No release: the source is not published, so the package did not change.
 
 ## Open decisions
 
-| Decision | Options | When |
-|----------|---------|------|
-| Wide gamut | Display P3 pigments, or sRGB only | Phase 4 |
+None.
 
 ## Working agreement
 
