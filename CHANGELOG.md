@@ -2,6 +2,36 @@
 
 Entries for 0.1.0 and 0.1.1 were generated from the commit history after those releases, with the rules release-please applies from 0.2.0 on.
 
+## [0.3.0](https://github.com/sanctuary-ds/tokens/compare/v0.2.1...v0.3.0) (2026-11-07)
+
+
+### ⚠ BREAKING CHANGES
+
+* **palette:** the default accent of Vespers is ember instead of amber, and of Matins viridian instead of ruby. Set data-san-accent="amber" or "ruby" to keep the previous look.
+* **css:** --san-breakpoint-<size> is removed; a media query cannot read a custom property. Read breakpoint from foundation/layout.tokens.json.
+* **tokens:** DTCG groups move between foundation files.
+    - breakpoint moves from foundation/space.tokens.json to foundation/layout.tokens.json.
+    - z moves from foundation/elevation.tokens.json to foundation/layout.tokens.json.
+    - blur and opacity move from foundation/elevation.tokens.json to foundation/effect.tokens.json.
+* **tokens:** --san-layer-<level> is --san-z-<level>, and the DTCG group layer is z.
+* **css:** the pigment and harmony custom properties are private.
+    - --san-pigment-<pigment>-<tone> is --_san-pigment-<pigment>-<tone>, and is not part of the API.
+    - --san-harmony-a, -b, -c are --_san-harmony-a, -b, -c, and are not part of the API; read --san-window-a, -b, -c.
+* **tokens:** the state tokens are renamed.
+    - --san-state-hover, -focus, -pressed (opacity) are --san-opacity-hover, -focus, -pressed.
+    - --san-state-hover, -focus, -pressed (color) are --san-state-layer-hover, -focus, -pressed.
+    - --san-state-disabled-content, -disabled-container are --san-opacity-disabled-content, -disabled-container.
+    - The DTCG group state in foundation/elevation.tokens.json is opacity.
+
+### Features
+
+* **css:** drop breakpoint custom properties ([33bf1e4](https://github.com/sanctuary-ds/tokens/commit/33bf1e48b1075782253e263a2b93639e9844fa20))
+* **css:** make pigment ramps and harmony stops private ([8a6d7c7](https://github.com/sanctuary-ds/tokens/commit/8a6d7c7cd5a0a7825a61f2a7e77a13a18cc7e70f))
+* **palette:** keep default accents apart from status pigments ([2a43f98](https://github.com/sanctuary-ds/tokens/commit/2a43f98a256351ed37edaa35355de5a3b563487c))
+* **tokens:** group foundation files by concern ([e6e4174](https://github.com/sanctuary-ds/tokens/commit/e6e4174d2b4a6a5582045e4810ad51590408c6c6))
+* **tokens:** rename the layer group to z ([bbdcf6e](https://github.com/sanctuary-ds/tokens/commit/bbdcf6e8f66a0f01fa182f9184501ae717b22c10))
+* **tokens:** split state opacities from state layers ([75e3406](https://github.com/sanctuary-ds/tokens/commit/75e34061fda8be9a6ccd9f9a3c0d5d74a8f8300f))
+
 ## [0.2.1](https://github.com/sanctuary-ds/tokens/compare/v0.2.0...v0.2.1) (2026-11-06)
 
 
