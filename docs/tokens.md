@@ -74,6 +74,8 @@ Each top-level key below is a named export of the module:
   "pigments": { "cobalt": { "hue": 259, "tones": { "300": "#9bc1fb" } } } }
 ```
 
+Each flavor's `colors` holds every color the stylesheet declares for that flavor, named as its custom property without `--san-`: stone, ink and lead, glass, accent, ANSI, status (`danger`, `danger-on-pane`) and syntax (`syntax-keyword`). A port reads a status from here instead of choosing the pigment behind it.
+
 It also lists the named windows (`windows`), the values of `data-san-window` (`windowModes`) and the glazings (`glazings`), each with a display name and a note, so a tool can offer the same choices as the stylesheet. `defaultFlavor`, `defaultGlazing` and `defaultWindow` name what the stylesheet shows before anyone chooses.
 
 `fonts` lists each font family with its fallbacks, its generic family, and the weights the type scale uses, so a site loads exactly those. `styles` is `["normal"]` for every family today, because no type role sets an italic:
