@@ -20,11 +20,13 @@ With a bundler (Vite, Astro, webpack), import the stylesheet once:
 import '@sanctuary-ds/tokens/css';
 ```
 
-Without a build step, link it from a CDN that serves npm packages:
+Without a build step, link it from a CDN that serves npm packages. The link names the latest release, and each release updates it:
 
+<!-- x-release-please-start-version -->
 ```html
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@sanctuary-ds/tokens@0.3/dist/css/sanctuary.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@sanctuary-ds/tokens@0.3.0/dist/css/sanctuary.css">
 ```
+<!-- x-release-please-end -->
 
 The resolved colors are also available as data, and the DTCG files under `tokens/` for design tools and token pipelines:
 
