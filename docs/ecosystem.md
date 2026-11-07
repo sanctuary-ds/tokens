@@ -1,6 +1,6 @@
 # Ecosystem
 
-This repository is the seed of the [`sanctuary-ds`](https://github.com/sanctuary-ds) GitHub organization; packages will publish under the `@sanctuary-ds` npm scope. It holds the one thing every other module depends on: the palette and tokens. This page maps how the rest is split and records the decisions that cross repositories.
+This repository is the core of the [`sanctuary-ds`](https://github.com/sanctuary-ds) GitHub organization, and its packages publish under the `@sanctuary-ds` npm scope. It holds the one thing every other module depends on: the palette and tokens. This page maps how the rest is split and records the decisions that cross repositories.
 
 ## Repositories
 
