@@ -24,7 +24,7 @@ Without a build step, link it from a CDN that serves npm packages. The link name
 
 <!-- x-release-please-start-version -->
 ```html
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@sanctuary-ds/tokens@0.3.0/dist/css/sanctuary.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@sanctuary-ds/tokens@0.3.1/dist/css/sanctuary.css">
 ```
 <!-- x-release-please-end -->
 
