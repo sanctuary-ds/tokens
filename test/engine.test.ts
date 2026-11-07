@@ -7,7 +7,7 @@ import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 import { oklchToHex, hexToOklch, contrast } from '../src/color.ts';
-import { FLAVORS, PIGMENTS, TONES, WINDOW_TONES, buildPalette, harmony } from '../src/palette.ts';
+import { FLAVORS, PIGMENTS, STATUS, TONES, WINDOW_TONES, buildPalette, harmony } from '../src/palette.ts';
 import { buildTokens, cssName, flatten, groupTokens, resolveHex } from '../src/tokens.ts';
 import { emitCss } from '../src/emit/css.ts';
 import type { FlavorId, PigmentId } from '../src/palette.ts';
@@ -233,6 +233,84 @@ test('under reduced motion every duration token collapses to zero', () => {
   for (const name of durations) assert.match(reduced, new RegExp(`${name}: 0ms;`), name);
 });
 
+test('a number token keeps a number value in every declaration of its custom property', () => {
+  const css = emitCss(palette, tokens);
+  const numbers = Object.entries(tokens.files)
+    .filter(([file]) => file.startsWith('foundation/'))
+    .flatMap(([, tree]) => flatten(tree))
+    .filter(({ type }) => type === 'number')
+    .map(({ path }) => cssName(path));
+  assert.ok(numbers.length > 0);
+  for (const name of numbers) {
+    const values = [...css.matchAll(new RegExp(`${name}: ([^;]+);`, 'g'))].map((match) => match[1]);
+    assert.ok(values.length > 0, `${name} is not declared`);
+    for (const value of values) assert.match(value, /^-?\d+(\.\d+)?$/, `${name} is redeclared as ${value}`);
+  }
+});
+
+test('each state layer mixes the content color at the opacity token of its state', () => {
+  const css = emitCss(palette, tokens);
+  for (const state of ['hover', 'focus', 'pressed']) {
+    assert.ok(css.includes(`--san-opacity-${state}: `), `--san-opacity-${state} is not declared`);
+    assert.ok(
+      css.includes(`--san-state-layer-${state}: color-mix(in oklch, currentColor calc(var(--san-opacity-${state}) * 100%), transparent);`),
+      `--san-state-layer-${state} does not read --san-opacity-${state}`,
+    );
+  }
+});
+
+test('pigment ramps are private custom properties that the stylesheet still resolves', () => {
+  const css = emitCss(palette, tokens);
+  assert.doesNotMatch(css, /--san-pigment-/, 'a pigment is declared or read under the public prefix');
+  const declared = new Set([...css.matchAll(/(--_san-pigment-[a-z0-9-]+):/g)].map((match) => match[1]));
+  assert.equal(declared.size, pigmentIds.length * TONES.length);
+  for (const [, name] of css.matchAll(/var\((--_san-pigment-[a-z0-9-]+)\)/g)) assert.ok(declared.has(name), `${name} is read but not declared`);
+});
+
+test('each foundation file holds the groups of one concern', () => {
+  const groups = Object.fromEntries(
+    Object.entries(tokens.files)
+      .filter(([file]) => file.startsWith('foundation/'))
+      .map(([file, tree]) => [file, Object.keys(tree).filter((key) => !key.startsWith('$'))]),
+  );
+  assert.deepEqual(groups, {
+    'foundation/space.tokens.json': ['space', 'size'],
+    'foundation/layout.tokens.json': ['breakpoint', 'z'],
+    'foundation/shape.tokens.json': ['radius', 'border'],
+    'foundation/typography.tokens.json': ['font', 'type'],
+    'foundation/motion.tokens.json': ['duration', 'ease'],
+    'foundation/elevation.tokens.json': ['elevation'],
+    'foundation/effect.tokens.json': ['blur', 'opacity'],
+  });
+});
+
+test("no flavor's default accent shares a pigment with a status", () => {
+  // An accent on a status pigment renders the same color as that status: a primary action would read as an error.
+  const statusPigments = new Map(Object.entries(STATUS).map(([status, pigment]) => [pigment, status]));
+  for (const [id, flavor] of Object.entries(FLAVORS)) {
+    assert.ok(!statusPigments.has(flavor.accent), `${id}: its accent ${flavor.accent} is the ${statusPigments.get(flavor.accent)} pigment`);
+  }
+});
+
+test('breakpoints are DTCG tokens only, since custom properties cannot be read in a media query', () => {
+  assert.deepEqual(Object.keys(tokens.files['foundation/layout.tokens.json'].breakpoint).filter((key) => !key.startsWith('$')), ['sm', 'md', 'lg', 'xl', '2xl']);
+  assert.doesNotMatch(emitCss(palette, tokens), /--san-breakpoint-/);
+});
+
+test('stacking order is the z group, so no custom property is named layer', () => {
+  const css = emitCss(palette, tokens);
+  assert.doesNotMatch(css, /--san-layer-/);
+  for (const level of ['base', 'raised', 'sticky', 'overlay', 'modal', 'toast', 'tooltip']) {
+    assert.match(css, new RegExp(`--san-z-${level}: \\d+;`), `--san-z-${level} is not declared as a number`);
+  }
+});
+
+test('the harmony stops behind the harmonic window are private custom properties', () => {
+  const css = emitCss(palette, tokens);
+  assert.doesNotMatch(css, /--san-harmony-/, 'a harmony stop is declared or read under the public prefix');
+  for (const stop of 'abc') assert.ok(css.includes(`--_san-harmony-${stop}: `), `--_san-harmony-${stop} is not declared`);
+});
+
 test('white light is a token, and the glass sheen is drawn with it', () => {
   const css = emitCss(palette, tokens);
   assert.match(css, /--san-light: oklch\(1 0 0\);/);
@@ -267,7 +345,7 @@ test('the harmonic window leads each accent with its two neighbors on the hue wh
 
   const css = emitCss(palette, tokens);
   const blockOf = (selector: string) => css.slice(css.indexOf(selector), css.indexOf('}', css.indexOf(selector)));
-  const stops = (id: PigmentId) => harmony(id).map((pigment, i) => `--san-harmony-${'abc'[i]}: var(--san-pigment-${pigment}-${WINDOW_TONES[i]});`);
+  const stops = (id: PigmentId) => harmony(id).map((pigment, i) => `--_san-harmony-${'abc'[i]}: var(--_san-pigment-${pigment}-${WINDOW_TONES[i]});`);
   for (const id of pigmentIds) {
     for (const stop of stops(id)) assert.ok(blockOf(`[data-san-accent="${id}"]`).includes(stop), `${id}: ${stop}`);
   }
@@ -276,7 +354,7 @@ test('the harmonic window leads each accent with its two neighbors on the hue wh
     for (const stop of stops(FLAVORS[flavor].accent)) assert.ok(blockOf(`[data-san-flavor="${flavor}"] {`).includes(stop), `${flavor}: ${stop}`);
   }
   const harmonic = blockOf('[data-san-window="harmonic"]');
-  for (const stop of 'abc') assert.ok(harmonic.includes(`--san-window-${stop}: var(--san-harmony-${stop});`), stop);
+  for (const stop of 'abc') assert.ok(harmonic.includes(`--san-window-${stop}: var(--_san-harmony-${stop});`), stop);
   // Mono is the default and can also be set explicitly, to opt out inside a harmonic scope.
   assert.ok(blockOf('[data-san-window="mono"]').includes('--san-window-b: var(--san-accent);'));
 });

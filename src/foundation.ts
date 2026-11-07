@@ -129,9 +129,11 @@ const elevation = {
 
 const blur = group('dimension', { sm: 8, md: 16, lg: 32 }, px);
 
-const state = {
+// Opacities only. The state layers that mix the content color at these opacities are CSS-only
+// (`--san-state-layer-*` in src/emit/css.ts): DTCG has no color functions.
+const opacity = {
   $type: 'number',
-  $description: 'Opacity of the content color laid over a control in each interaction state.',
+  $description: 'Opacity of the content color in each interaction state, from 0 to 1.',
   hover: { $value: 0.08 },
   focus: { $value: 0.12 },
   pressed: { $value: 0.16 },
@@ -139,14 +141,19 @@ const state = {
   'disabled-container': { $value: 0.12 },
 };
 
-const zLayer = group('number', { base: 0, raised: 10, sticky: 100, overlay: 200, modal: 300, toast: 400, tooltip: 500 });
+// Stacking order, read as `z-index: var(--san-z-modal)`. Named z, not layer, so it does not read as a
+// state layer (a color) or a CSS cascade layer.
+const z = group('number', { base: 0, raised: 10, sticky: 100, overlay: 200, modal: 300, toast: 400, tooltip: 500 });
 
 export const FOUNDATION_FILES = {
-  'foundation/space.tokens.json': { space, size, breakpoint },
+  'foundation/space.tokens.json': { space, size },
+  'foundation/layout.tokens.json': { breakpoint, z },
   'foundation/shape.tokens.json': { radius, border },
   'foundation/typography.tokens.json': { font, type },
   'foundation/motion.tokens.json': { duration, ease },
-  'foundation/elevation.tokens.json': { elevation, blur, state, layer: zLayer },
+  'foundation/elevation.tokens.json': { elevation },
+  // Effects change how something that is already there looks: the glass blur and the state opacities.
+  'foundation/effect.tokens.json': { blur, opacity },
 };
 
 /** Percentage polygon for a pointed (equilateral) arch whose springing sits `spring`% down the box. */

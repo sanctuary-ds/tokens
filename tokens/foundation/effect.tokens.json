@@ -1,0 +1,42 @@
+{
+  "blur": {
+    "$type": "dimension",
+    "sm": {
+      "$value": {
+        "value": 8,
+        "unit": "px"
+      }
+    },
+    "md": {
+      "$value": {
+        "value": 16,
+        "unit": "px"
+      }
+    },
+    "lg": {
+      "$value": {
+        "value": 32,
+        "unit": "px"
+      }
+    }
+  },
+  "opacity": {
+    "$type": "number",
+    "$description": "Opacity of the content color in each interaction state, from 0 to 1.",
+    "hover": {
+      "$value": 0.08
+    },
+    "focus": {
+      "$value": 0.12
+    },
+    "pressed": {
+      "$value": 0.16
+    },
+    "disabled-content": {
+      "$value": 0.38
+    },
+    "disabled-container": {
+      "$value": 0.12
+    }
+  }
+}

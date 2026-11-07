@@ -48,11 +48,6 @@ css --san-blur-sm
 css --san-border-width-came
 css --san-border-width-hairline
 css --san-border-width-heavy
-css --san-breakpoint-2xl
-css --san-breakpoint-lg
-css --san-breakpoint-md
-css --san-breakpoint-sm
-css --san-breakpoint-xl
 css --san-cast-lg
 css --san-cast-md
 css --san-cast-sm
@@ -166,159 +161,22 @@ css --san-glaze-fg
 css --san-glaze-glow
 css --san-glaze-sheen
 css --san-halo
-css --san-harmony-a
-css --san-harmony-b
-css --san-harmony-c
 css --san-info
 css --san-info-ink
 css --san-info-lume
 css --san-info-on
 css --san-info-on-pane
 css --san-info-pane
-css --san-layer-base
-css --san-layer-modal
-css --san-layer-overlay
-css --san-layer-raised
-css --san-layer-sticky
-css --san-layer-toast
-css --san-layer-tooltip
 css --san-lead
 css --san-lead-came
 css --san-lead-soft
 css --san-lead-strong
 css --san-light
-css --san-pigment-amber-100
-css --san-pigment-amber-200
-css --san-pigment-amber-300
-css --san-pigment-amber-400
-css --san-pigment-amber-50
-css --san-pigment-amber-500
-css --san-pigment-amber-600
-css --san-pigment-amber-700
-css --san-pigment-amber-800
-css --san-pigment-amber-900
-css --san-pigment-amber-950
-css --san-pigment-amethyst-100
-css --san-pigment-amethyst-200
-css --san-pigment-amethyst-300
-css --san-pigment-amethyst-400
-css --san-pigment-amethyst-50
-css --san-pigment-amethyst-500
-css --san-pigment-amethyst-600
-css --san-pigment-amethyst-700
-css --san-pigment-amethyst-800
-css --san-pigment-amethyst-900
-css --san-pigment-amethyst-950
-css --san-pigment-azure-100
-css --san-pigment-azure-200
-css --san-pigment-azure-300
-css --san-pigment-azure-400
-css --san-pigment-azure-50
-css --san-pigment-azure-500
-css --san-pigment-azure-600
-css --san-pigment-azure-700
-css --san-pigment-azure-800
-css --san-pigment-azure-900
-css --san-pigment-azure-950
-css --san-pigment-cobalt-100
-css --san-pigment-cobalt-200
-css --san-pigment-cobalt-300
-css --san-pigment-cobalt-400
-css --san-pigment-cobalt-50
-css --san-pigment-cobalt-500
-css --san-pigment-cobalt-600
-css --san-pigment-cobalt-700
-css --san-pigment-cobalt-800
-css --san-pigment-cobalt-900
-css --san-pigment-cobalt-950
-css --san-pigment-ember-100
-css --san-pigment-ember-200
-css --san-pigment-ember-300
-css --san-pigment-ember-400
-css --san-pigment-ember-50
-css --san-pigment-ember-500
-css --san-pigment-ember-600
-css --san-pigment-ember-700
-css --san-pigment-ember-800
-css --san-pigment-ember-900
-css --san-pigment-ember-950
-css --san-pigment-gilt-100
-css --san-pigment-gilt-200
-css --san-pigment-gilt-300
-css --san-pigment-gilt-400
-css --san-pigment-gilt-50
-css --san-pigment-gilt-500
-css --san-pigment-gilt-600
-css --san-pigment-gilt-700
-css --san-pigment-gilt-800
-css --san-pigment-gilt-900
-css --san-pigment-gilt-950
-css --san-pigment-indigo-100
-css --san-pigment-indigo-200
-css --san-pigment-indigo-300
-css --san-pigment-indigo-400
-css --san-pigment-indigo-50
-css --san-pigment-indigo-500
-css --san-pigment-indigo-600
-css --san-pigment-indigo-700
-css --san-pigment-indigo-800
-css --san-pigment-indigo-900
-css --san-pigment-indigo-950
-css --san-pigment-murrey-100
-css --san-pigment-murrey-200
-css --san-pigment-murrey-300
-css --san-pigment-murrey-400
-css --san-pigment-murrey-50
-css --san-pigment-murrey-500
-css --san-pigment-murrey-600
-css --san-pigment-murrey-700
-css --san-pigment-murrey-800
-css --san-pigment-murrey-900
-css --san-pigment-murrey-950
-css --san-pigment-rose-100
-css --san-pigment-rose-200
-css --san-pigment-rose-300
-css --san-pigment-rose-400
-css --san-pigment-rose-50
-css --san-pigment-rose-500
-css --san-pigment-rose-600
-css --san-pigment-rose-700
-css --san-pigment-rose-800
-css --san-pigment-rose-900
-css --san-pigment-rose-950
-css --san-pigment-ruby-100
-css --san-pigment-ruby-200
-css --san-pigment-ruby-300
-css --san-pigment-ruby-400
-css --san-pigment-ruby-50
-css --san-pigment-ruby-500
-css --san-pigment-ruby-600
-css --san-pigment-ruby-700
-css --san-pigment-ruby-800
-css --san-pigment-ruby-900
-css --san-pigment-ruby-950
-css --san-pigment-verdure-100
-css --san-pigment-verdure-200
-css --san-pigment-verdure-300
-css --san-pigment-verdure-400
-css --san-pigment-verdure-50
-css --san-pigment-verdure-500
-css --san-pigment-verdure-600
-css --san-pigment-verdure-700
-css --san-pigment-verdure-800
-css --san-pigment-verdure-900
-css --san-pigment-verdure-950
-css --san-pigment-viridian-100
-css --san-pigment-viridian-200
-css --san-pigment-viridian-300
-css --san-pigment-viridian-400
-css --san-pigment-viridian-50
-css --san-pigment-viridian-500
-css --san-pigment-viridian-600
-css --san-pigment-viridian-700
-css --san-pigment-viridian-800
-css --san-pigment-viridian-900
-css --san-pigment-viridian-950
+css --san-opacity-disabled-container
+css --san-opacity-disabled-content
+css --san-opacity-focus
+css --san-opacity-hover
+css --san-opacity-pressed
 css --san-radius-full
 css --san-radius-lg
 css --san-radius-md
@@ -352,11 +210,9 @@ css --san-space-6
 css --san-space-8
 css --san-space-half
 css --san-space-px
-css --san-state-disabled-container
-css --san-state-disabled-content
-css --san-state-focus
-css --san-state-hover
-css --san-state-pressed
+css --san-state-layer-focus
+css --san-state-layer-hover
+css --san-state-layer-pressed
 css --san-success
 css --san-success-ink
 css --san-success-lume
@@ -441,6 +297,13 @@ css --san-window-jesse
 css --san-window-lancet
 css --san-window-rosace
 css --san-window-vesperal
+css --san-z-base
+css --san-z-modal
+css --san-z-overlay
+css --san-z-raised
+css --san-z-sticky
+css --san-z-toast
+css --san-z-tooltip
 export ./css -> ./dist/css/sanctuary.css
 export ./package.json -> ./package.json
 export ./palette -> {"types":"./dist/palette.d.ts","default":"./dist/palette.js"}
@@ -462,7 +325,9 @@ file tokens/flavor/compline.tokens.json
 file tokens/flavor/lauds.tokens.json
 file tokens/flavor/matins.tokens.json
 file tokens/flavor/vespers.tokens.json
+file tokens/foundation/effect.tokens.json
 file tokens/foundation/elevation.tokens.json
+file tokens/foundation/layout.tokens.json
 file tokens/foundation/motion.tokens.json
 file tokens/foundation/shape.tokens.json
 file tokens/foundation/space.tokens.json
@@ -885,27 +750,32 @@ token flavor/<flavor>.tokens.json text.muted
 token flavor/<flavor>.tokens.json text.subtle
 token flavor/<flavor>.tokens.json umbra.ambient
 token flavor/<flavor>.tokens.json umbra.key
-token foundation/elevation.tokens.json blur.lg
-token foundation/elevation.tokens.json blur.md
-token foundation/elevation.tokens.json blur.sm
+token foundation/effect.tokens.json blur.lg
+token foundation/effect.tokens.json blur.md
+token foundation/effect.tokens.json blur.sm
+token foundation/effect.tokens.json opacity.disabled-container
+token foundation/effect.tokens.json opacity.disabled-content
+token foundation/effect.tokens.json opacity.focus
+token foundation/effect.tokens.json opacity.hover
+token foundation/effect.tokens.json opacity.pressed
 token foundation/elevation.tokens.json elevation.0
 token foundation/elevation.tokens.json elevation.1
 token foundation/elevation.tokens.json elevation.2
 token foundation/elevation.tokens.json elevation.3
 token foundation/elevation.tokens.json elevation.4
 token foundation/elevation.tokens.json elevation.5
-token foundation/elevation.tokens.json layer.base
-token foundation/elevation.tokens.json layer.modal
-token foundation/elevation.tokens.json layer.overlay
-token foundation/elevation.tokens.json layer.raised
-token foundation/elevation.tokens.json layer.sticky
-token foundation/elevation.tokens.json layer.toast
-token foundation/elevation.tokens.json layer.tooltip
-token foundation/elevation.tokens.json state.disabled-container
-token foundation/elevation.tokens.json state.disabled-content
-token foundation/elevation.tokens.json state.focus
-token foundation/elevation.tokens.json state.hover
-token foundation/elevation.tokens.json state.pressed
+token foundation/layout.tokens.json breakpoint.2xl
+token foundation/layout.tokens.json breakpoint.lg
+token foundation/layout.tokens.json breakpoint.md
+token foundation/layout.tokens.json breakpoint.sm
+token foundation/layout.tokens.json breakpoint.xl
+token foundation/layout.tokens.json z.base
+token foundation/layout.tokens.json z.modal
+token foundation/layout.tokens.json z.overlay
+token foundation/layout.tokens.json z.raised
+token foundation/layout.tokens.json z.sticky
+token foundation/layout.tokens.json z.toast
+token foundation/layout.tokens.json z.tooltip
 token foundation/motion.tokens.json duration.base
 token foundation/motion.tokens.json duration.fast
 token foundation/motion.tokens.json duration.instant
@@ -926,11 +796,6 @@ token foundation/shape.tokens.json radius.none
 token foundation/shape.tokens.json radius.sm
 token foundation/shape.tokens.json radius.xl
 token foundation/shape.tokens.json radius.xs
-token foundation/space.tokens.json breakpoint.2xl
-token foundation/space.tokens.json breakpoint.lg
-token foundation/space.tokens.json breakpoint.md
-token foundation/space.tokens.json breakpoint.sm
-token foundation/space.tokens.json breakpoint.xl
 token foundation/space.tokens.json size.control.lg
 token foundation/space.tokens.json size.control.md
 token foundation/space.tokens.json size.control.sm

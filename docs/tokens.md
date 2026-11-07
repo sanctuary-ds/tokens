@@ -48,7 +48,8 @@ Every token is a custom property prefixed `--san-`. The name is the DTCG token p
 | `--san-glass-<p>-pane` | Tinted container |
 | `--san-glass-<p>-on` | Content on the pigment |
 | `--san-glass-<p>-on-pane` | Content on the pane |
-| `--san-pigment-<p>-50` … `-950` | Raw ramp. For illustration and data only |
+
+The raw ramps are not custom properties you can rely on: the stylesheet declares them as private `--_san-pigment-<p>-<tone>` to build the glass, and they can change in any release. For illustration and data, read the ramps from `@sanctuary-ds/tokens/palette` (`pigments.<p>.tones`) or `tokens/pigment.tokens.json`.
 
 ### Accent, status, syntax, terminal
 
@@ -58,6 +59,8 @@ Every token is a custom property prefixed `--san-`. The name is the DTCG token p
 | Status | `--san-danger` (ruby), `--san-warning` (amber), `--san-success` (verdure), `--san-info` (azure), each with the same six suffixes |
 | Syntax | `--san-syntax-keyword`, `-string`, `-number`, `-constant`, `-function`, `-type`, `-property`, `-tag`, `-operator`, `-regex`, `-variable`, `-punctuation`, `-comment` |
 | ANSI | `--san-ansi-black` … `-white` and `--san-ansi-bright-black` … `-bright-white` |
+
+Each flavor's default accent is kept off the four status pigments, so a primary action never matches a status out of the box. An accent you set yourself can be a status pigment: `data-san-accent="ruby"` makes `--san-accent` the same color as `--san-danger`. Color alone never carries the meaning of a status; pair it with a label or an icon, as [Accessibility](https://sanctuary-ds.github.io/docs/accessibility) describes.
 
 ## Light (CSS only)
 
@@ -72,10 +75,9 @@ These are computed from the active flavor, accent, glazing and window setting.
 | `--san-glaze-blur` | filter | `backdrop-filter` value |
 | `--san-cast-sm`, `-md`, `-lg` | shadow | Colored light around glass |
 | `--san-halo` | shadow | Focus ring |
-| `--san-state-hover`, `-focus`, `-pressed` | color | State layer; uses `currentColor`, so it follows the content color |
+| `--san-state-layer-hover`, `-focus`, `-pressed` | color | State layer: `currentColor` at `--san-opacity-<state>`, so it follows the content color and the opacity token |
 | `--san-window` | gradient | The cast-light gradient |
 | `--san-window-a`, `-b`, `-c` | color | Its three stops |
-| `--san-harmony-a`, `-b`, `-c` | color | The accent and its two hue-wheel neighbors; read by `data-san-window="harmonic"` |
 | `--san-window-rosace`, `-jesse`, `-lancet`, `-aureole`, `-vesperal` | gradient | Named windows: fixed, independent of the accent, for one specific place |
 | `--san-elevation-0` … `-5` | shadow | Lumen shadows (pair with `surface-raised-n`) |
 
@@ -85,7 +87,6 @@ These are computed from the active flavor, accent, glazing and window setting.
 |-------|-----------|-------|
 | Space | `--san-space-0`, `-px`, `-half`, `-1`, `-2`, `-3`, `-4`, `-5`, `-6`, `-8`, `-10`, `-12`, `-16`, `-20`, `-24`, `-32` | 4px grid: `space-4` is 16px |
 | Size | `--san-size-control-sm/md/lg` (32/40/48px), `--san-size-icon-sm/md/lg`, `--san-size-measure` | |
-| Breakpoint | `--san-breakpoint-sm/md/lg/xl/2xl` | Reference values; custom properties cannot be used in media queries |
 | Radius | `--san-radius-none/xs/sm/md/lg/xl/full` | 0, 2, 4, 8, 12, 20px, pill |
 | Border | `--san-border-width-hairline/came/heavy` | 1, 2, 3px |
 | Shape | `--san-shape-lancet`, `--san-shape-ogive` | `clip-path` values, CSS only |
@@ -94,10 +95,12 @@ These are computed from the active flavor, accent, glazing and window setting.
 | Duration | `--san-duration-instant/fast/base/slow/slower/procession` | 80 to 900ms; all `0ms` under `prefers-reduced-motion: reduce` |
 | Easing | `--san-ease-standard/enter/exit/linear` | |
 | Blur | `--san-blur-sm/md/lg` | For glass surfaces |
-| State | `--san-state-disabled-content`, `-disabled-container` | Opacities |
-| Layer | `--san-layer-base/raised/sticky/overlay/modal/toast/tooltip` | `z-index` |
+| Opacity | `--san-opacity-hover/focus/pressed/disabled-content/disabled-container` | 0.08, 0.12, 0.16, 0.38, 0.12; numbers from 0 to 1 |
+| Z | `--san-z-base/raised/sticky/overlay/modal/toast/tooltip` | `z-index`: 0, 10, 100 to 500 |
 
 Type roles: `display-lg/md/sm`, `headline-lg/md/sm`, `title-lg/md/sm`, `body-lg/md/sm`, `label-lg/md/sm`, `inscription`, `code-md/sm`.
+
+Breakpoints (`sm` 40rem, `md` 48rem, `lg` 64rem, `xl` 80rem, `2xl` 96rem) are not custom properties: a media query cannot read one. Read them from `breakpoint` in `tokens/foundation/layout.tokens.json` and write the values into your queries, or let a preprocessor do it.
 
 ### Reduced motion
 

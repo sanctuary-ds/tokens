@@ -185,7 +185,13 @@ export function groupTokens<T>(group: { [key: string]: string | T }): [name: str
 }
 
 /** Custom property name for a token path. `$root` names the group itself. */
-export const cssName = (path: string[]): string => `--san-${path.filter((segment) => segment !== '$root').join('-')}`;
+// Custom properties the stylesheet needs but consumers must not read take the private `--_san-` prefix,
+// so they stay out of the public API. Pigments are the primitive tier: a component that reads one
+// bypasses the flavor and its contrast guarantees. Harmony stops are plumbing for the harmonic window,
+// which consumers read as `--san-window-a` to `-c`.
+const PRIVATE_TIERS = new Set(['pigment', 'harmony']);
+export const cssName = (path: string[]): string =>
+  `--${PRIVATE_TIERS.has(path[0]) ? '_' : ''}san-${path.filter((segment) => segment !== '$root').join('-')}`;
 
 export const aliasPath = (value: unknown): string[] | null =>
   typeof value === 'string' && value.startsWith('{') ? value.slice(1, -1).split('.') : null;
