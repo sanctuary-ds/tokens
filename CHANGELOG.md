@@ -2,6 +2,13 @@
 
 Entries for 0.1.0 and 0.1.1 were generated from the commit history after those releases, with the rules release-please applies from 0.2.0 on.
 
+## [0.3.1](https://github.com/sanctuary-ds/tokens/compare/v0.3.0...v0.3.1) (2026-11-07)
+
+
+### Features
+
+* **palette:** add the status and syntax colors to each flavor ([4310d89](https://github.com/sanctuary-ds/tokens/commit/4310d89cfb883bac80755162e77d9b42aae0176b))
+
 ## [0.3.0](https://github.com/sanctuary-ds/tokens/compare/v0.2.1...v0.3.0) (2026-11-07)
 
 
