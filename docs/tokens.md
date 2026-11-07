@@ -1,6 +1,6 @@
-# Token reference
+# Using the tokens
 
-Every token is a custom property prefixed `--san-`. The name is the DTCG token path joined with hyphens; a group's `$root` token takes the group's own name (`accent.$root` is `--san-accent`).
+Almost every token is a custom property prefixed `--san-`; [pigments](#pigments) and [breakpoints](#breakpoints) are the exceptions. The name is the DTCG token path joined with hyphens; a group's `$root` token takes the group's own name (`accent.$root` is `--san-accent`).
 
 ## Quick path
 
@@ -20,87 +20,27 @@ Every token is a custom property prefixed `--san-`. The name is the DTCG token p
 .button:focus-visible { box-shadow: var(--san-halo); }
 ```
 
-## Color
+## The groups
 
-### Stone, ink and lead (per flavor)
+The [token reference](https://sanctuary-ds.github.io/docs/tokens) on the site lists every token and custom property, with its value in each flavor. It is generated from this package, so it always matches the version the site documents. It is organized by group: [stone, ink and lead](https://sanctuary-ds.github.io/docs/tokens#stone), [glass](https://sanctuary-ds.github.io/docs/tokens#glass), [accent](https://sanctuary-ds.github.io/docs/tokens#accent), [status](https://sanctuary-ds.github.io/docs/tokens#status), [syntax](https://sanctuary-ds.github.io/docs/tokens#syntax), [terminal](https://sanctuary-ds.github.io/docs/tokens#terminal), [named windows](https://sanctuary-ds.github.io/docs/tokens#windows), [pigments](https://sanctuary-ds.github.io/docs/tokens#pigments) and the foundations, from [space](https://sanctuary-ds.github.io/docs/tokens#space) to [effect](https://sanctuary-ds.github.io/docs/tokens#effect). What each glass role is for, and which pairs are safe for text, is explained in [Color](https://sanctuary-ds.github.io/docs/foundations/color) and [Accessibility](https://sanctuary-ds.github.io/docs/accessibility).
 
-| Property | Use |
-|----------|-----|
-| `--san-surface-sunken` | Wells, inputs, the page behind panels |
-| `--san-surface` | The base surface |
-| `--san-surface-raised-1` … `-4` | Lumen levels 1 to 4; level 5 reuses `raised-4` |
-| `--san-surface-inverse`, `--san-text-inverse` | Tooltips, toasts |
-| `--san-text`, `-muted`, `-subtle`, `-disabled` | Text, in falling emphasis |
-| `--san-lead-soft`, `--san-lead`, `--san-lead-strong` | Dividers, borders, emphasized borders |
-| `--san-lead-came` | The near-black line between panes |
-| `--san-umbra-key`, `--san-umbra-ambient` | Shadow colors used by `elevation-*` |
-| `--san-scrim` | Overlay behind modals |
+The notes below cover what the reference does not: how to read the tokens that are not custom properties, and what the stylesheet does for you.
 
-### Glass (per flavor, per pigment)
+### Pigments
 
-`<p>` is any pigment name.
+The raw ramps are not custom properties you can rely on: the stylesheet declares them as private `--_san-pigment-<p>-<tone>` to build the glass, and they can change in any release. Use a glass role (`--san-glass-<p>`, `-lume`, `-ink`, `-pane`, `-on`, `-on-pane`) in an interface. For illustration and data, read the ramps from `@sanctuary-ds/tokens/palette` (`pigments.<p>.tones`) or `tokens/pigment.tokens.json`.
 
-| Property | Use |
-|----------|-----|
-| `--san-glass-<p>` | The pigment in this flavor |
-| `--san-glass-<p>-lume` | Brighter light: glow, hover, gradients. Not for text |
-| `--san-glass-<p>-ink` | Accent text: links, text on panes and on sunken stone |
-| `--san-glass-<p>-pane` | Tinted container |
-| `--san-glass-<p>-on` | Content on the pigment |
-| `--san-glass-<p>-on-pane` | Content on the pane |
+### Accent and status
 
-The raw ramps are not custom properties you can rely on: the stylesheet declares them as private `--_san-pigment-<p>-<tone>` to build the glass, and they can change in any release. For illustration and data, read the ramps from `@sanctuary-ds/tokens/palette` (`pigments.<p>.tones`) or `tokens/pigment.tokens.json`.
+Each flavor's default accent is kept off the four status pigments (danger is ruby, warning amber, success verdure, info azure), so a primary action never matches a status out of the box. An accent you set yourself can be a status pigment: `data-san-accent="ruby"` makes `--san-accent` the same color as `--san-danger`. Color alone never carries the meaning of a status; pair it with a label or an icon, as [Accessibility](https://sanctuary-ds.github.io/docs/accessibility) describes.
 
-### Accent, status, syntax, terminal
+### Light
 
-| Group | Properties |
-|-------|-----------|
-| Accent | `--san-accent`, `-lume`, `-ink`, `-pane`, `-on`, `-on-pane` |
-| Status | `--san-danger` (ruby), `--san-warning` (amber), `--san-success` (verdure), `--san-info` (azure), each with the same six suffixes |
-| Syntax | `--san-syntax-keyword`, `-string`, `-number`, `-constant`, `-function`, `-type`, `-property`, `-tag`, `-operator`, `-regex`, `-variable`, `-punctuation`, `-comment` |
-| ANSI | `--san-ansi-black` … `-white` and `--san-ansi-bright-black` … `-bright-white` |
+Glazing, cast, halo, state layers and the window that follows the accent (`--san-window`, with its stops `-a` to `-c`) are computed by the stylesheet from the active flavor, accent, glazing and window setting, so they exist only as custom properties, not in the token files. The named windows and elevation are in both. A state layer (`--san-state-layer-<state>`) is `currentColor` at `--san-opacity-<state>`, so it follows the content color and the opacity token.
 
-Each flavor's default accent is kept off the four status pigments, so a primary action never matches a status out of the box. An accent you set yourself can be a status pigment: `data-san-accent="ruby"` makes `--san-accent` the same color as `--san-danger`. Color alone never carries the meaning of a status; pair it with a label or an icon, as [Accessibility](https://sanctuary-ds.github.io/docs/accessibility) describes.
+### Breakpoints
 
-## Light (CSS only)
-
-These are computed from the active flavor, accent, glazing and window setting.
-
-| Property | Type | Use |
-|----------|------|-----|
-| `--san-glaze-bg`, `-bg-hover`, `-fg`, `-border` | color | A glazed (accent-filled) element |
-| `--san-light` | color | White light as it passes clear glass; draw sheens, suns and highlights with it, mixed toward `transparent` for strength |
-| `--san-glaze-sheen` | image | Highlight layered over `-bg` |
-| `--san-glaze-glow` | shadow | Glow of the glazing |
-| `--san-glaze-blur` | filter | `backdrop-filter` value |
-| `--san-cast-sm`, `-md`, `-lg` | shadow | Colored light around glass |
-| `--san-halo` | shadow | Focus ring |
-| `--san-state-layer-hover`, `-focus`, `-pressed` | color | State layer: `currentColor` at `--san-opacity-<state>`, so it follows the content color and the opacity token |
-| `--san-window` | gradient | The cast-light gradient |
-| `--san-window-a`, `-b`, `-c` | color | Its three stops |
-| `--san-window-rosace`, `-jesse`, `-lancet`, `-aureole`, `-vesperal` | gradient | Named windows: fixed, independent of the accent, for one specific place |
-| `--san-elevation-0` … `-5` | shadow | Lumen shadows (pair with `surface-raised-n`) |
-
-## Foundations
-
-| Group | Properties | Notes |
-|-------|-----------|-------|
-| Space | `--san-space-0`, `-px`, `-half`, `-1`, `-2`, `-3`, `-4`, `-5`, `-6`, `-8`, `-10`, `-12`, `-16`, `-20`, `-24`, `-32` | 4px grid: `space-4` is 16px |
-| Size | `--san-size-control-sm/md/lg` (32/40/48px), `--san-size-icon-sm/md/lg`, `--san-size-measure` | |
-| Radius | `--san-radius-none/xs/sm/md/lg/xl/full` | 0, 2, 4, 8, 12, 20px, pill |
-| Border | `--san-border-width-hairline/came/heavy` | 1, 2, 3px |
-| Shape | `--san-shape-lancet`, `--san-shape-ogive` | `clip-path` values, CSS only |
-| Font | `--san-font-family-display/text/mono/inscription`, `--san-font-weight-regular/medium/semibold/bold` | |
-| Type | `--san-type-<role>` and `--san-type-<role>-tracking` | `font` shorthand plus letter spacing |
-| Duration | `--san-duration-instant/fast/base/slow/slower/procession` | 80 to 900ms; all `0ms` under `prefers-reduced-motion: reduce` |
-| Easing | `--san-ease-standard/enter/exit/linear` | |
-| Blur | `--san-blur-sm/md/lg` | For glass surfaces |
-| Opacity | `--san-opacity-hover/focus/pressed/disabled-content/disabled-container` | 0.08, 0.12, 0.16, 0.38, 0.12; numbers from 0 to 1 |
-| Z | `--san-z-base/raised/sticky/overlay/modal/toast/tooltip` | `z-index`: 0, 10, 100 to 500 |
-
-Type roles: `display-lg/md/sm`, `headline-lg/md/sm`, `title-lg/md/sm`, `body-lg/md/sm`, `label-lg/md/sm`, `inscription`, `code-md/sm`.
-
-Breakpoints (`sm` 40rem, `md` 48rem, `lg` 64rem, `xl` 80rem, `2xl` 96rem) are not custom properties: a media query cannot read one. Read them from `breakpoint` in `tokens/foundation/layout.tokens.json` and write the values into your queries, or let a preprocessor do it.
+Breakpoints are not custom properties: a media query cannot read one. Read them from `breakpoint` in `tokens/foundation/layout.tokens.json` and write the values into your queries, or let a preprocessor do it.
 
 ### Reduced motion
 

@@ -95,7 +95,8 @@ A published version can never be replaced on npm. If one is wrong, release a fix
 
 - [Design language](https://sanctuary-ds.github.io/docs/philosophy): the idea, the materials and the rules, on the site.
 - [Architecture](docs/architecture.md): token tiers, the build pipeline and the decisions behind them.
-- [Token reference](docs/tokens.md): every group and its custom properties.
+- [Token reference](https://sanctuary-ds.github.io/docs/tokens): every token and custom property, generated from the package, on the site.
+- [Using the tokens](docs/tokens.md): the quick path, the tokens that are not custom properties, the DTCG files, the plain palette and the fonts.
 - [Public API](docs/public-api.md): what stays stable and how each change is versioned.
 - [Roadmap](ROADMAP.md): the phases of the core, up to `1.0.0`.
 - [Ecosystem](docs/ecosystem.md): the planned GitHub organization, the Lit library and the [ports](https://github.com/sanctuary-ds/ports) for desktop applications.
