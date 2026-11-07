@@ -23,7 +23,7 @@ The core ends as a small, stable package: tokens, stylesheet, palette and the do
 | Today here | Moves to | When |
 |------------|----------|------|
 | `showcase/` | The [playground](https://sanctuary-ds.github.io/playground/) of `sanctuary-ds.github.io` | Done: the playground replaced it and the showcase was deleted here |
-| `docs/design-language.md` | The site's [philosophy](https://sanctuary-ds.github.io/docs/philosophy) and [foundations](https://sanctuary-ds.github.io/docs/foundations/color) | Done: this repository keeps a page of links |
+| `docs/design-language.md` | The site's [philosophy](https://sanctuary-ds.github.io/docs/philosophy) and [foundations](https://sanctuary-ds.github.io/docs/foundations/color) | Done: the site holds it, and the page of links was removed here |
 | `ports/` and `src/emit/ports.js` | [`ports`](https://github.com/sanctuary-ds/ports) | Done: deleted here before any replacement exists; the untested first drafts remain in the history at commit `467f5cc` |
 
 ## Web components with Lit
