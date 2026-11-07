@@ -1,6 +1,6 @@
 # Ecosystem
 
-This repository is the seed of the [`sanctuary-ds`](https://github.com/sanctuary-ds) GitHub organization; packages will publish under the `@sanctuary-ds` npm scope. It holds the one thing every other module depends on: the palette and tokens. This page maps how the rest is split and records the decisions that cross repositories.
+This repository is the core of the [`sanctuary-ds`](https://github.com/sanctuary-ds) GitHub organization, and its packages publish under the `@sanctuary-ds` npm scope. It holds the one thing every other module depends on: the palette and tokens. This page maps how the rest is split and records the decisions that cross repositories.
 
 ## Repositories
 
@@ -79,6 +79,4 @@ The core names its fonts and publishes them in `palette.json` (`fonts`), but doe
 
 ## Open decisions
 
-| Decision | Options | Note |
-|----------|---------|------|
-| Wide gamut | Add Display P3 pigments | The engine clamps to sRGB today |
+None. Wide gamut was decided: `1.0.0` stays sRGB only, and Display P3 is evaluated after it as an addition (see the [roadmap](../ROADMAP.md#phase-4-wide-gamut)).

@@ -49,15 +49,15 @@ No release: the source is not published, so the package did not change.
 - [x] Publish the palette as a typed module, generated from the source, so `ports` and `web-components` can rely on ids such as `FlavorId` and `PigmentId`. A breaking change: `./palette` becomes the module and the JSON moves to `./palette.json`.
 - [x] Verify how a JSON entry point carries its types before choosing the shape. Types over a JSON file left the import attribute unchecked and could not be tree-shaken, so the entry point became a module.
 - [x] Add the types to the public API report.
-- [ ] Update the site to the new entry point and its guide for writing a port, after the release.
+- [x] Update the site to the new entry point and its guide for writing a port, after the release.
 - [x] Type the token trees from their source, so the build and the tests no longer cast the typography tree.
 - [x] Derive the `Role` type from the list of glass roles, so a new role cannot be left out of the tokens.
 - [x] Pass the test file pattern to `node --test` explicitly, so a run without type stripping fails instead of finding no tests.
 
 ### Phase 4: Wide gamut
 
-- [ ] Decide whether pigments gain Display P3 values next to the sRGB ones; see [Open decisions](#open-decisions).
-- [ ] If they do, add them as an addition that keeps every existing name and value.
+- [x] Decide whether pigments gain Display P3 values next to the sRGB ones. `1.0.0` stays sRGB only: P3 makes colors more saturated on screens that support it, but nothing fails without it, and adding it later breaks nothing.
+- [ ] After `1.0.0`, evaluate Display P3 values as an addition that keeps every existing name and value, with the contrast guarantees checked in P3 too (a minor release).
 
 ### Phase 5: Road to `1.0.0`
 
@@ -70,9 +70,7 @@ No release: the source is not published, so the package did not change.
 
 ## Open decisions
 
-| Decision | Options | When |
-|----------|---------|------|
-| Wide gamut | Display P3 pigments, or sRGB only | Phase 4 |
+None.
 
 ## Working agreement
 

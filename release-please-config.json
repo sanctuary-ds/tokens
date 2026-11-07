@@ -5,6 +5,7 @@
       "package-name": "@sanctuary-ds/tokens",
       "include-component-in-tag": false,
       "changelog-path": "CHANGELOG.md",
+      "extra-files": [{ "type": "generic", "path": "README.md" }],
       "bump-minor-pre-major": true,
       "bump-patch-for-minor-pre-major": true,
       "changelog-sections": [

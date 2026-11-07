@@ -20,11 +20,13 @@ With a bundler (Vite, Astro, webpack), import the stylesheet once:
 import '@sanctuary-ds/tokens/css';
 ```
 
-Without a build step, link it from a CDN that serves npm packages:
+Without a build step, link it from a CDN that serves npm packages. The link names the latest release, and each release updates it:
 
+<!-- x-release-please-start-version -->
 ```html
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@sanctuary-ds/tokens@0.2/dist/css/sanctuary.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@sanctuary-ds/tokens@0.3.0/dist/css/sanctuary.css">
 ```
+<!-- x-release-please-end -->
 
 The resolved colors are also available as data, and the DTCG files under `tokens/` for design tools and token pipelines:
 
@@ -99,11 +101,11 @@ A published version can never be replaced on npm. If one is wrong, release a fix
 - [Using the tokens](docs/tokens.md): the quick path, the tokens that are not custom properties, the DTCG files, the plain palette and the fonts.
 - [Public API](docs/public-api.md): what stays stable and how each change is versioned.
 - [Roadmap](ROADMAP.md): the phases of the core, up to `1.0.0`.
-- [Ecosystem](docs/ecosystem.md): the planned GitHub organization, the Lit library and the [ports](https://github.com/sanctuary-ds/ports) for desktop applications.
+- [Ecosystem](docs/ecosystem.md): the repositories of the GitHub organization, the planned Lit library and the [ports](https://github.com/sanctuary-ds/ports) for desktop applications.
 
 ## Status
 
-`0.2.0`. The [roadmap](ROADMAP.md) lists what comes next, up to `1.0.0`.
+Before `1.0.0`: a breaking change bumps the minor version, as [Public API](docs/public-api.md#how-changes-are-versioned) explains. The current version and what changed in each one are in the [releases](https://github.com/sanctuary-ds/tokens/releases); the [roadmap](ROADMAP.md) lists what comes next, up to `1.0.0`.
 
 ## License
 
