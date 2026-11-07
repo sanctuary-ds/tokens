@@ -210,6 +210,23 @@ test('the palette module holds the same data as palette.json', async () => {
   assert.deepEqual({ ...module }, data);
 });
 
+test('each flavor in the palette data holds every color the stylesheet declares for it, status and syntax included', () => {
+  // Ports read colors from the palette; a color missing here would make a port map it again by hand.
+  const files = (flavor: FlavorId) => [`flavor/${flavor}.tokens.json`, 'semantic.tokens.json'];
+  for (const flavor of flavorIds) {
+    const colors = data.flavors[flavor].colors;
+    const declared = files(flavor).flatMap((file) => flatten(tokens.files[file]).filter(({ type }) => type === 'color'));
+    for (const { path } of declared) {
+      const name = cssName(path).slice('--san-'.length);
+      assert.equal(colors[name]?.hex, resolveHex(tokens, flavor, path), `${flavor}: ${name}`);
+    }
+    assert.equal(Object.keys(colors).length, declared.length, flavor);
+  }
+  assert.equal(data.flavors.compline.colors.danger.hex, data.flavors.compline.colors['glass-ruby'].hex);
+  assert.ok('danger-on-pane' in data.flavors.compline.colors);
+  assert.ok('syntax-keyword' in data.flavors.compline.colors);
+});
+
 test('every font in the palette data has the stylesheet variable of the same name', () => {
   // Consumers that host their own fonts map fonts.<role> onto --san-font-family-<role>.
   const css = emitCss(palette, tokens);

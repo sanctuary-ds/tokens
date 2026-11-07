@@ -53,7 +53,9 @@ function paletteData(palette: Palette, tokens: Tokens): PaletteData {
   const flavors: PaletteData['flavors'] = {};
   for (const [id, flavor] of Object.entries(palette.flavors)) {
     const colors: Record<string, unknown> = {};
-    for (const { path, type } of flatten(tokens.files[`flavor/${id}.tokens.json`])) {
+    // The semantic colors (status and syntax) alias the flavor's glass, so they are resolved per flavor too.
+    const declared = [`flavor/${id}.tokens.json`, 'semantic.tokens.json'].flatMap((file) => flatten(tokens.files[file]));
+    for (const { path, type } of declared) {
       if (type !== 'color') continue;
       const { hex, components, alpha } = resolveToken(tokens, id, path).$value as DtcgColor;
       const name = path.filter((segment) => segment !== '$root').join('-');
