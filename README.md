@@ -23,7 +23,7 @@ import '@sanctuary-ds/tokens/css';
 Without a build step, link it from a CDN that serves npm packages:
 
 ```html
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@sanctuary-ds/tokens@0.2/dist/css/sanctuary.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@sanctuary-ds/tokens@0.3/dist/css/sanctuary.css">
 ```
 
 The resolved colors are also available as data, and the DTCG files under `tokens/` for design tools and token pipelines:
@@ -103,7 +103,7 @@ A published version can never be replaced on npm. If one is wrong, release a fix
 
 ## Status
 
-`0.2.0`. The [roadmap](ROADMAP.md) lists what comes next, up to `1.0.0`.
+Before `1.0.0`: a breaking change bumps the minor version, as [Public API](docs/public-api.md#how-changes-are-versioned) explains. The current version and what changed in each one are in the [releases](https://github.com/sanctuary-ds/tokens/releases); the [roadmap](ROADMAP.md) lists what comes next, up to `1.0.0`.
 
 ## License
 
