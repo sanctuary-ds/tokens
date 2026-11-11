@@ -120,7 +120,7 @@ export const FLAVORS = {
     name: 'Compline',
     hour: 'Night',
     scheme: 'dark',
-    blurb: 'Blue-slate stone after the doors close. The default flavor.',
+    blurb: 'Slate stone after the doors close. The default flavor.',
     accent: 'cobalt',
     roles: ROLE_TONES.dark,
     stone: { hue: 265, chroma: 0.012 },

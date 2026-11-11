@@ -1,5 +1,5 @@
 {
-  "$description": "Compline (Night). Blue-slate stone after the doors close. The default flavor.",
+  "$description": "Compline (Night). Slate stone after the doors close. The default flavor.",
   "$extensions": {
     "dev.sanctuary": {
       "scheme": "dark",
