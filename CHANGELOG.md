@@ -2,6 +2,13 @@
 
 Entries for 0.1.0 and 0.1.1 were generated from the commit history after those releases, with the rules release-please applies from 0.2.0 on.
 
+## [0.3.2](https://github.com/sanctuary-ds/tokens/compare/v0.3.1...v0.3.2) (2026-11-11)
+
+
+### Features
+
+* **palette:** lower the stone chroma of Compline and Vespers ([47d2e93](https://github.com/sanctuary-ds/tokens/commit/47d2e93e0519cf0e4a4b7bf6feb42297b7fd8f3c))
+
 ## [0.3.1](https://github.com/sanctuary-ds/tokens/compare/v0.3.0...v0.3.1) (2026-11-07)
 
 
