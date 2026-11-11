@@ -13,10 +13,10 @@
         "colorSpace": "oklch",
         "components": [
           0.175,
-          0.025,
+          0.012,
           345
         ],
-        "hex": "#180c13"
+        "hex": "#140e12"
       }
     },
     "$root": {
@@ -24,10 +24,10 @@
         "colorSpace": "oklch",
         "components": [
           0.205,
-          0.025,
+          0.012,
           345
         ],
-        "hex": "#1f131a"
+        "hex": "#1b1518"
       }
     },
     "raised-1": {
@@ -35,10 +35,10 @@
         "colorSpace": "oklch",
         "components": [
           0.237,
-          0.025,
+          0.012,
           345
         ],
-        "hex": "#271a21"
+        "hex": "#231c20"
       }
     },
     "raised-2": {
@@ -46,10 +46,10 @@
         "colorSpace": "oklch",
         "components": [
           0.268,
-          0.025,
+          0.012,
           345
         ],
-        "hex": "#2f2129"
+        "hex": "#2a2427"
       }
     },
     "raised-3": {
@@ -57,10 +57,10 @@
         "colorSpace": "oklch",
         "components": [
           0.3,
-          0.025,
+          0.012,
           345
         ],
-        "hex": "#372931"
+        "hex": "#322b2f"
       }
     },
     "raised-4": {
@@ -68,10 +68,10 @@
         "colorSpace": "oklch",
         "components": [
           0.335,
-          0.025,
+          0.012,
           345
         ],
-        "hex": "#40323a"
+        "hex": "#3b3438"
       }
     },
     "inverse": {
@@ -137,10 +137,10 @@
         "colorSpace": "oklch",
         "components": [
           0.205,
-          0.025,
+          0.012,
           345
         ],
-        "hex": "#1f131a"
+        "hex": "#1b1518"
       }
     }
   },
@@ -151,10 +151,10 @@
         "colorSpace": "oklch",
         "components": [
           0.31,
-          0.0325,
+          0.0156,
           345
         ],
-        "hex": "#3c2a34"
+        "hex": "#362d32"
       }
     },
     "$root": {
@@ -162,10 +162,10 @@
         "colorSpace": "oklch",
         "components": [
           0.385,
-          0.0325,
+          0.0156,
           345
         ],
-        "hex": "#513d48"
+        "hex": "#4a4046"
       }
     },
     "strong": {
@@ -173,10 +173,10 @@
         "colorSpace": "oklch",
         "components": [
           0.52,
-          0.0325,
+          0.0156,
           345
         ],
-        "hex": "#77626d"
+        "hex": "#70656b"
       }
     },
     "came": {
@@ -184,10 +184,10 @@
         "colorSpace": "oklch",
         "components": [
           0.1,
-          0.0325,
+          0.0156,
           345
         ],
-        "hex": "#090105"
+        "hex": "#060204"
       }
     }
   },
@@ -198,11 +198,11 @@
         "colorSpace": "oklch",
         "components": [
           0.05,
-          0.025,
+          0.012,
           345
         ],
         "alpha": 0.55,
-        "hex": "#020001"
+        "hex": "#010001"
       }
     },
     "ambient": {
@@ -210,11 +210,11 @@
         "colorSpace": "oklch",
         "components": [
           0.05,
-          0.025,
+          0.012,
           345
         ],
         "alpha": 0.35,
-        "hex": "#020001"
+        "hex": "#010001"
       }
     }
   },
