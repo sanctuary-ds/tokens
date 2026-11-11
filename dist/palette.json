@@ -2431,7 +2431,7 @@
       "name": "Compline",
       "hour": "Night",
       "scheme": "dark",
-      "blurb": "Blue-slate stone after the doors close. The default flavor.",
+      "blurb": "Slate stone after the doors close. The default flavor.",
       "accent": "cobalt",
       "colors": {
         "surface-sunken": {
