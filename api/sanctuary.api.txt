@@ -45,6 +45,7 @@ css --san-ansi-yellow
 css --san-blur-lg
 css --san-blur-md
 css --san-blur-sm
+css --san-border-disabled
 css --san-border-width-came
 css --san-border-width-hairline
 css --san-border-width-heavy
@@ -52,6 +53,16 @@ css --san-cast-lg
 css --san-cast-md
 css --san-cast-sm
 css --san-danger
+css --san-danger-cast-lg
+css --san-danger-cast-md
+css --san-danger-cast-sm
+css --san-danger-glaze-bg
+css --san-danger-glaze-bg-hover
+css --san-danger-glaze-blur
+css --san-danger-glaze-border
+css --san-danger-glaze-fg
+css --san-danger-glaze-glow
+css --san-danger-glaze-sheen
 css --san-danger-ink
 css --san-danger-lume
 css --san-danger-on
@@ -73,6 +84,10 @@ css --san-elevation-2
 css --san-elevation-3
 css --san-elevation-4
 css --san-elevation-5
+css --san-focus-ring
+css --san-focus-ring-color
+css --san-focus-ring-offset
+css --san-focus-ring-width
 css --san-font-family-display
 css --san-font-family-inscription
 css --san-font-family-mono
@@ -160,8 +175,17 @@ css --san-glaze-border
 css --san-glaze-fg
 css --san-glaze-glow
 css --san-glaze-sheen
-css --san-halo
 css --san-info
+css --san-info-cast-lg
+css --san-info-cast-md
+css --san-info-cast-sm
+css --san-info-glaze-bg
+css --san-info-glaze-bg-hover
+css --san-info-glaze-blur
+css --san-info-glaze-border
+css --san-info-glaze-fg
+css --san-info-glaze-glow
+css --san-info-glaze-sheen
 css --san-info-ink
 css --san-info-lume
 css --san-info-on
@@ -185,6 +209,8 @@ css --san-radius-sm
 css --san-radius-xl
 css --san-radius-xs
 css --san-scrim
+css --san-selection-bg
+css --san-selection-fg
 css --san-shape-lancet
 css --san-shape-ogive
 css --san-size-control-lg
@@ -196,10 +222,12 @@ css --san-size-icon-sm
 css --san-size-measure
 css --san-space-0
 css --san-space-1
+css --san-space-1-5
 css --san-space-10
 css --san-space-12
 css --san-space-16
 css --san-space-2
+css --san-space-2-5
 css --san-space-20
 css --san-space-24
 css --san-space-3
@@ -214,12 +242,23 @@ css --san-state-layer-focus
 css --san-state-layer-hover
 css --san-state-layer-pressed
 css --san-success
+css --san-success-cast-lg
+css --san-success-cast-md
+css --san-success-cast-sm
+css --san-success-glaze-bg
+css --san-success-glaze-bg-hover
+css --san-success-glaze-blur
+css --san-success-glaze-border
+css --san-success-glaze-fg
+css --san-success-glaze-glow
+css --san-success-glaze-sheen
 css --san-success-ink
 css --san-success-lume
 css --san-success-on
 css --san-success-on-pane
 css --san-success-pane
 css --san-surface
+css --san-surface-disabled
 css --san-surface-inverse
 css --san-surface-raised-1
 css --san-surface-raised-2
@@ -245,44 +284,126 @@ css --san-text-inverse
 css --san-text-muted
 css --san-text-subtle
 css --san-type-body-lg
+css --san-type-body-lg-family
+css --san-type-body-lg-line-height
+css --san-type-body-lg-size
 css --san-type-body-lg-tracking
+css --san-type-body-lg-weight
 css --san-type-body-md
+css --san-type-body-md-family
+css --san-type-body-md-line-height
+css --san-type-body-md-size
 css --san-type-body-md-tracking
+css --san-type-body-md-weight
 css --san-type-body-sm
+css --san-type-body-sm-family
+css --san-type-body-sm-line-height
+css --san-type-body-sm-size
 css --san-type-body-sm-tracking
+css --san-type-body-sm-weight
 css --san-type-code-md
+css --san-type-code-md-family
+css --san-type-code-md-line-height
+css --san-type-code-md-size
 css --san-type-code-md-tracking
+css --san-type-code-md-weight
 css --san-type-code-sm
+css --san-type-code-sm-family
+css --san-type-code-sm-line-height
+css --san-type-code-sm-size
 css --san-type-code-sm-tracking
+css --san-type-code-sm-weight
 css --san-type-display-lg
+css --san-type-display-lg-family
+css --san-type-display-lg-line-height
+css --san-type-display-lg-size
 css --san-type-display-lg-tracking
+css --san-type-display-lg-weight
 css --san-type-display-md
+css --san-type-display-md-family
+css --san-type-display-md-line-height
+css --san-type-display-md-size
 css --san-type-display-md-tracking
+css --san-type-display-md-weight
 css --san-type-display-sm
+css --san-type-display-sm-family
+css --san-type-display-sm-line-height
+css --san-type-display-sm-size
 css --san-type-display-sm-tracking
+css --san-type-display-sm-weight
 css --san-type-headline-lg
+css --san-type-headline-lg-family
+css --san-type-headline-lg-line-height
+css --san-type-headline-lg-size
 css --san-type-headline-lg-tracking
+css --san-type-headline-lg-weight
 css --san-type-headline-md
+css --san-type-headline-md-family
+css --san-type-headline-md-line-height
+css --san-type-headline-md-size
 css --san-type-headline-md-tracking
+css --san-type-headline-md-weight
 css --san-type-headline-sm
+css --san-type-headline-sm-family
+css --san-type-headline-sm-line-height
+css --san-type-headline-sm-size
 css --san-type-headline-sm-tracking
+css --san-type-headline-sm-weight
 css --san-type-inscription
+css --san-type-inscription-family
+css --san-type-inscription-line-height
+css --san-type-inscription-size
 css --san-type-inscription-tracking
+css --san-type-inscription-weight
 css --san-type-label-lg
+css --san-type-label-lg-family
+css --san-type-label-lg-line-height
+css --san-type-label-lg-size
 css --san-type-label-lg-tracking
+css --san-type-label-lg-weight
 css --san-type-label-md
+css --san-type-label-md-family
+css --san-type-label-md-line-height
+css --san-type-label-md-size
 css --san-type-label-md-tracking
+css --san-type-label-md-weight
 css --san-type-label-sm
+css --san-type-label-sm-family
+css --san-type-label-sm-line-height
+css --san-type-label-sm-size
 css --san-type-label-sm-tracking
+css --san-type-label-sm-weight
 css --san-type-title-lg
+css --san-type-title-lg-family
+css --san-type-title-lg-line-height
+css --san-type-title-lg-size
 css --san-type-title-lg-tracking
+css --san-type-title-lg-weight
 css --san-type-title-md
+css --san-type-title-md-family
+css --san-type-title-md-line-height
+css --san-type-title-md-size
 css --san-type-title-md-tracking
+css --san-type-title-md-weight
 css --san-type-title-sm
+css --san-type-title-sm-family
+css --san-type-title-sm-line-height
+css --san-type-title-sm-size
 css --san-type-title-sm-tracking
+css --san-type-title-sm-weight
 css --san-umbra-ambient
 css --san-umbra-key
 css --san-warning
+css --san-warning-cast-lg
+css --san-warning-cast-md
+css --san-warning-cast-sm
+css --san-warning-glaze-bg
+css --san-warning-glaze-bg-hover
+css --san-warning-glaze-blur
+css --san-warning-glaze-border
+css --san-warning-glaze-fg
+css --san-warning-glaze-glow
+css --san-warning-glaze-sheen
 css --san-warning-ink
 css --san-warning-lume
 css --san-warning-on
@@ -563,6 +684,10 @@ palette flavors.<flavor>.colors.lead.oklch
 palette flavors.<flavor>.colors.scrim.alpha
 palette flavors.<flavor>.colors.scrim.hex
 palette flavors.<flavor>.colors.scrim.oklch
+palette flavors.<flavor>.colors.selection-bg.hex
+palette flavors.<flavor>.colors.selection-bg.oklch
+palette flavors.<flavor>.colors.selection-fg.hex
+palette flavors.<flavor>.colors.selection-fg.oklch
 palette flavors.<flavor>.colors.success-ink.hex
 palette flavors.<flavor>.colors.success-ink.oklch
 palette flavors.<flavor>.colors.success-lume.hex
@@ -827,6 +952,8 @@ token flavor/<flavor>.tokens.json umbra.key
 token foundation/effect.tokens.json blur.lg
 token foundation/effect.tokens.json blur.md
 token foundation/effect.tokens.json blur.sm
+token foundation/effect.tokens.json focus.ring.offset
+token foundation/effect.tokens.json focus.ring.width
 token foundation/effect.tokens.json opacity.disabled-container
 token foundation/effect.tokens.json opacity.disabled-content
 token foundation/effect.tokens.json opacity.focus
@@ -879,10 +1006,12 @@ token foundation/space.tokens.json size.icon.sm
 token foundation/space.tokens.json size.measure
 token foundation/space.tokens.json space.0
 token foundation/space.tokens.json space.1
+token foundation/space.tokens.json space.1-5
 token foundation/space.tokens.json space.10
 token foundation/space.tokens.json space.12
 token foundation/space.tokens.json space.16
 token foundation/space.tokens.json space.2
+token foundation/space.tokens.json space.2-5
 token foundation/space.tokens.json space.20
 token foundation/space.tokens.json space.24
 token foundation/space.tokens.json space.3
@@ -1063,6 +1192,8 @@ token semantic.tokens.json info.lume
 token semantic.tokens.json info.on
 token semantic.tokens.json info.on-pane
 token semantic.tokens.json info.pane
+token semantic.tokens.json selection.bg
+token semantic.tokens.json selection.fg
 token semantic.tokens.json success.$root
 token semantic.tokens.json success.ink
 token semantic.tokens.json success.lume

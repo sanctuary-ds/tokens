@@ -27,11 +27,11 @@
     "url": "https://github.com/sanctuary-ds/tokens/issues"
   },
   "type": "module",
-  "packageManager": "pnpm@12.8.1",
+  "packageManager": "pnpm@12.21.0",
   "devEngines": {
     "runtime": {
       "name": "node",
-      "version": "^24.0.0",
+      "version": "^26.0.0",
       "onFail": "download"
     }
   },
@@ -63,7 +63,7 @@
     "access": "public"
   },
   "devDependencies": {
-    "@types/node": "24.19.2",
+    "@types/node": "26.6.6",
     "typescript": "7.0.2"
   }
 }

@@ -38,5 +38,22 @@
     "disabled-container": {
       "$value": 0.12
     }
+  },
+  "focus": {
+    "ring": {
+      "$type": "dimension",
+      "width": {
+        "$value": {
+          "value": 0.125,
+          "unit": "rem"
+        }
+      },
+      "offset": {
+        "$value": {
+          "value": 0.125,
+          "unit": "rem"
+        }
+      }
+    }
   }
 }

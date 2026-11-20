@@ -83,6 +83,15 @@
       "$value": "{glass.azure.on-pane}"
     }
   },
+  "selection": {
+    "$type": "color",
+    "bg": {
+      "$value": "{accent.pane}"
+    },
+    "fg": {
+      "$value": "{accent.on-pane}"
+    }
+  },
   "syntax": {
     "$type": "color",
     "keyword": {

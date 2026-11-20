@@ -1109,6 +1109,22 @@
             228
           ]
         },
+        "selection-bg": {
+          "hex": "#e1ecfe",
+          "oklch": [
+            0.94,
+            0.0271,
+            259
+          ]
+        },
+        "selection-fg": {
+          "hex": "#043377",
+          "oklch": [
+            0.34,
+            0.1259,
+            259
+          ]
+        },
         "syntax-keyword": {
           "hex": "#863ec0",
           "oklch": [
@@ -2319,6 +2335,22 @@
             0.94,
             0.0348,
             228
+          ]
+        },
+        "selection-bg": {
+          "hex": "#5c2604",
+          "oklch": [
+            0.34,
+            0.0897,
+            47
+          ]
+        },
+        "selection-fg": {
+          "hex": "#fee5da",
+          "oklch": [
+            0.94,
+            0.0311,
+            47
           ]
         },
         "syntax-keyword": {
@@ -3533,6 +3565,22 @@
             228
           ]
         },
+        "selection-bg": {
+          "hex": "#043377",
+          "oklch": [
+            0.34,
+            0.1259,
+            259
+          ]
+        },
+        "selection-fg": {
+          "hex": "#e1ecfe",
+          "oklch": [
+            0.94,
+            0.0271,
+            259
+          ]
+        },
         "syntax-keyword": {
           "hex": "#d2abfb",
           "oklch": [
@@ -4743,6 +4791,22 @@
             0.885,
             0.068,
             228
+          ]
+        },
+        "selection-bg": {
+          "hex": "#022d22",
+          "oklch": [
+            0.265,
+            0.0494,
+            172
+          ]
+        },
+        "selection-fg": {
+          "hex": "#ace8d4",
+          "oklch": [
+            0.885,
+            0.0676,
+            172
           ]
         },
         "syntax-keyword": {

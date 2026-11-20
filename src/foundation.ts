@@ -14,7 +14,7 @@ const group = <V>(type: string, entries: Record<string, V>, wrap: (value: V) => 
 // A 4px grid. The key is the multiplier, so `space.4` is 16px.
 const space = group(
   'dimension',
-  { 0: 0, px: 0.0625, half: 0.125, 1: 0.25, 2: 0.5, 3: 0.75, 4: 1, 5: 1.25, 6: 1.5, 8: 2, 10: 2.5, 12: 3, 16: 4, 20: 5, 24: 6, 32: 8 },
+  { 0: 0, px: 0.0625, half: 0.125, 1: 0.25, '1-5': 0.375, 2: 0.5, '2-5': 0.625, 3: 0.75, 4: 1, 5: 1.25, 6: 1.5, 8: 2, 10: 2.5, 12: 3, 16: 4, 20: 5, 24: 6, 32: 8 },
   rem,
 );
 
@@ -141,6 +141,10 @@ const opacity = {
   'disabled-container': { $value: 0.12 },
 };
 
+const focus = {
+  ring: group('dimension', { width: 0.125, offset: 0.125 }, rem),
+};
+
 // Stacking order, read as `z-index: var(--san-z-modal)`. Named z, not layer, so it does not read as a
 // state layer (a color) or a CSS cascade layer.
 const z = group('number', { base: 0, raised: 10, sticky: 100, overlay: 200, modal: 300, toast: 400, tooltip: 500 });
@@ -152,8 +156,8 @@ export const FOUNDATION_FILES = {
   'foundation/typography.tokens.json': { font, type },
   'foundation/motion.tokens.json': { duration, ease },
   'foundation/elevation.tokens.json': { elevation },
-  // Effects change how something that is already there looks: the glass blur and the state opacities.
-  'foundation/effect.tokens.json': { blur, opacity },
+  // Effects change how something that is already there looks: the glass blur, state opacities, and focus ring geometry.
+  'foundation/effect.tokens.json': { blur, opacity, focus },
 };
 
 /** Percentage polygon for a pointed (equilateral) arch whose springing sits `spring`% down the box. */
