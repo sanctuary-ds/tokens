@@ -23,6 +23,8 @@ Almost every token is a custom property prefixed `--san-`; [pigments](#pigments)
 }
 ```
 
+The entire stylesheet is wrapped in `@layer sanctuary.tokens`, so unlayered application and component styles (or later consumer layers such as Tailwind v4's `@layer theme, base, components, utilities`) override token declarations cleanly without `!important`.
+
 ## The groups
 
 The [token reference](https://sanctuary-ds.github.io/docs/tokens) on the site lists every token and custom property, with its value in each flavor. It is generated from this package, so it always matches the version the site documents. It is organized by group: [stone, ink and lead](https://sanctuary-ds.github.io/docs/tokens#stone), [glass](https://sanctuary-ds.github.io/docs/tokens#glass), [accent](https://sanctuary-ds.github.io/docs/tokens#accent), [status](https://sanctuary-ds.github.io/docs/tokens#status), [syntax](https://sanctuary-ds.github.io/docs/tokens#syntax), [terminal](https://sanctuary-ds.github.io/docs/tokens#terminal), [named windows](https://sanctuary-ds.github.io/docs/tokens#windows), [pigments](https://sanctuary-ds.github.io/docs/tokens#pigments) and the foundations, from [space](https://sanctuary-ds.github.io/docs/tokens#space) to [effect](https://sanctuary-ds.github.io/docs/tokens#effect). What each glass role is for, and which pairs are safe for text, is explained in [Color](https://sanctuary-ds.github.io/docs/foundations/color) and [Accessibility](https://sanctuary-ds.github.io/docs/accessibility).

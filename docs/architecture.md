@@ -44,12 +44,14 @@ Tokens store the OKLCH triple and a hex fallback, as the DTCG color module speci
 ## How switching works in CSS
 
 ```css
-:root, [data-san-flavor="compline"] { /* stone, glass roles, default accent, elevation */ }
-[data-san-flavor="lauds"]           { /* same properties, other values */ }
-[data-san-accent="ruby"]            { --san-accent: var(--san-glass-ruby); /* ... */ }
-:root, [data-san-*]                 { /* cast, status cast, focus ring, disabled, selection, state layers, default glaze and window */ }
-[data-san-glazing="flashed"]        { /* accent and status glaze overrides */ }
-[data-san-window="harmonic"]        { /* window stops: the accent and its neighbors */ }
+@layer sanctuary.tokens {
+  :root, [data-san-flavor="compline"] { /* stone, glass roles, default accent, elevation */ }
+  [data-san-flavor="lauds"]           { /* same properties, other values */ }
+  [data-san-accent="ruby"]            { --san-accent: var(--san-glass-ruby); /* ... */ }
+  :root, [data-san-*]                 { /* cast, status cast, focus ring, disabled, selection, state layers, default glaze and window */ }
+  [data-san-glazing="flashed"]        { /* accent and status glaze overrides */ }
+  [data-san-window="harmonic"]        { /* window stops: the accent and its neighbors */ }
+}
 ```
 
 Two rules of the cascade shape this file:
