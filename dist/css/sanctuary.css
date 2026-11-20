@@ -103,6 +103,8 @@
   --san-opacity-pressed: 0.16;
   --san-opacity-disabled-content: 0.38;
   --san-opacity-disabled-container: 0.12;
+  --san-focus-ring-width: 0.125rem;
+  --san-focus-ring-offset: 0.125rem;
   --san-light: oklch(1 0 0);
   --san-shape-lancet: polygon(0% 100%, 0% 38%, 0.28% 34.72%, 1.12% 31.46%, 2.51% 28.24%, 4.44% 25.07%, 6.91% 21.97%, 9.9% 18.96%, 13.4% 16.06%, 17.38% 13.28%, 21.82% 10.64%, 26.69% 8.15%, 31.98% 5.83%, 37.65% 3.69%, 43.67% 1.75%, 50% 0%, 56.33% 1.75%, 62.35% 3.69%, 68.02% 5.83%, 73.31% 8.15%, 78.18% 10.64%, 82.62% 13.28%, 86.6% 16.06%, 90.1% 18.96%, 93.09% 21.97%, 95.56% 25.07%, 97.49% 28.24%, 98.88% 31.46%, 99.72% 34.72%, 100% 38%, 100% 100%);
   --san-shape-ogive: polygon(0% 100%, 0% 100%, 0.28% 91.37%, 1.12% 82.79%, 2.51% 74.31%, 4.44% 65.96%, 6.91% 57.81%, 9.9% 49.9%, 13.4% 42.26%, 17.38% 34.95%, 21.82% 28.01%, 26.69% 21.46%, 31.98% 15.35%, 37.65% 9.72%, 43.67% 4.59%, 50% 0%, 56.33% 4.59%, 62.35% 9.72%, 68.02% 15.35%, 73.31% 21.46%, 78.18% 28.01%, 82.62% 34.95%, 86.6% 42.26%, 90.1% 49.9%, 93.09% 57.81%, 95.56% 65.96%, 97.49% 74.31%, 98.88% 82.79%, 99.72% 91.37%, 100% 100%, 100% 100%);
@@ -1061,22 +1063,23 @@
 
 /* Light derived from the active flavor and accent. Pot-metal is the default glazing. */
 :root, [data-san-flavor], [data-san-accent], [data-san-glazing], [data-san-window] {
-  --san-cast-sm: 0 0 12px -2px color-mix(in oklch, var(--san-accent) 45%, transparent);
-  --san-cast-md: 0 0 28px -4px color-mix(in oklch, var(--san-accent) 50%, transparent);
-  --san-cast-lg: 0 0 18px -2px color-mix(in oklch, var(--san-accent-lume) 40%, transparent), 0 0 72px -8px color-mix(in oklch, var(--san-accent) 55%, transparent);
-  --san-halo: 0 0 0 2px var(--san-surface), 0 0 0 4px var(--san-accent);
-  --san-state-layer-hover: color-mix(in oklch, currentColor calc(var(--san-opacity-hover) * 100%), transparent);
-  --san-state-layer-focus: color-mix(in oklch, currentColor calc(var(--san-opacity-focus) * 100%), transparent);
-  --san-state-layer-pressed: color-mix(in oklch, currentColor calc(var(--san-opacity-pressed) * 100%), transparent);
+  --san-cast-sm: 0 0 12px -2px color-mix(in oklab, var(--san-accent) 45%, transparent);
+  --san-cast-md: 0 0 28px -4px color-mix(in oklab, var(--san-accent) 50%, transparent);
+  --san-cast-lg: 0 0 18px -2px color-mix(in oklab, var(--san-accent-lume) 40%, transparent), 0 0 72px -8px color-mix(in oklab, var(--san-accent) 55%, transparent);
+  --san-focus-ring-color: var(--san-accent);
+  --san-focus-ring: var(--san-focus-ring-width) solid var(--san-focus-ring-color);
+  --san-state-layer-hover: color-mix(in oklab, currentColor calc(var(--san-opacity-hover) * 100%), transparent);
+  --san-state-layer-focus: color-mix(in oklab, currentColor calc(var(--san-opacity-focus) * 100%), transparent);
+  --san-state-layer-pressed: color-mix(in oklab, currentColor calc(var(--san-opacity-pressed) * 100%), transparent);
   --san-window-a: var(--san-accent-pane);
   --san-window-b: var(--san-accent);
   --san-window-c: var(--san-accent-lume);
   --san-window: linear-gradient(160deg in oklch, var(--san-window-a), var(--san-window-b) 55%, var(--san-window-c));
   --san-glaze-bg: var(--san-accent);
-  --san-glaze-bg-hover: color-mix(in oklch, var(--san-accent), var(--san-accent-lume) 55%);
+  --san-glaze-bg-hover: color-mix(in oklab, var(--san-accent), light-dark(var(--san-accent-ink), var(--san-accent-lume)) 55%);
   --san-glaze-fg: var(--san-accent-on);
   --san-glaze-border: transparent;
-  --san-glaze-sheen: linear-gradient(180deg, color-mix(in oklch, var(--san-light) 20%, transparent), transparent 55%);
+  --san-glaze-sheen: linear-gradient(180deg, color-mix(in oklab, var(--san-light) 20%, transparent), transparent 55%);
   --san-glaze-glow: 0 0 0 0 transparent;
   --san-glaze-blur: none;
 }
@@ -1084,21 +1087,21 @@
 [data-san-glazing="pot-metal"],
 [data-san-glazing="pot-metal"] :is([data-san-flavor], [data-san-accent], [data-san-glazing], [data-san-window]):not([data-san-glazing]) {
   --san-glaze-bg: var(--san-accent);
-  --san-glaze-bg-hover: color-mix(in oklch, var(--san-accent), var(--san-accent-lume) 55%);
+  --san-glaze-bg-hover: color-mix(in oklab, var(--san-accent), light-dark(var(--san-accent-ink), var(--san-accent-lume)) 55%);
   --san-glaze-fg: var(--san-accent-on);
   --san-glaze-border: transparent;
-  --san-glaze-sheen: linear-gradient(180deg, color-mix(in oklch, var(--san-light) 20%, transparent), transparent 55%);
+  --san-glaze-sheen: linear-gradient(180deg, color-mix(in oklab, var(--san-light) 20%, transparent), transparent 55%);
   --san-glaze-glow: 0 0 0 0 transparent;
   --san-glaze-blur: none;
 }
 
 [data-san-glazing="flashed"],
 [data-san-glazing="flashed"] :is([data-san-flavor], [data-san-accent], [data-san-glazing], [data-san-window]):not([data-san-glazing]) {
-  --san-glaze-bg: color-mix(in oklch, var(--san-accent) 20%, transparent);
-  --san-glaze-bg-hover: color-mix(in oklch, var(--san-accent) 32%, transparent);
-  --san-glaze-fg: var(--san-accent-ink);
-  --san-glaze-border: color-mix(in oklch, var(--san-accent) 60%, transparent);
-  --san-glaze-sheen: linear-gradient(135deg, color-mix(in oklch, var(--san-accent-lume) 30%, transparent), transparent 45%, color-mix(in oklch, var(--san-accent) 14%, transparent));
+  --san-glaze-bg: color-mix(in oklab, var(--san-accent) 20%, transparent);
+  --san-glaze-bg-hover: color-mix(in oklab, var(--san-accent) 32%, transparent);
+  --san-glaze-fg: var(--san-accent-on-pane);
+  --san-glaze-border: color-mix(in oklab, var(--san-accent) 60%, transparent);
+  --san-glaze-sheen: linear-gradient(135deg, color-mix(in oklab, var(--san-accent-lume) 30%, transparent), transparent 45%, color-mix(in oklab, var(--san-accent) 14%, transparent));
   --san-glaze-glow: var(--san-cast-sm);
   --san-glaze-blur: blur(var(--san-blur-md)) saturate(1.5);
 }
@@ -1108,7 +1111,7 @@
   --san-glaze-bg: var(--san-surface-raised-2);
   --san-glaze-bg-hover: var(--san-surface-raised-4);
   --san-glaze-fg: var(--san-text);
-  --san-glaze-border: color-mix(in oklch, var(--san-accent) 75%, var(--san-lead-strong));
+  --san-glaze-border: color-mix(in oklab, var(--san-accent) 75%, var(--san-lead-strong));
   --san-glaze-sheen: none;
   --san-glaze-glow: 0 0 0 0 transparent;
   --san-glaze-blur: none;

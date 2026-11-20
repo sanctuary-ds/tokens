@@ -33,7 +33,7 @@ function scoped(attr: string, value: string): string {
 }
 
 const unit = ({ value, unit: u }: Dimension): string => (value === 0 ? '0' : `${value}${u}`);
-const mix = (name: string, percent: number): string => `color-mix(in oklch, var(--san-${name}) ${percent}%, transparent)`;
+const mix = (name: string, percent: number): string => `color-mix(in oklab, var(--san-${name}) ${percent}%, transparent)`;
 
 function colorValue(value: unknown): string {
   const alias = aliasPath(value);
@@ -96,7 +96,7 @@ const windowModeStops: Record<string, Declaration[]> = {
 const glaze: Record<string, Declaration[]> = {
   'pot-metal': [
     ['--san-glaze-bg', 'var(--san-accent)'],
-    ['--san-glaze-bg-hover', 'color-mix(in oklch, var(--san-accent), var(--san-accent-lume) 55%)'],
+    ['--san-glaze-bg-hover', 'color-mix(in oklab, var(--san-accent), light-dark(var(--san-accent-ink), var(--san-accent-lume)) 55%)'],
     ['--san-glaze-fg', 'var(--san-accent-on)'],
     ['--san-glaze-border', 'transparent'],
     ['--san-glaze-sheen', `linear-gradient(180deg, ${mix('light', 20)}, transparent 55%)`],
@@ -106,7 +106,7 @@ const glaze: Record<string, Declaration[]> = {
   flashed: [
     ['--san-glaze-bg', mix('accent', 20)],
     ['--san-glaze-bg-hover', mix('accent', 32)],
-    ['--san-glaze-fg', 'var(--san-accent-ink)'],
+    ['--san-glaze-fg', 'var(--san-accent-on-pane)'],
     ['--san-glaze-border', mix('accent', 60)],
     ['--san-glaze-sheen', `linear-gradient(135deg, ${mix('accent-lume', 30)}, transparent 45%, ${mix('accent', 14)})`],
     ['--san-glaze-glow', 'var(--san-cast-sm)'],
@@ -116,7 +116,7 @@ const glaze: Record<string, Declaration[]> = {
     ['--san-glaze-bg', 'var(--san-surface-raised-2)'],
     ['--san-glaze-bg-hover', 'var(--san-surface-raised-4)'],
     ['--san-glaze-fg', 'var(--san-text)'],
-    ['--san-glaze-border', 'color-mix(in oklch, var(--san-accent) 75%, var(--san-lead-strong))'],
+    ['--san-glaze-border', 'color-mix(in oklab, var(--san-accent) 75%, var(--san-lead-strong))'],
     ['--san-glaze-sheen', 'none'],
     ['--san-glaze-glow', transparentShadow],
     ['--san-glaze-blur', 'none'],
@@ -126,7 +126,7 @@ const glaze: Record<string, Declaration[]> = {
 /** A state layer: the content color at the opacity token of its state, so retuning the opacity retunes the layer. */
 const stateLayer = (state: string): Declaration => [
   `--san-state-layer-${state}`,
-  `color-mix(in oklch, currentColor calc(var(--san-opacity-${state}) * 100%), transparent)`,
+  `color-mix(in oklab, currentColor calc(var(--san-opacity-${state}) * 100%), transparent)`,
 ];
 
 function derived(opacity: TokenNode): Declaration[] {
@@ -137,7 +137,8 @@ function derived(opacity: TokenNode): Declaration[] {
     ['--san-cast-sm', `0 0 12px -2px ${mix('accent', 45)}`],
     ['--san-cast-md', `0 0 28px -4px ${mix('accent', 50)}`],
     ['--san-cast-lg', `0 0 18px -2px ${mix('accent-lume', 40)}, 0 0 72px -8px ${mix('accent', 55)}`],
-    ['--san-halo', '0 0 0 2px var(--san-surface), 0 0 0 4px var(--san-accent)'],
+    ['--san-focus-ring-color', 'var(--san-accent)'],
+    ['--san-focus-ring', 'var(--san-focus-ring-width) solid var(--san-focus-ring-color)'],
     ...STATE_LAYERS.map(stateLayer),
     ...windowModeStops[DEFAULT_WINDOW],
     ['--san-window', windowGradient(['a', 'b', 'c'].map((stop) => `var(--san-window-${stop})`))],

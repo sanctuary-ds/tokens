@@ -17,7 +17,10 @@ Almost every token is a custom property prefixed `--san-`; [pigments](#pigments)
   font: var(--san-type-label-lg);
   letter-spacing: var(--san-type-label-lg-tracking);
 }
-.button:focus-visible { box-shadow: var(--san-halo); }
+.button:focus-visible {
+  outline: var(--san-focus-ring);
+  outline-offset: var(--san-focus-ring-offset);
+}
 ```
 
 ## The groups
@@ -36,7 +39,27 @@ Each flavor's default accent is kept off the four status pigments (danger is rub
 
 ### Light
 
-Glazing, cast, halo, state layers and the window that follows the accent (`--san-window`, with its stops `-a` to `-c`) are computed by the stylesheet from the active flavor, accent, glazing and window setting, so they exist only as custom properties, not in the token files. The named windows and elevation are in both. A state layer (`--san-state-layer-<state>`) is `currentColor` at `--san-opacity-<state>`, so it follows the content color and the opacity token.
+Glazing, cast, focus ring, state layers and the window that follows the accent (`--san-window`, with its stops `-a` to `-c`) are computed by the stylesheet from the active flavor, accent, glazing and window setting, so they exist as derived custom properties rather than standalone DTCG values. The named windows and elevation are in both. A state layer (`--san-state-layer-<state>`) is `currentColor` at `--san-opacity-<state>`, so it follows the content color and the opacity token.
+
+### Focus ring
+
+Focus indicators use native `outline` rather than `box-shadow`, so they remain visible in High Contrast (`forced-colors: active`) mode:
+
+```css
+:focus-visible {
+  outline: var(--san-focus-ring);
+  outline-offset: var(--san-focus-ring-offset);
+}
+```
+
+`--san-focus-ring` expands to `var(--san-focus-ring-width) solid var(--san-focus-ring-color)` (defaulting to `0.125rem` width and offset, and `var(--san-accent)` color). Because CSS custom properties substitute where they are declared, Shadow DOM components that override focus color or width per state (for example `var(--san-danger)`) compose the atomic tokens directly:
+
+```css
+:host([invalid]) :focus-visible {
+  outline: var(--san-focus-ring-width) solid var(--san-danger);
+  outline-offset: var(--san-focus-ring-offset);
+}
+```
 
 ### Breakpoints
 
@@ -55,7 +78,7 @@ When the visitor asks for reduced motion (`prefers-reduced-motion: reduce`), the
 | `flavor` | `lauds`, `vespers`, `compline`, `matins` | `compline` |
 | `accent` | `flavor` (keep the flavor's default) or any pigment | `flavor` |
 
-Glazing, cast, halo, state layers and the arch shapes are not in the token files: the format has no color functions or string type. They are defined in `src/emit/css.ts`.
+Glazing, cast, focus ring (`--san-focus-ring`, `--san-focus-ring-color`), state layers and the arch shapes are not in the token files: the format has no color functions or string type. They are defined in `src/emit/css.ts`.
 
 ## Using the plain palette
 

@@ -90,15 +90,81 @@ test('text and accent roles meet WCAG AA against the surfaces of every flavor', 
   }
 });
 
-test('the focus halo is drawn in the accent, which clears 3:1 against its stone band', () => {
+test('the focus ring uses outline properties in the accent, which clears 3:1 against all standard surfaces', () => {
   const css = emitCss(palette, tokens);
-  assert.match(css, /--san-halo: 0 0 0 2px var\(--san-surface\), 0 0 0 4px var\(--san-accent\);/);
+  assert.doesNotMatch(css, /--san-halo\b/);
+  assert.match(css, /--san-focus-ring-width: 0\.125rem;/);
+  assert.match(css, /--san-focus-ring-offset: 0\.125rem;/);
+  assert.match(css, /--san-focus-ring-color: var\(--san-accent\);/);
+  assert.match(css, /--san-focus-ring: var\(--san-focus-ring-width\) solid var\(--san-focus-ring-color\);/);
+  const surfaces = ['surface', 'surface.sunken', 'surface.raised-1', 'surface.raised-2', 'surface.raised-3', 'surface.raised-4'];
   for (const flavor of flavorIds) {
     const hex = (path: string) => resolveHex(tokens, flavor, path);
     for (const id of pigmentIds) {
-      const ratio = contrast(hex(`glass.${id}`), hex('surface'));
-      assert.ok(ratio >= 3, `${flavor}: halo in ${id} is ${ratio.toFixed(2)}`);
+      for (const surface of surfaces) {
+        const ratio = contrast(hex(`glass.${id}`), hex(surface));
+        assert.ok(ratio >= 3, `${flavor}: focus ring in ${id} on ${surface} is ${ratio.toFixed(2)}`);
+      }
     }
+  }
+});
+
+function mixOklabHex(hexA: string, hexB: string, weightB: number): string {
+  const toLab = (hex: string): [number, number, number] => {
+    const [l, c, h] = hexToOklch(hex);
+    const rad = (h * Math.PI) / 180;
+    return [l, c * Math.cos(rad), c * Math.sin(rad)];
+  };
+  const [l1, a1, b1] = toLab(hexA);
+  const [l2, a2, b2] = toLab(hexB);
+  const w1 = 1 - weightB;
+  const l = w1 * l1 + weightB * l2;
+  const a = w1 * a1 + weightB * a2;
+  const b = w1 * b1 + weightB * b2;
+  return oklchToHex([l, Math.hypot(a, b), ((Math.atan2(b, a) * 180) / Math.PI + 360) % 360]);
+}
+
+function compositeSrgbHex(fgHex: string, alpha: number, bgHex: string): string {
+  const ch = (hex: string, i: number) => parseInt(hex.slice(i, i + 2), 16);
+  const mix = (i: number) => Math.round(alpha * ch(fgHex, i) + (1 - alpha) * ch(bgHex, i)).toString(16).padStart(2, '0');
+  return `#${mix(1)}${mix(3)}${mix(5)}`;
+}
+
+test('all glazing modes meet WCAG AA (>= 4.5:1) across all flavors, pigments, and standard surfaces', () => {
+  const css = emitCss(palette, tokens);
+  assert.doesNotMatch(css, /color-mix\(in oklch/);
+  assert.match(css, /--san-glaze-bg-hover: color-mix\(in oklab, var\(--san-accent\), light-dark\(var\(--san-accent-ink\), var\(--san-accent-lume\)\) 55%\);/);
+  assert.match(css, /--san-glaze-fg: var\(--san-accent-on-pane\);/);
+
+  const surfaces = ['surface', 'surface.sunken', 'surface.raised-1', 'surface.raised-2', 'surface.raised-3', 'surface.raised-4'];
+  for (const flavor of flavorIds) {
+    const hex = (path: string) => resolveHex(tokens, flavor, path);
+    const scheme = FLAVORS[flavor].scheme;
+    for (const surface of surfaces) {
+      const surfaceHex = hex(surface);
+      for (const id of pigmentIds) {
+        const glass = `glass.${id}`;
+        const rootHex = hex(glass);
+        const onHex = hex(`${glass}.on`);
+        const onPaneHex = hex(`${glass}.on-pane`);
+
+        const potMetalBase = contrast(onHex, rootHex);
+        assert.ok(potMetalBase >= 4.5, `${flavor} pot-metal base ${id}: ${potMetalBase.toFixed(2)}`);
+        const hoverMixTarget = hex(scheme === 'light' ? `${glass}.ink` : `${glass}.lume`);
+        const potMetalHoverBg = mixOklabHex(rootHex, hoverMixTarget, 0.55);
+        const potMetalHover = contrast(onHex, potMetalHoverBg);
+        assert.ok(potMetalHover >= 4.5, `${flavor} pot-metal hover ${id}: ${potMetalHover.toFixed(2)}`);
+
+        const flashedBaseBg = compositeSrgbHex(rootHex, 0.2, surfaceHex);
+        const flashedBase = contrast(onPaneHex, flashedBaseBg);
+        assert.ok(flashedBase >= 4.5, `${flavor} flashed base ${id} on ${surface}: ${flashedBase.toFixed(2)}`);
+        const flashedHoverBg = compositeSrgbHex(rootHex, 0.32, surfaceHex);
+        const flashedHover = contrast(onPaneHex, flashedHoverBg);
+        assert.ok(flashedHover >= 4.5, `${flavor} flashed hover ${id} on ${surface}: ${flashedHover.toFixed(2)}`);
+      }
+    }
+    assert.ok(contrast(hex('text'), hex('surface.raised-2')) >= 4.5, `${flavor} grisaille base`);
+    assert.ok(contrast(hex('text'), hex('surface.raised-4')) >= 4.5, `${flavor} grisaille hover`);
   }
 });
 
@@ -270,7 +336,7 @@ test('each state layer mixes the content color at the opacity token of its state
   for (const state of ['hover', 'focus', 'pressed']) {
     assert.ok(css.includes(`--san-opacity-${state}: `), `--san-opacity-${state} is not declared`);
     assert.ok(
-      css.includes(`--san-state-layer-${state}: color-mix(in oklch, currentColor calc(var(--san-opacity-${state}) * 100%), transparent);`),
+      css.includes(`--san-state-layer-${state}: color-mix(in oklab, currentColor calc(var(--san-opacity-${state}) * 100%), transparent);`),
       `--san-state-layer-${state} does not read --san-opacity-${state}`,
     );
   }
@@ -297,7 +363,7 @@ test('each foundation file holds the groups of one concern', () => {
     'foundation/typography.tokens.json': ['font', 'type'],
     'foundation/motion.tokens.json': ['duration', 'ease'],
     'foundation/elevation.tokens.json': ['elevation'],
-    'foundation/effect.tokens.json': ['blur', 'opacity'],
+    'foundation/effect.tokens.json': ['blur', 'opacity', 'focus'],
   });
 });
 

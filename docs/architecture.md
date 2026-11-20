@@ -24,7 +24,7 @@ The palette module and `palette.json` are two forms of one generated object, nev
 | 1. Pigment (primitive) | `pigment.cobalt.300` | `--_san-pigment-cobalt-300` (private) | Nothing |
 | 2. Flavor roles | `surface.raised-2`, `glass.cobalt.pane` | `--san-surface-raised-2`, `--san-glass-cobalt-pane` | Flavor |
 | 3. Semantic aliases | `accent.$root`, `danger.pane`, `syntax.keyword` | `--san-accent`, `--san-danger-pane` | Flavor, accent |
-| 4. Light (CSS only) | glaze, cast, halo, window | `--san-glaze-bg`, `--san-cast-md`, `--san-window` | Flavor, accent, glazing, window setting |
+| 4. Light (CSS only) | glaze, cast, focus ring, window | `--san-glaze-bg`, `--san-cast-md`, `--san-focus-ring`, `--san-window` | Flavor, accent, glazing, window setting |
 
 Components must read tiers 3 and 4 (and tier 2 for stone, ink and lead). Reading a pigment directly bypasses the flavor and breaks contrast guarantees, so the stylesheet declares the pigments with the private `--_san-` prefix and the public API leaves them out.
 
@@ -47,7 +47,7 @@ Tokens store the OKLCH triple and a hex fallback, as the DTCG color module speci
 :root, [data-san-flavor="compline"] { /* stone, glass roles, default accent, elevation */ }
 [data-san-flavor="lauds"]           { /* same properties, other values */ }
 [data-san-accent="ruby"]            { --san-accent: var(--san-glass-ruby); /* ... */ }
-:root, [data-san-*]                 { /* cast, halo, state layers, default glaze and window */ }
+:root, [data-san-*]                 { /* cast, focus ring, state layers, default glaze and window */ }
 [data-san-glazing="flashed"]        { /* glaze overrides */ }
 [data-san-window="harmonic"]        { /* window stops: the accent and its neighbors */ }
 ```
