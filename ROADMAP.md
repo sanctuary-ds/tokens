@@ -63,7 +63,8 @@ No release: the source is not published, so the package did not change.
 
 `1.0.0` means the contract is stable, not that the system is complete. It is published when:
 
-- [ ] `web-components` and `ports` consume the package in their own releases.
+- [ ] `web-components` consumes the package in its own release, so the colors are proven in a browser.
+- [ ] At least one port, the foot terminal theme, is proven on a real desktop, so the terminal colors (`ansi`, `syntax`) are proven too. The remaining ports do not block `1.0.0`.
 - [ ] Several releases have passed without a breaking change.
 - [x] Releases are automated (release-please with a GitHub App, so its pull requests and tags run the workflows).
 - [x] The docs keep only what this repository owns: `docs/design-language.md`, a stub left from when the repository was `sanctuary`, is removed, and the hand-written group tables in `docs/tokens.md` give way to the site's reference, which is generated from the package; the usage guide stays.
