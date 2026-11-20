@@ -9,8 +9,10 @@ This repository is the core of the [`sanctuary-ds`](https://github.com/sanctuary
 | [`tokens`](https://github.com/sanctuary-ds/tokens) (this one, formerly `sanctuary`) | Token engine, DTCG tokens, stylesheet, palette and their technical docs | Nothing | Active, published as `@sanctuary-ds/tokens` |
 | [`sanctuary-ds.github.io`](https://github.com/sanctuary-ds/sanctuary-ds.github.io) | Public site: home, playground, documentation; see its [roadmap](https://github.com/sanctuary-ds/sanctuary-ds.github.io/blob/main/ROADMAP.md) | `tokens`, later `web-components` | In progress |
 | [`.github`](https://github.com/sanctuary-ds/.github) | Organization profile, contributing guide, security policy, brand mark | Nothing | Active |
-| `web-components` | Sanctuary Web Components: the Lit library (`<san-button>`, ...), published as `@sanctuary-ds/web-components` | `tokens` | Planned |
-| [`ports`](https://github.com/sanctuary-ds/ports) | Themes for desktop applications, generated from one template per application; see [Ports](#ports) | `tokens` | Planned: no port is published yet |
+| `web-components` | Sanctuary Web Components: the Lit library (`<san-button>`, ...), published as `@sanctuary-ds/web-components` | `tokens` | Next: the first priority after the core |
+| [`ports`](https://github.com/sanctuary-ds/ports) | Themes for desktop applications, generated from one template per application; see [Ports](#ports) | `tokens` | Paused: work has started, and no port is published yet |
+
+Order of work: `web-components` comes before `ports`. The components are what the site is waiting for (its `/components` page is blocked on them), so `ports` is paused. The work already done on `ports` is kept.
 
 Repositories are named after what they ship, and a platform-specific library carries its platform in its name, so a future Flutter library would live in its own `flutter` repository and generate its theme from `palette.json`. This repository was renamed from `sanctuary` to `tokens`, to match `@sanctuary-ds/tokens`, once the showcase had moved to the site; GitHub redirects the old name. There is no separate umbrella repository: the organization profile and the site play that role, joined by organization discussions once they are enabled.
 
