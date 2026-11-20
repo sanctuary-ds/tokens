@@ -473,3 +473,76 @@ test('the build check fails on a generated file that the sources no longer produ
     rmSync(copy, { recursive: true, force: true });
   }
 });
+
+test('status glaze and cast tokens are pre-derived in ANY_SCOPE and every glazing block', () => {
+  const css = emitCss(palette, tokens);
+  const blockOf = (selector: string) => css.slice(css.indexOf(selector), css.indexOf('}', css.indexOf(selector)));
+  const anyScope = blockOf(':root, [data-san-flavor], [data-san-accent], [data-san-glazing], [data-san-window]');
+  const glazeProps = ['bg', 'bg-hover', 'fg', 'border', 'sheen', 'glow', 'blur'];
+  const castProps = ['sm', 'md', 'lg'];
+
+  for (const status of Object.keys(STATUS)) {
+    for (const size of castProps) {
+      assert.ok(anyScope.includes(`--san-${status}-cast-${size}:`), `ANY_SCOPE missing --san-${status}-cast-${size}`);
+    }
+    for (const prop of glazeProps) {
+      assert.ok(anyScope.includes(`--san-${status}-glaze-${prop}:`), `ANY_SCOPE missing --san-${status}-glaze-${prop}`);
+      for (const glazing of Object.keys(palette.glazings)) {
+        const glazingBlock = blockOf(`[data-san-glazing="${glazing}"]`);
+        assert.ok(glazingBlock.includes(`--san-${status}-glaze-${prop}:`), `${glazing} missing --san-${status}-glaze-${prop}`);
+      }
+    }
+    const potMetal = blockOf('[data-san-glazing="pot-metal"]');
+    assert.ok(
+      potMetal.includes(`--san-${status}-glaze-bg-hover: color-mix(in oklab, var(--san-${status}), light-dark(var(--san-${status}-ink), var(--san-${status}-lume)) 55%);`),
+      `pot-metal ${status} bg-hover`,
+    );
+    const flashed = blockOf('[data-san-glazing="flashed"]');
+    assert.ok(flashed.includes(`--san-${status}-glaze-fg: var(--san-${status}-on-pane);`), `flashed ${status} fg`);
+    assert.ok(flashed.includes(`--san-${status}-glaze-glow: var(--san-${status}-cast-sm);`), `flashed ${status} glow`);
+  }
+});
+
+test('every typography role emits shorthand plus atomic family, size, line-height, weight, and tracking tokens', () => {
+  const css = emitCss(palette, tokens);
+  const roles = groupTokens(tokens.files['foundation/typography.tokens.json'].type);
+  assert.equal(roles.length, 18);
+  for (const [role] of roles) {
+    for (const suffix of ['', '-family', '-size', '-line-height', '-weight', '-tracking']) {
+      assert.match(css, new RegExp(`--san-type-${role}${suffix}:`), `missing --san-type-${role}${suffix}`);
+    }
+  }
+});
+
+test('disabled surface/border and selection tokens are emitted in ANY_SCOPE and resolve in every flavor', () => {
+  const css = emitCss(palette, tokens);
+  const blockOf = (selector: string) => css.slice(css.indexOf(selector), css.indexOf('}', css.indexOf(selector)));
+  const anyScope = blockOf(':root, [data-san-flavor], [data-san-accent], [data-san-glazing], [data-san-window]');
+
+  assert.ok(
+    anyScope.includes('--san-surface-disabled: color-mix(in oklab, var(--san-text) calc(var(--san-opacity-disabled-container) * 100%), transparent);'),
+    'missing --san-surface-disabled in ANY_SCOPE',
+  );
+  assert.ok(
+    anyScope.includes('--san-border-disabled: color-mix(in oklab, var(--san-lead-strong) calc(var(--san-opacity-disabled-content) * 100%), transparent);'),
+    'missing --san-border-disabled in ANY_SCOPE',
+  );
+  assert.ok(anyScope.includes('--san-selection-bg: var(--san-accent-pane);'), 'missing --san-selection-bg in ANY_SCOPE');
+  assert.ok(anyScope.includes('--san-selection-fg: var(--san-accent-on-pane);'), 'missing --san-selection-fg in ANY_SCOPE');
+
+  for (const flavor of flavorIds) {
+    const flavorBlock = blockOf(`[data-san-flavor="${flavor}"] {`);
+    assert.ok(!flavorBlock.includes('--san-selection-bg:'), `${flavor} block must not duplicate --san-selection-bg`);
+    assert.ok(!flavorBlock.includes('--san-selection-fg:'), `${flavor} block must not duplicate --san-selection-fg`);
+    assert.match(resolveHex(tokens, flavor, 'selection.bg'), /^#[0-9a-f]{6}$/);
+    assert.match(resolveHex(tokens, flavor, 'selection.fg'), /^#[0-9a-f]{6}$/);
+  }
+});
+
+test('the spacing scale includes intermediate 1-5 and 2-5 steps', () => {
+  const css = emitCss(palette, tokens);
+  assert.match(css, /--san-space-1-5: 0\.375rem;/);
+  assert.match(css, /--san-space-2-5: 0\.625rem;/);
+  assert.ok('1-5' in tokens.files['foundation/space.tokens.json'].space);
+  assert.ok('2-5' in tokens.files['foundation/space.tokens.json'].space);
+});

@@ -14,7 +14,7 @@ const group = <V>(type: string, entries: Record<string, V>, wrap: (value: V) => 
 // A 4px grid. The key is the multiplier, so `space.4` is 16px.
 const space = group(
   'dimension',
-  { 0: 0, px: 0.0625, half: 0.125, 1: 0.25, 2: 0.5, 3: 0.75, 4: 1, 5: 1.25, 6: 1.5, 8: 2, 10: 2.5, 12: 3, 16: 4, 20: 5, 24: 6, 32: 8 },
+  { 0: 0, px: 0.0625, half: 0.125, 1: 0.25, '1-5': 0.375, 2: 0.5, '2-5': 0.625, 3: 0.75, 4: 1, 5: 1.25, 6: 1.5, 8: 2, 10: 2.5, 12: 3, 16: 4, 20: 5, 24: 6, 32: 8 },
   rem,
 );
 

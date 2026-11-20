@@ -39,6 +39,7 @@ The stylesheet is already shaped for Shadow DOM: custom properties inherit throu
 | Theming attributes go on the host or any ancestor (`data-san-accent="ruby"`) | The same switch works for pages and for single components |
 | Glazing is a system axis, not a per-component `variant` | One attribute restyles every filled control consistently |
 | Ship `:focus-visible` with `outline: var(--san-focus-ring)` and `outline-offset: var(--san-focus-ring-offset)` (supporting `forced-colors: active` and Shadow DOM overrides via `--san-focus-ring-width` / `--san-focus-ring-color`), and honor `prefers-reduced-motion` | Accessibility is part of the contract |
+| Use pre-derived `--san-<status>-glaze-*` and `--san-<status>-cast-*` for status-styled controls | Status glazing works inside Shadow DOM without Light DOM `[data-san-accent]` attributes |
 | A status is never conveyed by color alone: every status component (alert, chip, field error, destructive button) carries a label or an icon | Any accent can be chosen, so the accent can match a status color; the [accessibility guide](https://sanctuary-ds.github.io/docs/accessibility) states the rule |
 
 Suggested first components, in dependency order: button, icon button, chip, text field, checkbox, radio, switch, tabs, menu, dialog, tooltip, card.

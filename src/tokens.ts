@@ -108,6 +108,11 @@ function semanticFile(palette: Palette): TokenNode {
   const status = Object.fromEntries(
     Object.entries(STATUS).map(([name, pigment]) => [name, { $type: 'color', ...roleGroup(`glass.${pigment}`) }]),
   );
+  const selection: TokenNode = {
+    $type: 'color',
+    bg: { $value: '{accent.pane}' },
+    fg: { $value: '{accent.on-pane}' },
+  };
   const syntax: TokenNode = { $type: 'color' };
   for (const [name, target] of Object.entries(SYNTAX)) syntax[name] = { $value: `{${target}}` };
   const window: TokenNode = { $type: 'gradient' };
@@ -117,7 +122,7 @@ function semanticFile(palette: Palette): TokenNode {
       $value: stops.map((pigment, i) => ({ color: `{pigment.${pigment}.${WINDOW_TONES[i]}}`, position: i / (stops.length - 1) })),
     };
   }
-  return { ...status, syntax, window };
+  return { ...status, selection, syntax, window };
 }
 
 function resolverDocument(files: TokenFiles) {

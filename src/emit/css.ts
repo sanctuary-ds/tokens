@@ -1,7 +1,7 @@
 // Emits the token stylesheet: custom properties only, no element or component rules.
 
 import { archPolygon } from '../foundation.ts';
-import { DEFAULT_FLAVOR, DEFAULT_GLAZING, DEFAULT_WINDOW, PIGMENTS, WINDOW_TONES, harmony } from '../palette.ts';
+import { DEFAULT_FLAVOR, DEFAULT_GLAZING, DEFAULT_WINDOW, PIGMENTS, STATUS, WINDOW_TONES, harmony } from '../palette.ts';
 import { aliasPath, cssName, flatten } from '../tokens.ts';
 import type { Palette, PigmentId } from '../palette.ts';
 import type { Dimension, DtcgColor, FlatToken, TokenNode, Tokens, Typography } from '../tokens.ts';
@@ -58,8 +58,13 @@ function declarations({ path, token, type }: FlatToken): Declaration[] {
     case 'typography': {
       const { fontFamily, fontSize, fontWeight, letterSpacing, lineHeight } = value as Typography;
       const family = `var(${cssName(aliasPath(fontFamily)!)})`;
+      const size = unit(fontSize);
       return [
-        [name, `${fontWeight} ${unit(fontSize)}/${lineHeight} ${family}`],
+        [name, `${fontWeight} ${size}/${lineHeight} ${family}`],
+        [`${name}-family`, family],
+        [`${name}-size`, size],
+        [`${name}-line-height`, String(lineHeight)],
+        [`${name}-weight`, String(fontWeight)],
         [`${name}-tracking`, unit(letterSpacing)],
       ];
     }
@@ -92,36 +97,50 @@ const windowModeStops: Record<string, Declaration[]> = {
   harmonic: [...'abc'].map((stop): Declaration => [`--san-window-${stop}`, `var(${cssName(['harmony', stop])})`]),
 };
 
-// Glazing: how the accent is rendered on a filled element.
-const glaze: Record<string, Declaration[]> = {
-  'pot-metal': [
-    ['--san-glaze-bg', 'var(--san-accent)'],
-    ['--san-glaze-bg-hover', 'color-mix(in oklab, var(--san-accent), light-dark(var(--san-accent-ink), var(--san-accent-lume)) 55%)'],
-    ['--san-glaze-fg', 'var(--san-accent-on)'],
-    ['--san-glaze-border', 'transparent'],
-    ['--san-glaze-sheen', `linear-gradient(180deg, ${mix('light', 20)}, transparent 55%)`],
-    ['--san-glaze-glow', transparentShadow],
-    ['--san-glaze-blur', 'none'],
+const cast = (source: string, prefix = ''): Declaration[] => [
+  [`--san-${prefix}cast-sm`, `0 0 12px -2px ${mix(source, 45)}`],
+  [`--san-${prefix}cast-md`, `0 0 28px -4px ${mix(source, 50)}`],
+  [`--san-${prefix}cast-lg`, `0 0 18px -2px ${mix(`${source}-lume`, 40)}, 0 0 72px -8px ${mix(source, 55)}`],
+];
+
+// Glazing: how an accent or status is rendered on a filled element.
+const glazeModes: Record<string, (source: string, prefix: string) => Declaration[]> = {
+  'pot-metal': (source, prefix) => [
+    [`--san-${prefix}glaze-bg`, `var(--san-${source})`],
+    [
+      `--san-${prefix}glaze-bg-hover`,
+      `color-mix(in oklab, var(--san-${source}), light-dark(var(--san-${source}-ink), var(--san-${source}-lume)) 55%)`,
+    ],
+    [`--san-${prefix}glaze-fg`, `var(--san-${source}-on)`],
+    [`--san-${prefix}glaze-border`, 'transparent'],
+    [`--san-${prefix}glaze-sheen`, `linear-gradient(180deg, ${mix('light', 20)}, transparent 55%)`],
+    [`--san-${prefix}glaze-glow`, transparentShadow],
+    [`--san-${prefix}glaze-blur`, 'none'],
   ],
-  flashed: [
-    ['--san-glaze-bg', mix('accent', 20)],
-    ['--san-glaze-bg-hover', mix('accent', 32)],
-    ['--san-glaze-fg', 'var(--san-accent-on-pane)'],
-    ['--san-glaze-border', mix('accent', 60)],
-    ['--san-glaze-sheen', `linear-gradient(135deg, ${mix('accent-lume', 30)}, transparent 45%, ${mix('accent', 14)})`],
-    ['--san-glaze-glow', 'var(--san-cast-sm)'],
-    ['--san-glaze-blur', 'blur(var(--san-blur-md)) saturate(1.5)'],
+  flashed: (source, prefix) => [
+    [`--san-${prefix}glaze-bg`, mix(source, 20)],
+    [`--san-${prefix}glaze-bg-hover`, mix(source, 32)],
+    [`--san-${prefix}glaze-fg`, `var(--san-${source}-on-pane)`],
+    [`--san-${prefix}glaze-border`, mix(source, 60)],
+    [`--san-${prefix}glaze-sheen`, `linear-gradient(135deg, ${mix(`${source}-lume`, 30)}, transparent 45%, ${mix(source, 14)})`],
+    [`--san-${prefix}glaze-glow`, `var(--san-${prefix}cast-sm)`],
+    [`--san-${prefix}glaze-blur`, 'blur(var(--san-blur-md)) saturate(1.5)'],
   ],
-  grisaille: [
-    ['--san-glaze-bg', 'var(--san-surface-raised-2)'],
-    ['--san-glaze-bg-hover', 'var(--san-surface-raised-4)'],
-    ['--san-glaze-fg', 'var(--san-text)'],
-    ['--san-glaze-border', 'color-mix(in oklab, var(--san-accent) 75%, var(--san-lead-strong))'],
-    ['--san-glaze-sheen', 'none'],
-    ['--san-glaze-glow', transparentShadow],
-    ['--san-glaze-blur', 'none'],
+  grisaille: (source, prefix) => [
+    [`--san-${prefix}glaze-bg`, 'var(--san-surface-raised-2)'],
+    [`--san-${prefix}glaze-bg-hover`, 'var(--san-surface-raised-4)'],
+    [`--san-${prefix}glaze-fg`, 'var(--san-text)'],
+    [`--san-${prefix}glaze-border`, `color-mix(in oklab, var(--san-${source}) 75%, var(--san-lead-strong))`],
+    [`--san-${prefix}glaze-sheen`, 'none'],
+    [`--san-${prefix}glaze-glow`, transparentShadow],
+    [`--san-${prefix}glaze-blur`, 'none'],
   ],
 };
+
+const glazeAll = (mode: string): Declaration[] => [
+  ...glazeModes[mode]('accent', ''),
+  ...Object.keys(STATUS).flatMap((status) => glazeModes[mode](status, `${status}-`)),
+];
 
 /** A state layer: the content color at the opacity token of its state, so retuning the opacity retunes the layer. */
 const stateLayer = (state: string): Declaration => [
@@ -130,19 +149,22 @@ const stateLayer = (state: string): Declaration => [
 ];
 
 function derived(opacity: TokenNode): Declaration[] {
-  for (const state of STATE_LAYERS) {
-    if (!(state in opacity)) throw new Error(`No opacity token "${state}" for its state layer; add it to opacity in src/foundation.ts.`);
+  for (const state of [...STATE_LAYERS, 'disabled-content', 'disabled-container']) {
+    if (!(state in opacity)) throw new Error(`No opacity token "${state}" for its derived layer; add it to opacity in src/foundation.ts.`);
   }
   return [
-    ['--san-cast-sm', `0 0 12px -2px ${mix('accent', 45)}`],
-    ['--san-cast-md', `0 0 28px -4px ${mix('accent', 50)}`],
-    ['--san-cast-lg', `0 0 18px -2px ${mix('accent-lume', 40)}, 0 0 72px -8px ${mix('accent', 55)}`],
+    ...cast('accent'),
+    ...Object.keys(STATUS).flatMap((status) => cast(status, `${status}-`)),
     ['--san-focus-ring-color', 'var(--san-accent)'],
     ['--san-focus-ring', 'var(--san-focus-ring-width) solid var(--san-focus-ring-color)'],
+    ['--san-surface-disabled', 'color-mix(in oklab, var(--san-text) calc(var(--san-opacity-disabled-container) * 100%), transparent)'],
+    ['--san-border-disabled', 'color-mix(in oklab, var(--san-lead-strong) calc(var(--san-opacity-disabled-content) * 100%), transparent)'],
+    ['--san-selection-bg', 'var(--san-accent-pane)'],
+    ['--san-selection-fg', 'var(--san-accent-on-pane)'],
     ...STATE_LAYERS.map(stateLayer),
     ...windowModeStops[DEFAULT_WINDOW],
     ['--san-window', windowGradient(['a', 'b', 'c'].map((stop) => `var(--san-window-${stop})`))],
-    ...glaze[DEFAULT_GLAZING],
+    ...glazeAll(DEFAULT_GLAZING),
   ];
 }
 
@@ -156,7 +178,7 @@ export function emitCss(palette: Palette, tokens: Tokens): string {
   const foundation = Object.keys(files).filter((file) => file.startsWith('foundation/'));
   // Elevation reads the flavor's umbra, so it is declared with the flavor, not on :root.
   const isElevation = ({ path }: FlatToken) => path[0] === 'elevation';
-  const semantic = tokenEntries(files['semantic.tokens.json'], ({ type }) => type === 'color');
+  const semantic = tokenEntries(files['semantic.tokens.json'], ({ path, type }) => type === 'color' && path[0] !== 'selection');
   const elevation = tokenEntries(files['foundation/elevation.tokens.json'], isElevation);
 
   const out: string[] = [
@@ -189,8 +211,8 @@ export function emitCss(palette: Palette, tokens: Tokens): string {
   out.push(`/* Light derived from the active flavor and accent. ${palette.glazings[DEFAULT_GLAZING].name} is the default glazing. */`);
   out.push(block(ANY_SCOPE, derived(files['foundation/effect.tokens.json'].opacity as TokenNode)));
   for (const id of Object.keys(palette.glazings)) {
-    if (!glaze[id]) throw new Error(`No CSS is defined for glazing "${id}"; add it to the glaze table in src/emit/css.ts.`);
-    out.push(block(scoped('data-san-glazing', id), glaze[id]));
+    if (!glazeModes[id]) throw new Error(`No CSS is defined for glazing "${id}"; add it to the glaze table in src/emit/css.ts.`);
+    out.push(block(scoped('data-san-glazing', id), glazeAll(id)));
   }
 
   out.push('/* Window: the cast light is one pigment (mono, the default) or the accent with its neighbours. */');

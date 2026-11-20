@@ -96,6 +96,18 @@
         "value": 0.125,
         "unit": "rem"
       }
+    },
+    "1-5": {
+      "$value": {
+        "value": 0.375,
+        "unit": "rem"
+      }
+    },
+    "2-5": {
+      "$value": {
+        "value": 0.625,
+        "unit": "rem"
+      }
     }
   },
   "size": {
