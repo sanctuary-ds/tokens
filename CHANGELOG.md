@@ -2,6 +2,24 @@
 
 Entries for 0.1.0 and 0.1.1 were generated from the commit history after those releases, with the rules release-please applies from 0.2.0 on.
 
+## [0.4.0](https://github.com/sanctuary-ds/tokens/compare/v0.3.2...v0.4.0) (2026-11-20)
+
+
+### ⚠ BREAKING CHANGES
+
+* **css:** wrap sanctuary.css in @layer sanctuary.tokens
+* **a11y:** fix glaze WCAG AA contrast and replace --san-halo with outline focus ring
+
+### Features
+
+* **css:** wrap sanctuary.css in [@layer](https://github.com/layer) sanctuary.tokens ([5690bcc](https://github.com/sanctuary-ds/tokens/commit/5690bcc5dd0e45db46805767649768b5d123f020))
+* **tokens:** add Shadow DOM status glazing/cast, atomic typography, disabled, selection, and spacing steps ([2c2669c](https://github.com/sanctuary-ds/tokens/commit/2c2669cc8157085367caf6ddcf6b1ce5e079a589))
+
+
+### Bug Fixes
+
+* **a11y:** fix glaze WCAG AA contrast and replace --san-halo with outline focus ring ([d4bae89](https://github.com/sanctuary-ds/tokens/commit/d4bae8921b5e53b92a6ed3bed52223d084b71fcb))
+
 ## [0.3.2](https://github.com/sanctuary-ds/tokens/compare/v0.3.1...v0.3.2) (2026-11-11)
 
 
